@@ -1,0 +1,22 @@
+<ul class="nav nav-tabs padding-18">
+    <li ng-class="{true:'active'}[type=='mentions']">
+        <a href="#/untouched/mentions">
+            @我的 <span class="badge badge-danger">{{count.mentions}}</span>
+        </a>
+    </li>
+    <li ng-class="{true:'active'}[type=='comments']">
+        <a href="#/untouched/comments">
+            评论我的 <span class="badge badge-danger">{{count.comments}}</span>
+        </a>
+    </li>
+    <li ng-class="{true:'active'}[type=='keywords']">
+        <a href="#/untouched/keywords">
+            关键字 <span class="badge badge-danger">{{count.keywords}}</span>
+        </a>
+    </li>
+    <li ng-class="{true:'active'}[type=='messages']">
+        <a href="#/untouched/messages">
+            私信 <span class="badge badge-danger">{{count.messages}}</span>
+        </a>
+    </li>
+</ul>

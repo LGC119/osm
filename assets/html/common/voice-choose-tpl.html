@@ -1,0 +1,53 @@
+<div class="modal-header">
+    <button ng-click="cancel()" type="button" class="close" >
+    ×
+    </button>
+    <h3 class="modal-title">语音选择</h3>
+</div>
+<div class="modal-body articles-choose clearfix">
+    <div ng-show="mediaData.code == 204">
+    暂无语音，请添加
+    </div>
+    <div class="col-xs-4 item" ng-class="{true:'selected'}[common.itemSelected{{item.mediaid}}]" ng-repeat="item in mediaData.data.data">
+        <div class="widget-box widget-box-me">
+            <div class="widget-header">
+                <h5 class="widget-title bigger lighter">
+                    <a href="">
+                        标题：{{item.title}}
+                    </a>
+                </h5>
+                <div class="created-at" style="height: 50px;line-height: 50px;">
+                    创建时间：{{item.created_at}}
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+
+                    <div class="header-pic" style="height:160px;overflow:hidden">
+                        <button class="btn btn-success btn-lg">
+                            语音
+                        </button>
+                        <!--<img src="uploads/h5page/1/img/activity_20140612_104741_45f6d5ef082e20049ed97b8996c9fa03.jpg" alt="" style="width:100%"/>-->
+                    </div>
+                    <div class="description" style="overflow:hidden;height:30px">
+                        {{item.description}}
+                    </div>
+                </div>
+            </div>
+            <div class="item-mask" ng-click="itemSelect(item.mediaid,item)"></div>
+            <i class="item-selected-icon" ng-click="itemSelect(item.mediaid,item)"></i>
+
+        </div>
+    </div>
+    <div class="col-xs-12" ng-show="mediaData.data.sum">
+        <pagination total-items="mediaData.data.sum" ng-model="mediaData.data.page" ng-click="get_media_list(mediaData.data.page)" items-per-page="mediaData.data.perpage" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+    </div>
+</div>
+<div class="modal-footer">
+    <button ng-click="cancel()" type="button" class="btn btn-default">
+    取消  
+    </button>
+    <button ng-click="ok()" type="button" class="btn btn-primary">
+    确定
+    </button>
+</div>

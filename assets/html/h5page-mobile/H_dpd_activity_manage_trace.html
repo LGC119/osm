@@ -1,0 +1,288 @@
+<div class="row-fluid" Tstyle="margin-top:0px">
+    <div class="widget-box">
+        <div class="widget-title">
+            <ul class="nav nav-tabs">
+                <li><a class="loadpage" href="" data-toggle="tab" linkhref="./h5page/H_dpd_activity_manage_detail.html">H5详情</a></li>
+                <li><a class="loadpage"  href=""  data-toggle="tab" linkhref="./h5page/H_dpd_activity_manage_analysis.html">访问统计</a></li>
+                <li class="active"><a class="loadpage" href="" data-toggle="tab" linkhref="./h5page/H_dpd_activity_manage_trace.html">访问跟踪</a></li>
+                <li style="float:right;margin: 3px 15px 0px 0px;"><button class="btn loadpage" linkhref="./h5page/H_dpd_activity_manage.html"  ><i class=" icon-backward"></i>&nbsp; 返回</button></li>
+            </ul>
+        </div>
+        <div class="widget-content tab-content" style="overflow: visible;">
+			<div class="content vt"> 
+				<div class="page-bd">
+					<div class="group">
+						<!--筛选部分-->
+						<div class="filter-sort">
+							<ul class="filter nav nav-pills">
+								<li>
+									<div class="groups-box filter-select">
+										<select class="list-filter"  name="template" style="margin-bottom:10px;display:none">
+					                        <option value="" selected >类型：全部</option>
+					                    </select>
+					                    <select id="templateList" class="list-filter"  name="usertype" style="margin-bottom:10px;">
+					                        <option value="" selected >用户：访问用户</option>
+					                        <option value="click"  >用户：广告点击</option>
+					                        <option value="input"  >用户：参与用户</option>
+					                    </select>
+									</div>
+								</li>
+								<li>
+									<div id="city_select_province_city1" class="filter-dropdown filter-select">
+									</div>
+								</li>
+								<li>
+									<div class="filter-dropdown filter-select">
+										<select class="list-filter"  name="sex" style="margin-bottom:10px;">
+					                        <option value="" selected >全部性别</option>
+					                        <option value="m"  >男</option>
+					                        <option value="f"  >女</option>
+					                    </select>
+									</div>
+								</li>
+								<li>
+									<input class="list-filter" type="text" name="display_name" placeholder="搜索昵称" style="width:100px;" value=""/>
+								</li>
+								<li>
+									<button  class="btn submit-filter" type="non-matched">筛选</button>
+								</li>
+							</ul>
+							<div class="clearfix"></div>
+						</div>
+						<!--/筛选部分-->
+						<div class="clearfix"></div>
+					</div>
+					<ul class="users-list"></ul>
+					<script id="userstpl" type="text/template">
+						<li class="liHead">
+							<div class="left"><input type="checkbox" /></div>
+							<span class="left">全选</span>
+						</li>
+						{{ for(var i in it) { }}
+							<li class="user">
+								<div class="info">
+									<div class="m-info">
+										<div class="left"><input type="checkbox" value="{{=it[i]['id']}}"/></div>
+										<div class="avatar left">
+											<img src="{{=it[i]['avartar']}}" title="用户名：{{=it[i]['display_name']}}"/>
+										</div>
+										<div class="left">
+											<div class="base-info">
+												<div class="nickname c-l f16 b">
+													<span class="left">{{=it[i]['display_name']}}</span>
+													{{?it[i]['sex'] == 'm'}}
+														<span class="left icon18 iconSexBoy"></span>
+													{{??it[i]['sex'] == 'f'}}
+														<span class="left icon18 iconSexGirl"></span>
+													{{?}}
+			                                        {{?it[i]['readurl'] == 1}}&nbsp;<span class="label label-success">广告点击</span>{{?}}
+												</div>
+												<div>
+													<div class="location left">
+														<span class="b">地区：</span>
+														<span>{{=it[i]['province']}} {{=it[i]['city']}}</span>
+													</div>
+													<div class="clearfix"></div>
+												</div>
+												<div class="clearfix"></div>
+											</div>
+										</div>
+									</div>
+									<div class="right">
+									{{?it[i]['info'] != 'noooo'}}
+			                            <button 
+			                                class="btn show-input" it="{{=i}}" 
+			                              
+			                                uid="{{=it[i]['uid']}}"
+			                                id="modal-774085" 
+			                                href="#modal-container-774085" 
+			                                role="button" data-toggle="modal"
+			                                >用户内容</button>
+			                         {{?}}
+			                        </div>
+									<div class="clearfix"></div>
+								</div>
+							</li>
+						{{ } }}
+					</script>
+			        <table class="table  users-list-table table-condensed"></table>
+			        <script id="userstpl-table" type="text/template">
+			                <tr>
+			                <td>name</td><td>sex</td><td>district</td><td>adClick</td><td>userinfo</td>
+			                </tr>
+			            {{ for(var i in it) { }}
+			                <tr>
+			                    <td>
+			                        <img style="height:30px;" src="{{=it[i]['avartar']}}" title="用户名：{{=it[i]['display_name']}}"/>
+			                        <span>{{=it[i]['display_name']}}</span></td>
+			                    <td>
+			                        {{?it[i]['sex'] == 'm'}}
+			                        <span class="left icon18 iconSexBoy"></span>
+			                        {{??it[i]['sex'] == 'f'}}
+			                        <span class="left icon18 iconSexGirl"></span>
+			                        {{?}}
+			                    </td>
+			                    <td><span>{{=it[i]['province']}} {{=it[i]['city']}}</span></td>
+			                    <td> {{?it[i]['readurl'] == 1}}&nbsp;<span class="label label-success">广告点击</span>{{?}}</td>
+			                    <td>
+			                        {{?it[i]['info'] != 'noooo'}}
+			                            <button class="btn show-input" it="{{=i}}"  uid="{{=it[i]['uid']}}" id="modal-774085"  href="#modal-container-774085" role="button" data-toggle="modal" >用户内容</button>
+			                        {{?}}
+			                    </td>
+			                </tr>
+			            {{ } }}
+			        </script>
+					<div class="paging dataTables_paginate">
+						<script id="pagingtpl" type="text/template">
+						{{=it}}
+						</script>
+					</div>
+				</div>
+			</div>
+					
+			<div id="modal-container-774085" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-header">
+					 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="myModalLabel">
+						用户内容
+					</h3>
+				</div>
+				<div class="modal-body">
+			        <div id="insertarea">
+			            
+			        </div>
+					<script id="userinput" type="text/Template" charset="utf-8">
+						<div >
+							{{=it.htmlss}}
+						</div>
+					</script>
+				</div>
+				<div class="modal-footer">
+					<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button> 
+				</div>
+			</div>
+            <div style="display:block;clear:both;height:0px;width:100%;padding:0;margin:0;"></div>
+        </div>
+    </div>
+</div>
+<script>
+
+function makeDotList(tplId, obj, data) {
+    var tmpl = $(tplId).html();
+    var dotTemplate = doT.template(tmpl);
+    $(obj).html(dotTemplate(data));
+};
+
+//获取数据
+function getUsers(filter) {
+
+    $.ajax({
+    	type     : "POST",
+        url      :  _c.baseUrl + 'getdata/e_h5page-wxh5.json?method=listActivityUser',
+    	datatype : 'json',
+        data     : {'filter' : filter},
+    	//timeout  : 2000,
+        async : false,  //同步请求
+    	success  : function(data) {
+            datas = JSON.parse(data);
+            $('.users-list-table').empty();
+            //makeDotList('#userstpl', '.users-list',datas);
+            makeDotList('#userstpl-table', '.users-list-table',datas);
+            ZENG.msgbox.hide();
+        },
+    });
+};
+getUsers('');
+
+function getTplList() {
+    $.ajax({
+        type     : "POST",
+        url      :  _c.baseUrl + 'getdata/e_h5page-wxh5.json?method=getTemplateList',
+        datatype : 'json',
+        data     : { 'type':'1' },
+        //timeout  : 2000,
+        success  : function(data) {
+            var data = JSON.parse(data);
+            var append = '<option value="" selected >模板：全部</option>';
+            $.each(data, function(k,v){
+                append +=  '<option value="' + v.tplname + '"     > ' + v.name + '</option >';   
+            });
+            $('.list-filter[name=template]').html('');
+            $('.list-filter[name=template]').append(append);
+        },
+    });
+}
+getTplList();
+
+	var userinfo;
+	var activity;
+	var tpl;
+	var dataformat;
+$('.content').on('click', '.show-input', function (){
+    var inum = $(this).attr('it');
+        $.ajax({
+           type     : "POST",
+	       url      :  _c.baseUrl + 'getdata/e_h5page-wxh5.json?method=listUser',
+           datatype : 'json',
+           data     : { 'uid' : $(this).attr('uid'), 'id' :  $('#h5manage').attr('idx')},
+           //timeout  : 2000,
+            async : false,  //同步请求
+           success  : function(data) {
+           		datas = JSON.parse(data);
+               userinfo  = datas['userinfo'];
+               activity = datas['html'];
+               tpl = datas['tpl'];
+               eval('dataformat='+datas['array']);
+           },
+        });
+        var dataformatt = {  
+        	/*'a':{
+        		'3' : activity[3],
+        		'4' : activity[4],
+        		'yes-no-input' : activity[5],
+        		'yes-no-select' : activity[6],
+        		'checkbox0' : activity[7] + ':' + activity[8][0],
+        		'checkbox1' : activity[7] + ':' + activity[8][1],
+        		'checkbox2' : activity[7] + ':' + activity[8][2],
+        		'checkbox3' : activity[7] + ':' + activity[8][3],
+        		'checkbox4' : activity[7] + ':' + activity[8][4],
+        		'checkbox5' : activity[7] + ':' + activity[8][5],
+        		'checkbox6' : activity[7] + ':' + activity[8][6],
+        		'slider' : activity[9],
+        		'10' : activity[10],
+        		'11' : activity[11],
+        		'14' : activity[12],
+        	}, */
+        };
+        var okarray = {};
+        var insertcontent = '<table class="table" style="text-align:center;"><tr class="info"><th>字段</th><th>值</th></tr>';
+        $.each(userinfo.info,function(k,v){
+            okarray[dataformat[tpl][k]] = v;
+            insertcontent += '<tr><td>' + dataformat[tpl][k] + '</td><td>' + v + '</td></tr>';
+        });
+        insertcontent += '</table>';
+        $('#insertarea').html('');
+        $('#insertarea').html(insertcontent);
+});
+
+$('.content').on('click', '.submit-filter', function() {
+		var filter = {};
+		filter['sex'] = $('.list-filter[name="sex"]').select().val();
+		filter['like']   = $('.list-filter[name="display_name"]').val();
+		switch ($('.list-filter[name="usertype"]').select().val()) {
+			case 'click' :  filter['readurl'] = '1';
+			break;
+			case 'input' :  
+				filter['mass'] = {};
+				filter['mass']['key'] = 'info';
+				filter['mass']['cal'] = '!=';
+				filter['mass']['val'] = 'noooo';
+			break;
+		}
+		getUsers(filter);
+});
+$('.loadpage').click(function(){
+    ZENG.msgbox.show('载入中...',6);
+    $('.container-fluid').load($(this).attr('linkhref'));
+})
+</script>

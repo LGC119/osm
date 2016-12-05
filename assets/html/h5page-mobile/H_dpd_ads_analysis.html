@@ -1,0 +1,291 @@
+            <div class="navbar">
+                <ul class="relation-tab">
+                    <li><a href="library.html" class="loadpage">内容库</a></li>
+                    <li><a href="code.html" class="loadpage">二维码管理</a></li>
+                    <li><a href="html/H_dpd_activity.html" class="loadpage">H5页面创建</a></li>
+                    <li><a href="html/H_dpd_activity_manage.html" class="loadpage">H5管理</a></li>
+                    <li class="active"><a href="html/H_dpd_ads.html" class="loadpage">H5广告</a></li>
+                </ul>
+                <span class="show-help nav-help" help-item="library">?</span>
+            </div>
+<div class="content">
+    <div id="filterMod" class="wx-filter" style="">
+        <ul id="filter-list" class="filter-list" style="">
+            <li class="loadpage" href="html/H_dpd_ads.html">H5广告库<div></div></li>
+            <li class="active loadpage" href="html/H_dpd_ads_analysis.html">H5广告统计<div class="mactive"></div></li>
+            
+        </ul>
+    </div> 
+
+    <!-- <div id="filterMod" class="wx-filter" style="">
+        <ul id="filter-list" class="filter-list" style="">
+            <li class="active loadpageonly" href="./html/H_dpd_ads_analysis.html">访问统计!!!<div class="mactive"></div></li>
+            <li class="loadpageonly" href="./html/H_dpd_activity_manage_trace.html">访问跟踪<div></div></li>
+        </ul>
+    </div>  -->
+    <div class="page-bd">
+        <div id="name" class="filter-sort" style="flodat:left;text-align:center;">
+
+            <!-- <div id="city_select_province_city1" class="list-filter" style="display:inline;"></div> -->
+            <select id="nowAdList" data-placeholder="选择广告" class="list-filter"  name="id" multiple="" style="margin-bottomT:10px;width: 350px;">
+                <option value="" selected >广告：全部广告</option>
+                <option value=""  >广告：广告点击</option>
+            </select>
+            <link rel="stylesheet" href="./js/datepicker/public/css/default.css" type="text/css">
+            <script src="./js/datepicker/public/javascript/zebra_datepicker.src.js"></script>
+            <div class="btn-group" style="">
+                <input type="submit" name="time-gt" class="btn datepicker list-filter" style="cursor:pointer;" value="开始日期" />
+                <input type="submit" name="time-lt" class="btn datepicker list-filter" style="cursor:pointer;" value="结束日期" />
+            </div>
+            <button id="do-analysis" class="btn btn-success" style="dispdlay:none;" >显示</button>
+        </div>
+        <div id="rightf" style="flodat:right"></div>
+        <div id="tongji">
+            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        
+            <table class="table  users-list-table table-condensed"></table>
+            <script id="userstpl-table" type="text/template">
+                    <tr>
+                    <td>name</td><td>sex</td><td>district</td><td>adClick</td><td>userinfo</td>
+                    </tr>
+                {{ for(var i in it) { }}
+                    <tr>
+                        <td>
+                            <img style="height:30px;" src="{{=it[i]['avartar']}}" title="用户名：{{=it[i]['display_name']}}"/>
+                            <span>{{=it[i]['display_name']}}</span></td>
+                        <td>
+                            {{?it[i]['sex'] == 'm'}}
+                            <span class="left icon18 iconSexBoy"></span>
+                            {{??it[i]['sex'] == 'f'}}
+                            <span class="left icon18 iconSexGirl"></span>
+                            {{?}}
+                        </td>
+                        <td><span>{{=it[i]['province']}} {{=it[i]['city']}}</span></td>
+                        <td> {{?it[i]['readurl'] == 1}}&nbsp;<span class="label label-success">广告点击</span>{{?}}</td>
+                        <td>
+                            {{?it[i]['info'] != 'noooo'}}
+                                <button class="btn show-input" it="{{=i}}"  uid="{{=it[i]['uid']}}" id="modal-774085"  href="#modal-container-774085" role="button" data-toggle="modal" >用户内容</button>
+                            {{?}}
+                        </td>
+                    </tr>
+                {{ } }}
+            </script>
+            <hr/>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+var filter = {};
+
+function makeDotList(tplId, obj, data) {
+    var tmpl = $(tplId).html();
+    var dotTemplate = doT.template(tmpl);
+    $(obj).html(dotTemplate(data));
+};
+
+function loadAdList(){
+    $('#nowAdList').empty();
+    var tmp = '';
+    $.each(global_ads_list, function(k, v){
+        tmp += '<option value="'+v.id+'"  >广告：'+v.name+'</option>';
+    });
+    $('#nowAdList').append(tmp);
+    if (doAdId != 'noid') {
+        $('#nowAdList').val(doAdId);
+        getFilter();
+        getData(filter,'getNumAccess', '');
+    }
+}
+loadAdList();
+function getFilter() {
+        filter = {};
+        filter['time']   = {};
+        if ($('.list-filter[name="time-gt"]').val() != '开始日期') {
+            filter['time']['gt'] = $('.list-filter[name="time-gt"]').val();
+        }
+        if ($('.list-filter[name="time-lt"]').val() != '结束日期') {
+            filter['time']['lt'] = $('.list-filter[name="time-lt"]').val();
+        }
+        
+        filter['id']   =  {};
+        filter['id'] = $('.list-filter[name="id"]').val();
+};
+$('.content').on('click', '#do-analysis', function() {
+        getFilter();
+        getData(filter,'getNumAccess', '');
+        //getData(filter,'getNumDistrict', '');
+});
+$('.datepicker').Zebra_DatePicker({
+    show_icon:false,
+    show_clear_date:false,
+});
+
+//select多选插件chosen
+$("#nowAdList").chosen({max_selected_options: 5});
+
+// 地区选择插件           
+/*$('#city_select_province_city1').ajax_city_select({
+    'province':'province21',
+    'city':'city21'
+});*/
+
+function getNumAccess(datas, unit) {
+    //console.log(datas);
+    Highcharts.setOptions({    
+        global: {    
+            useUTC: false    
+        }    
+    }); 
+     $('#container').highcharts({
+        chart: {
+            zoomType: 'x',
+            type: 'spline',
+            renderTo : 'container'
+        },
+        title: {
+            text: '广告统计'
+        },
+        subtitle: {
+            //text: '访问量与提交量同步显示'
+        },
+        xAxis: {
+            type: 'datetime',
+            //title: {text: '时间'},
+            lineWidth: 1 ,
+            dateTimeLabelFormats:{
+                second :  '%H:%M:%S',
+                minute :  '%m-%d %H:%M',
+                hour   :  '%Y-%m-%d %H:00',
+                day    :  '%Y-%m-%d',
+                week   :  '%Y-%m-%d',
+                month  :  '%Y-%m',
+                year   :  '%Y',
+            },
+            labels: {
+                     rotation: -30,  //逆时针旋转30°，标签名称太长。
+                     align: 'right'  //设置右对齐
+            },
+        },
+        yAxis: {
+            title: {
+                text: '访问量 (次)'
+            },
+            lineWidth:1,
+            min: 0,
+        },
+        tooltip: {
+            crosshairs: true,
+            valueSuffix: '次',
+            dateTimeLabelFormats:{
+                second: '%H:%M:%S',
+                minute: '%m月%d日 %H:%M',
+                hour: '%Y年%m月%d日 %H时',
+                day: '%Y年%m月%d日',
+                week: '%Y年%m月%d日',
+                month: '%Y年%m月',
+                year: '%Y年'
+            },
+        },
+        plotOptions: {
+            spline: {
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 2
+                    }
+                },
+                marker: {
+                    enabled: false
+                },
+                pointInterval: unit * 1000,
+                //pointInterval: 3600 * 1000, // one hour
+                //pointInterval: 24 * 3600 * 1000, // one day
+                //pointStart: Date.UTC(2013, 9, 6, 0, 0, 0)
+                /*cursor: 'pointer',
+                events: {
+                    click: function(e) {
+                        //location.href = e.point.url;
+                        console.log(e);
+                    }
+                }*/
+            },
+            series: {  
+                cursor: 'pointer',  
+                events: {  
+                    click: function(e) {  
+                        //console.log(e.point.x / 1000);
+                        var filter = {};
+                        filter['id'] = e.point.id;
+                        filter['time'] = e.point.x / 1000;
+                        getUsers(filter);
+                    }  
+                }
+            } ,
+        },
+        credits: {  
+            enabled: false  
+        }, 
+        series: 
+            datas,
+/*            [ 
+
+                {
+                    name: '点击量',
+                    data: datas[0]['data'],
+                }, 
+            ],*/
+        navigation: {
+            menuItemStyle: {
+                fontSize: '10px'
+            }
+        },
+    });
+}
+function getData(filter, type, extra) {
+    getFilter();
+    $.ajax({
+        type     : "POST",
+        url      :  _c.baseUrl + 'getdata/e_h5page-h5ads.json?method=getAdAnalysis',
+        datatype : 'json',
+        data     : {'filter' : filter ,  'id' : $('#h5manage').attr('idx') , 'type' : type , 'extra' : extra},
+        //timeout  : 2000,
+        success  : function(data) {
+            if (data == 'nodata'){
+                ZENG.msgbox.show('目前没有数据',3);
+            }
+            var datas = JSON.parse(data);
+            var unit = 3600;
+            eval(type + '(datas,unit)');
+        },
+    });
+};
+
+getFilter();
+//getData(filter, 'getNumAccess', '');
+//getData(filter, 'getNumDistrict', '');
+
+//广告用户显示
+//获取数据
+function getUsers(filter) {
+    $.ajax({
+        type     : "POST",
+        url      :  _c.baseUrl + 'getdata/e_h5page-h5ads.json?method=listAdUser',
+        datatype : 'json',
+        data     : {'filter' : filter},
+        //timeout  : 2000,
+        async : false,  //同步请求
+        success  : function(data) {
+            datas = JSON.parse(data);
+            $('.users-list-table').empty();
+            //makeDotList('#userstpl', '.users-list',datas);
+            makeDotList('#userstpl-table', '.users-list-table',datas);
+            ZENG.msgbox.hide();
+        },
+    });
+};
+
+</script>
+<script type="text/javascript" charset="utf-8">
+ZENG.msgbox.hide();
+</script>

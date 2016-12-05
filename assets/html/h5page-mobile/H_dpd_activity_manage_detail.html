@@ -1,0 +1,144 @@
+                <div class="row-fluid" Tstyle="margin-top:0px">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a class="loadpage" href="" data-toggle="tab" linkhref="./h5page/H_dpd_activity_manage_detail.html">H5详情</a></li>
+                                <li><a class="loadpage"  href=""  data-toggle="tab" linkhref="./h5page/H_dpd_activity_manage_analysis.html">访问统计</a></li>
+                                <li><a class="loadpage" href="" data-toggle="tab" linkhref="./h5page/H_dpd_activity_manage_trace.html">访问跟踪</a></li>
+                                <li style="float:right;margin: 3px 15px 0px 0px;"><button class="btn loadpage" linkhref="./h5page/H_dpd_activity_manage.html"  ><i class=" icon-backward"></i>&nbsp; 返回</button></li>
+                            </ul>
+                        </div>
+                        <div class="widget-content tab-content" style="overflow: visible;">
+                            <div class="content">
+                                <div class="page-bd">
+                                    <script id="script"  type="text/template" >
+                                        <div class="msg-item-wrapper this-activity"  idx="{{=it.id}}" data-create-time="{{=it.createtime}}" style="width:400px;float:left;" >
+                                            <div id="appmsgItem1" class="msg-item appmsgItem">
+                                                <h4 class="msg-t">
+                                                    <a href="{{=it.url}}" class="i-title" target="_blank">
+                                                        {{=it.name}}
+                                                    </a>
+                                                </h4>
+                                                <p class="msg-meta">
+                                                    <span class="msg-date" >
+                                                        创建时间：{{=it.createtime}}
+                                                    </span>
+                                                    {{? it.status == 1}}
+                                                    <span class="label label-success    changestatus" idx="{{=it.id}}" 
+                                                        isstatus="{{=it.status}}" ising="正在进行" isstop="已经停止" isswitch="点击更改" style="cursor:pointer;"
+                                                        >正在进行</span>
+                                                    {{??}}
+                                                    <span class="label label-important  changestatus" idx="{{=it.id}}" 
+                                                        isstatus="{{=it.status}}" ising="正在进行" isstop="已经停止" isswitch="点击更改" style="cursor:pointer;"
+                                                        >已经停止</span>
+                                                    {{?}}
+                                                </p>
+                                                <div class="cover">
+                                                    {{? it.htmlss[1] == '../../../../public/images/h5page/h5_empty.png'}}
+                                                    <p class="default-tip" style="displsay:none">
+                                                        无封面图
+                                                    </p>
+                                                    {{??}}
+                                                    <img src="{{=it.htmlss[1]}}" class="i-img" style="">
+                                                    {{?}}
+                                                </div>
+                                                <div class="overflow-div" idx="{{=it.id}}" style="padding-left:15px;padding-right:15px;">
+                                                    <p class="msg-text" >
+                                                        {{=it.htmlss[2]}}
+                                                    </p>
+                                                </div>
+                                                <p>
+                                                    <center>
+                                                        <span class="label {{? it.submitnum > 0}}label-info{{?}} showdetailsT Tloadpage" href="./h5page/h5manage_trace.html" idx="{{=it.id}}" ><b> &nbsp; {{=it.submitnum}} </b>条记录 &nbsp; </span>
+                                                        <span class="label {{? it.clicknum > 0}}label-info{{?}} " idx="{{=it.id}}" ><b> &nbsp; {{=it.clicknum}} </b>次点击 &nbsp; </span>
+                                                    </center>
+                                                </p>
+                                            </div>
+                                            <div class="msg-opr">
+                                            <!--
+                                                <ul class="f0 msg-opr-list">
+                                                <li class="b-dib opr-item">
+                                                        <a class="block tc opr-btn edit-btn" href="javascript:;" data-mid="{{=it.id}}" filename="{{=it.pic}}">
+                                                            <span class="th vm dib opr-icon edit-icon" >
+                                                                编辑
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="b-dib opr-item">
+                                                        <a class="block tc opr-btn del-btn show-delete-window" idx="{{=it.id}}" >
+                                                            <span class="th vm dib opr-icon del-icon" >
+                                                                删除
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            -->
+                                            </div>
+                                            <div class="msg-hover-mask">
+                                            </div>
+                                            <div class="msg-mask">
+                                                <span class="dib msg-selected-tip">
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <iframe  src="{{=it.url}}&uid=noooo"  style="width:400px;float:left;margin-left:10px; height:600px;border:2px solid black" ></iframe>
+                                    </script>
+                                    <div id="user-list" style="widtdh:400px;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:block;clear:both;height:0px;width:100%;padding:0;margin:0;"></div>
+                        </div>
+                    </div>
+                </div>
+<script type="text/javascript" charset="utf-8">
+    ZENG.msgbox.hide();
+ // 获取并返回当前url路径           
+ //function getpath(){
+ //    var arrp = document.location.href.split('/');
+ //    var tmpp = new Array();
+ //    var lenp = arrp.length;
+ //    var ip=1;
+ //    $.each(arrp, function(k,v){
+ //        if(ip < lenp){
+ //            tmpp[k]= v;
+ //        };
+ //        ip++;
+ //    });
+ //    tmpp = tmpp.join('/') + '/index.php/wxh5_ext/go/' ;
+ //    return tmpp;
+ //};
+function makeDotList(tplId, obj, data) {
+    var tmpl = $(tplId).html();
+    var dotTemplate = doT.template(tmpl);
+    $(obj).html(dotTemplate(data));
+};
+function makedot(tplId, obj, data) {
+    var tmpl = $(tplId).html();
+    var dotTemplate = doT.template(tmpl);
+    $(obj).append(dotTemplate(data));
+};
+var userlist;
+$(function (){
+        ZENG.msgbox.show('载入中...',6);
+        $.ajax({
+        	type     : "POST",
+	        url      :  _c.baseUrl + 'getdata/e_h5page-wxh5.json?method=listActivity',
+        	datatype : 'json',
+            data     : {'detail' : 1},
+        	//timeout  : 2000,
+        	success  : function(data) {
+                var data = JSON.parse(data);
+                $.each(data, function(k,v) {
+                //v['url'] =  getpath() ;
+                makedot('#script', '#user-list', v);
+                });
+                ZENG.msgbox.hide();
+            },
+        });
+});
+$('.loadpage').click(function(){
+    ZENG.msgbox.show('载入中...',6);
+    $('.container-fluid').load($(this).attr('linkhref'));
+})
+</script>

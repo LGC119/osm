@@ -1,0 +1,28 @@
+<div class="page-header">
+	<h1>
+		微博活动
+		<small><i class="ace-icon fa fa-angle-double-right"></i> 活动详情 </small>
+	</h1>
+</div>
+<div class="row" ng-controller="WbEventDetailController" ng-init="initPage()">
+	<div class="col-xs-12">
+		<ul class="nav nav-tabs padding-18">
+			<li ng-class="{true:'active'}[type=='event-info']">
+				<a ng-href="#/wb-event-detail/event-info/{{id}}">活动信息</a>
+			</li>
+			<li ng-class="{true:'active'}[type=='event-parti-list']">
+				<a href="#/wb-event-detail/event-parti-list/{{id}}">推送列表</a>
+			</li>
+			<li ng-class="{true:'active'}[type=='event-winner-list']">
+				<a ng-href="#/wb-event-detail/event-winner-list/{{id}}">中奖者列表</a>
+			</li>
+			<li ng-class="{true:'active'}[type=='event-stats']">
+				<a ng-href="#/wb-event-detail/event-stats/{{id}}">活动统计</a>
+			</li>
+			<!-- <li ng-class="{true:'active'}[type=='event-wave-stats']">
+				<a ng-href="#/wb-event-detail/event-wave-stats/{{id}}">波次统计</a>
+			</li> -->
+		</ul>
+		<div class="tab-content no-border padding-24" ng-include src="url"></div>
+	</div>
+</div>

@@ -1,0 +1,367 @@
+<div class="page-header">
+    <h1>
+        微信活动管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            活动创建
+        </small>
+    </h1>
+</div>
+<div class="row" ng-controller="WeiboEventController">
+    <div class="col-xs-12">
+        <div id="event-wizard" data-target="#step-container">
+            <ul class="wizard-steps">
+               <li data-target="#step1" class="active">
+                  <span class="step">1</span>
+                  <span class="title">活动信息</span>
+               </li>
+
+               <li data-target="#step2">
+                  <span class="step">2</span>
+                  <span class="title">目标用户组</span>
+               </li>
+               <li data-target="#step3">
+                  <span class="step">3</span>
+                  <span class="title">推送策略</span>
+               </li>
+            </ul>
+        </div>
+        <div class="spcace"></div>
+        <!-- 每步的内容体 -->
+        <div id="step-container" class="step-content row">
+            <div class="step-pane col-xs-12 active" id="step1">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+                        <!-- #section:custom/widget-box -->
+                        <div class="widget-box">
+                            <div class="widget-header  widget-header-blue widget-header-flat">
+                                <h5 class="widget-title">活动基本信息</h5>
+
+                                <!-- #section:custom/widget-box.toolbar -->
+                                <div class="widget-toolbar">
+                                    <a href="#" data-action="fullscreen" class="orange2">
+                                        <i class="ace-icon fa fa-expand"></i>
+                                    </a>
+                                    <a href="#" data-action="collapse">
+                                        <i class="ace-icon fa fa-chevron-up" id=""></i>
+                                    </a>
+                                </div>
+
+                                <!-- /section:custom/widget-box.toolbar -->
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="widget-body-inner" style="display: block;">
+                                    <div class="widget-main clearfix">
+                                        <div class="form-horizontal col-xs-6 event-base-info">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 活动名称 </label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" id="form-field-1" placeholder="活动名称" class="col-xs-10 col-sm-5">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 活动时间 </label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5">
+                                                    <div class="col-xs-1 col-sm-1" style="margin:7px 5px 0 -5px">至</div>
+                                                    <input type="text" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 开始推送时间 </label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" id="form-field-1" placeholder="开始推送时间" class="col-xs-10 col-sm-5">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 活动类型 </label>
+                                                <div class="col-sm-9">
+                                                    <!-- <select class="form-control col-xs-10 col-sm-5"> -->
+                                                    <select class="col-xs-10 col-sm-5">
+                                                        <option>抽奖</option>
+                                                        <option>线下</option>
+                                                        <option>调查</option>
+                                                        <option>会员绑定</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 活动行业 </label>
+                                                <div class="col-sm-9">
+                                                    <!-- <select class="form-control col-xs-10 col-sm-5"> -->
+                                                    <select class="col-xs-10 col-sm-5">
+                                                        <option>快消</option>
+                                                        <option>汽车</option>
+                                                        <option>数码</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-6" style="height:100%">
+                                            <div class="well tags-well">
+                                                <h4 class="green smaller lighter">
+                                                活动标签
+                                                </h4>
+                                                <div class="hot-tags">
+                                                    <div>热门标签：</div>
+                                                    <div class="checkbox ng-scope" style="display:inline-block;min-width:100px;">
+                                                        <label>
+                                                            <input type="checkbox" class="ace ng-pristine ng-valid" tagid="59" ng-model="common.tempTags[tag.id]" ng-click="pushTag(tag.id, tag.tag_name)" ng-checked="common.tempTags[tag.id]">
+                                                            <span class="lbl ng-binding"> 高购买力</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkbox ng-scope" style="display:inline-block;min-width:100px;">
+                                                        <label>
+                                                            <input type="checkbox" class="ace ng-pristine ng-valid" tagid="59" ng-model="common.tempTags[tag.id]" ng-click="pushTag(tag.id, tag.tag_name)" ng-checked="common.tempTags[tag.id]">
+                                                            <span class="lbl ng-binding"> 旗舰店</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkbox ng-scope" style="display:inline-block;min-width:100px;">
+                                                        <label>
+                                                            <input type="checkbox" class="ace ng-pristine ng-valid" tagid="59" ng-model="common.tempTags[tag.id]" ng-click="pushTag(tag.id, tag.tag_name)" ng-checked="common.tempTags[tag.id]">
+                                                            <span class="lbl ng-binding"> 忠实客户</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkbox ng-scope" style="display:inline-block;min-width:100px;">
+                                                        <label>
+                                                            <input type="checkbox" class="ace ng-pristine ng-valid" tagid="59" ng-model="common.tempTags[tag.id]" ng-click="pushTag(tag.id, tag.tag_name)" ng-checked="common.tempTags[tag.id]">
+                                                            <span class="lbl ng-binding"> 潜客</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkbox ng-scope" style="display:inline-block;min-width:100px;">
+                                                        <label>
+                                                            <input type="checkbox" class="ace ng-pristine ng-valid" tagid="59" ng-model="common.tempTags[tag.id]" ng-click="pushTag(tag.id, tag.tag_name)" ng-checked="common.tempTags[tag.id]">
+                                                            <span class="lbl ng-binding"> 吃喝玩乐</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="more-tags">
+                                                    <button class="btn btn-primary btn-sm">更多标签</button>
+                                                </div>
+                                                <hr>
+                                                <div class="seleted-tags">
+                                                    <span class="label label-lg label-primary">
+                                                        小盆友
+                                                    </span>
+                                                    <span class="label label-lg label-primary">
+                                                        小盆友
+                                                    </span>
+                                                    <span class="label label-lg label-primary">
+                                                        小盆友
+                                                    </span>
+                                                    <span class="label label-lg label-primary">
+                                                        小盆友
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /section:custom/widget-box -->
+                    </div>
+                </div>
+                <div class="space"></div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+                    <!-- #section:custom/widget-box -->
+                        <div class="widget-box">
+                            <div class="widget-header widget-header-blue widget-header-flat">
+                                <h5 class="widget-title">推送微信内容</h5>
+
+                                <!-- #section:custom/widget-box.toolbar -->
+                                <div class="widget-toolbar">
+                                    <a href="#" data-action="fullscreen" class="orange2">
+                                        <i class="ace-icon fa fa-expand"></i>
+                                    </a>
+                                    <a href="#" data-action="collapse">
+                                        <i class="ace-icon fa fa-chevron-up" id=""></i>
+                                    </a>
+                                </div>
+                                <!-- /section:custom/widget-box.toolbar -->
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="widget-body-inner" style="display: block;">
+                                    <div class="widget-main clearfix">
+                                        <textarea class="weixin-text" rows="4" ng-model="weixin.text"></textarea>
+                                        <div class="elm-area">
+                                            <div class="elms">
+                                                <a class="emotions elm" href="javascript:;" title="表情">
+                                                    <i class="fa fa-smile-o bigger-160"></i>
+                                                    表情
+                                                </a>
+                                                <a class="image elm" href="javascript:;" title="文字" ng-click="ChangeToText()">
+                                                    <i class="fa fa-pencil-square-o bigger-160"></i>
+                                                    文字
+                                                </a>
+                                                <a class="image elm" href="javascript:;" title="图文" ng-click="articlesModal()">
+                                                    <i class="fa fa-file-o bigger-160"></i>
+                                                    图文
+                                                </a>
+                                                <a class="image elm" href="javascript:;" title="图片" ng-click="imgModal()">
+                                                    <i class="fa fa-picture-o bigger-160"></i>
+                                                    图片
+                                                </a>
+                                                <a class="image elm" href="javascript:;" title="音频" ng-click="voiceModal()">
+                                                    <i class="fa fa-volume-up bigger-160"></i>
+                                                    音频
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="intro" style="margin-top:10px;font-size:11px;">
+                                            注：微信活动除了对指定用户群发一条消息外，还将该消息内容自动设置为追加回复规则，指定用户只要在设置时间内主动发消息给公众账号，即可收到该活动内容消息回复。
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 第二步：选择用户组 -->
+            <div class="step-pane col-xs-12" id="step2">
+                <div ng-if="groups.length==0">{{empty}}</div>
+                <div class="row groups-list">
+                    <div class="col-xs-3 group-box" ng-repeat="(key, item) in groups">
+                        <div class="widget-box widget-color-blue">
+                            <div class="widget-header" data-original-title="" id="">
+                                <h5 class="widget-title bigger lighter pull-left">{{item.group_name}}</h5>
+                                <div class="sync-switcher">
+                                    <i class="fa fa-lock bigger-160"></i>
+                                </div>
+                            </div>
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div class="alert alert-info description" data-html="true" data-placement="top"
+                                    data-trigger="hover" data-original-title="组描述" data-content="aaa" style="cursor: default;"
+                                    id="">
+                                        {{item.description}}
+                                    </div>
+                                    <div class="basic-info clearfix">
+                                        <div class="alert alert-success">
+                                            <i class="icon icon-user">
+                                            </i>
+                                                {{item.members_count}}人 
+                                        </div>
+
+                                        <div data-html="true" data-placement="top" data-trigger="hover" data-original-title="有效日期"
+                                        class="alert alert-warning" data-toggle="tooltip" data-content="创建时间:<br>2014年06月05日 11时<br>过期时间:<br>2014年06月30日 00时"
+                                        style="cursor: default;">
+                                            <i class="icon icon-time">
+                                            </i>
+                                            <!-- {{item.expires_in}}到期 -->
+                                            剩余：55天
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="opt-btn-grp clearfix">
+                                    <a href="javascript:;" class="btn btn btn-success" style="width:50%">
+                                            组特征
+                                    </a>
+                                    <a href="javascript:;" class="btn btn-info " ng-click="statistics(item.id)" style="width:50%">
+                                        组统计
+                                    </a>
+                                </div>                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 推送设置 -->
+            <div class="step-pane col-xs-12" id="step3">
+                <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+                    <!-- #section:custom/widget-box -->
+                    <div class="widget-box">
+                        <div class="widget-header  widget-header-blue widget-header-flat">
+                            <h5 class="widget-title">推送策略设置</h5>
+                            <!-- #section:custom/widget-box.toolbar -->
+                            <div class="widget-toolbar">
+                                <a href="#" data-action="fullscreen" class="orange2">
+                                    <i class="ace-icon fa fa-expand"></i>
+                                </a>
+                                <a href="#" data-action="collapse">
+                                    <i class="ace-icon fa fa-chevron-up" id=""></i>
+                                </a>
+                            </div>
+                            <!-- /section:custom/widget-box.toolbar -->
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-body-inner" style="display: block;">
+                                <div class="widget-main clearfix">
+                                    <div class="col-xs-6 push-tactics form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 活动名称 </label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="form-field-1" placeholder="活动名称" class="col-xs-10 col-sm-5">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="wb-accounts" class="col-sm-3 control-label no-padding-right">推送账号</label>
+                                            <div class="col-sm-9">
+                                                <select multiple="" id="wb-accounts" name="wb-accounts" class="chosen-select">
+                                                    <option value="1">Option#1</option>
+                                                    <option value="2">Option#2</option>
+                                                    <option value="2">Option#3</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="push-mode" class="col-sm-3 control-label no-padding-right">推送方式</label>
+                                            <div class="col-sm-9">
+                                                <select id="push-mode" name="push-mode" class="col-xs-10 col-sm-5">
+                                                    <option value="1">评论中@</option>
+                                                    <option value="2">内容中@</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6 push-tactics form-horizontal">
+                                        <div class="form-group">
+                                            <label for="wb-accounts" class="col-sm-3 control-label no-padding-right">推送时间段</label>
+                                            <div class="col-sm-9">
+                                                <select multiple="" id="wb-accounts" name="wb-accounts" class="chosen-select">
+                                                    <option value="1">Option#1</option>
+                                                    <option value="2">Option#2</option>
+                                                    <option value="2">Option#3</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="push-mode" class="col-sm-3 control-label no-padding-right">推送方式</label>
+                                            <div class="col-sm-9">
+                                                <select id="push-mode" name="push-mode" class="col-xs-10 col-sm-5">
+                                                    <option value="1">评论中@</option>
+                                                    <option value="2">内容中@</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 前进后退按钮 -->
+        <div class="wizard-actions row">
+            <div class="col-xs-12">
+                <button class="btn-prev btn">
+                    <i class="ace-icon fa fa-arrow-left"></i> 
+                    上一步
+                </button>
+                <button class="btn-next btn btn-success" data-last="完成 ">
+                    下一步
+                    <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

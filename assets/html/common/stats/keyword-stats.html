@@ -1,0 +1,43 @@
+<div class="page-header">
+    <h1>
+        统计分析
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            舆情关键词分析
+        </small>
+    </h1>
+</div>
+<div class="row" ng-controller="StatsController" ng-init="getKeywordStats()">
+    <div class="col-xs-12">
+        <div class="well well-sm form-inline clearfix">
+            <div class="pull-right" style="margin-left:20px">
+                <button class="btn btn-primary btn-sm" ng-click="getKeywordStats()">确定</button>
+            </div>
+            <div class="pull-right input-daterange input-group col-xs-6 col-sm-4">
+                <span>
+                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="startDt" is-open="startOpened" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="关闭" clear-text="清除" current-text="今天" ng-click="open($event, 'startOpened', 'endOpened')" placeholder="选择开始日期"/>
+                </span>
+                <span class="input-group-addon">
+                    <i class="fa fa-exchange"></i>
+                </span>
+                <span>
+                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="endDt" is-open="endOpened" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="关闭" clear-text="清除" current-text="今天" ng-click="open($event, 'endOpened', 'startOpened')" placeholder="选择结束日期"/>
+                </span> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 widget-container-col">
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h5 class="widget-title">关键词排名</h5>
+                    </div>
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div id="wb_keyword_stats">{{statsEmpty}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

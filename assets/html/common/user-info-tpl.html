@@ -1,0 +1,232 @@
+<div class="modal-header">
+    <button ng-click="cancel()" type="button" class="close" >
+    ×
+    </button>
+    <h3 class="modal-title">用户信息</h3>
+</div>
+<div class="modal-body articles-choose clearfix">
+    <tabset>
+        <tab heading="基本信息">
+            <div class="profile-user-info profile-user-info-striped" id="bootDate">
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 真实姓名 </div>
+
+                    <div class="profile-info-value">
+                        <span class="editable" id="full_name" ng-show="!showEditInput">{{userData.full_name}}</span>
+                        <input ng-show="showEditInput" ng-model="userData.full_name">
+                    </div>
+                </div>
+
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 性别 </div>
+
+                    <div class="profile-info-value">
+                        <select ng-disabled="!showEditInput" ng-model="userData.gender" style="width: 150px;">
+                            <option value="1">男</option>
+                            <option value="2">女</option>
+                            <option value="0">未知</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 生日 </div>
+
+                    <div class="profile-info-value">
+                        <span ng-show="!showEditInput">{{userData.birthday}}</span>
+                        <input type="text" datepicker-popup="{{format}}" is-open="showDateSelect" max-date="" datepicker-options="dateOptions" date-disabled="dtdisabled(date, mode)" ng-click="showDateSelect=true" clear-text="清除" current-text="今天" close-text="关闭" ng-model="userData.birthdate" ng-show="showEditInput"/>
+                    </div>
+                </div>
+
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 血型 </div>
+
+                    <div class="profile-info-value">
+                        <select ng-disabled="!showEditInput" ng-model="userData.blood_type" style="width: 150px;">
+                            <option value="1">A型</option>
+                            <option value="2">B型</option>
+                            <option value="3">AB型</option>
+                            <option value="4">O型</option>
+                            <option value="0">未知</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 星座 </div>
+
+                    <div class="profile-info-value">
+                        <select ng-disabled="!showEditInput" ng-model="userData.constellation" style="width: 150px;">
+                            <option value="1">白羊座</option>
+                            <option value="2">金牛座</option>
+                            <option value="3">双子座</option>
+                            <option value="4">巨蟹座</option>
+                            <option value="5">狮子座</option>
+                            <option value="6">处女座</option>
+                            <option value="7">天秤座</option>
+                            <option value="8">天蝎座</option>
+                            <option value="9">射手座</option>
+                            <option value="10">摩羯座</option>
+                            <option value="11">水瓶座</option>
+                            <option value="12">双鱼座</option>
+                            <option value="0">未知</option>
+                        </select>
+                    </div>
+                </div>
+                 <div class="profile-info-row">
+                    <div class="profile-info-name"> 地址 </div>
+
+                    <div class="profile-info-value">
+                        <span class="editable">{{userData.location}}</span>
+                        <!-- <input ng-show="showEditInput" ng-model="userData.address1"> -->
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 电话 </div>
+
+                    <div class="profile-info-value">
+                        <span class="editable" ng-show="!showEditInput">{{userData.tel1}}</span>
+                        <input ng-show="showEditInput" ng-model="userData.tel1">
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> 邮箱 </div>
+
+                    <div class="profile-info-value">
+                        <span class="editable" ng-show="!showEditInput">{{userData.email1}}</span>
+                        <input ng-show="showEditInput" ng-model="userData.email1">
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name"> QQ </div>
+                    <div class="profile-info-value">
+                        <span class="editable" ng-show="!showEditInput">{{userData.qq1}}</span>
+                        <input ng-show="showEditInput" ng-model="userData.qq1">
+                    </div>
+                </div>
+            </div>
+            <style type="text/css">
+            .user_tags{padding:12px;}
+            .user_tags span{margin:2px;}
+            </style>
+            <div class="user_tags" style="padding:12px;">
+                <button ng-click="showTagModal(userData.user_id, userData.tags)" class="btn btn-xs btn-info">编辑标签</button>
+                <span class="label label-info arrowed arrowed-right" ng-repeat="item in userData.tags">{{item.tag_name}}</span>
+                <span class="label label-light arrowed arrowed-right" ng-if="userData.tags.length==0">无标签</span>
+            </div>
+        </tab>
+        <tab heading="沟通记录">
+            <div class="col-xs-12" style="overflow-y: scroll;max-height: 400px;">
+                <div ng-if="userData.cmnHistory==undefined||userData.cmnHistory.feeds.length==0">
+                    <p>没有该用户的沟通记录</p>
+                </div>
+                <!-- ngRepeat:  -->
+                <div class="row">
+                    <div class="profile-activity clearfix col-xs-12" ng-repeat="item in userData.cmnHistory.feeds">
+                        <div>
+                            <img style="width: 40px;height: 40px;" class="pull-left avatar" alt="{{item.nickname}}" ng-src="{{item.headimgurl}}">
+                            <a class="user" href="javascript:;"> {{item.nickname}} </a>
+                            <div class="content">
+                                <p ng-if="item.type=='text'">{{item.content}}</p>
+                                <p ng-if="item.type=='location'">
+                                    <i class="fa fa-map-marker red"></i>
+                                    <a href="" ng-click="show_map=!show_map" ng-init="show_map=false" title="查看地图">{{item.label}}·查看</a> <br />
+                                    <img ng-show='show_map' class="map" ng-src="http://st.map.qq.com/api?size=680*360&center={{item.location_y}},{{item.location_x}}&markers={{item.location_y}},{{item.location_x}},red&zoom={{item.scale}}" title="{{item.label}}" style="border-radius:0" />
+                                </p>
+                                <p ng-if="item.type=='image'">
+                                    <i class="fa fa-image green"></i> <img ng-src="{{item.picurl}}" ng-class="{'auto':is_auto}" ng-click="is_auto=!is_auto" ng-init="is_auto=false" style="border-radius:0">
+                                </p>
+                                <p ng-if="item.type=='video'">
+                                    <i class="fa fa-film purple"></i>
+                                    <!-- img ThumbNail -->
+                                    <a href="#">打开视频</a>
+                                </p>
+                                <p ng-if="item.type=='voice'">
+                                    <i class="fa fa-music pink"></i> <a href="#">打开音频</a>
+                                </p>
+                                <p ng-if="item.type=='link'">
+                                    <i class="fa fa-external-link blue"></i> <a href="{{item.url}}" title="{{item.description}}" target="_blank">{{item.title}}</a>
+                                </p>
+                            </div>
+                            <div class="pull-left">
+                                <span class="created-at">
+                                    <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                    {{item.created_at}}
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="actions" cmn-id="{{item.id}}">
+                            <span ng-if='item.cate_names' class="label label-sm label-info arrowed-in-right arrowed-in">{{item.cate_names}}</span>
+                        </div>
+                        <div class="reply" ng-show="item.replies">
+                            <div ng-repeat="reply in item.replies">
+                                <div ng-if="reply.staff_name">{{reply.staff_name}} 回复：</div>
+                                <div ng-if="!reply.staff_name">自动回复：</div>
+                                <!--文字-->
+                                <div ng-if="reply.type=='text'">
+                                    {{reply.content}}
+                                    <div class="reply-time" style="margin-top: 10px;">
+                                        {{reply.created_at}}
+                                    </div>
+                                </div>
+                                <!--语音-->
+                                <div ng-if="reply.type=='voice'">
+                                    <!--<div style="width:200px;height:120px;border: 1px solid #CCCCCC;">-->
+                                    <a ng-href="uploads/voice/{{reply.content.filename}}" target="_blank">
+                                        <span class="btn">播放语音</span>
+                                    </a>
+                                    <div class="reply-time" style="margin-top: 10px;">
+                                        {{reply.created_at}}
+                                    </div>
+                                    <!--</div>-->
+                                </div>
+                                <!--图片-->
+                                <div ng-if="reply.type=='image'">
+                                    <div style="padding:15px;border: 1px solid #CCCCCC;">
+                                        <img style="border-radius:0;max-width: 200px;" width="200" height="120" ng-src="uploads/images/{{reply.content.filename}}" alt=""/>
+                                        <div class="reply-time" style="margin-top: 10px;">
+                                            {{reply.created_at}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--图文-->
+                                <div ng-if="reply.type=='news'">
+                                    <div style="float:left;padding:15px;border: 1px solid #CCCCCC;">
+                                            <span style="float:left;width:250px;margin:10px;" ng-repeat="articleReply in reply.content">
+                                                <h4>标题：{{articleReply.title}}</h4>
+                                                <img style="border-radius:0;max-width: 200px;" width="200" height="120" ng-src="uploads/images/{{articleReply.filename}}" alt=""/>
+                                            </span>
+                                        <div class="reply-time" style="float:left;width:100%;margin-top: 10px;">
+                                            {{reply.created_at}}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end ngRepeat:  -->
+                <div class="row">
+                    <div class="col-xs-12" ng-show="userData.cmnHistory.total_number">
+                        <pagination total-items="userData.cmnHistory.total_number" ng-model="userData.cmnHistory.current_page" ng-click="getCmnHistory()" items-per-page="userData.cmnHistory.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </tab>
+    </tabset>
+</div>
+<div class="modal-footer">
+    <button ng-click="edit()" ng-show="!showEditInput" type="button" class="btn btn-primary">
+    编辑
+    </button>
+    <button ng-click="confirmEdit()" ng-show="showEditInput" type="button" class="btn btn-primary">
+    确定
+    </button>
+    <button ng-click="cancelEdit()" ng-show="showEditInput" type="button" class="btn btn-warning">
+    取消
+    </button>
+    <button ng-click="cancel()" type="button" class="btn btn-default">
+    关闭
+    </button>
+</div>

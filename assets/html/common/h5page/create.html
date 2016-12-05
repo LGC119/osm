@@ -1,0 +1,282 @@
+<div class="page-header">
+	<h1>
+		活动页面
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>
+			活动页面创建
+		</small>
+	</h1>
+</div>
+<div class="row" ng-controller="H5pageController">
+	<!-- 页面预览 -->
+	<div class="col-sm-4">
+		<div class="widget-box widget-color-dark">
+			<div class="widget-header widget-header-small">
+				<h6 class="widget-title">页面预览</h6>
+			</div>
+			<div class="widget-body" style="height:480px">
+				<iframe id="mobile-frame" ng-src="{{iframe.baseScr + iframe.tpl}}" tpl="{{iframe.tpl}}" style="width:100%;height:100%">
+				</iframe>
+			</div>
+		</div>
+	</div>
+	<!-- 模板选择 -->
+	<div class="col-sm-8">
+		<a href="javascript:;" class="btn btn-primary btn-block" ng-click="showTagModal()">发布页面</a>
+		<tplswitcherswrap> 
+			<tplswitchers ng-repeat="tplswitcher in tpls">
+				<h3>
+					{{tplswitcher.title}} &nbsp;
+					<a class="btn btn-sm ng-changeTemplate" href="javascript:;" ng-show="showMe" ng-click="switchTpl(tplswitcher.tplId)">使用</a>
+				</h3>
+				<p>{{tplswitcher.desc}}</p>
+				<div class="clearfix" ng-if="tplswitcher.tplId=='custom'" ng-show="iframe.tpl=='custom'">
+					<input type="text" ng-model="custom_url" id="custom_url" placeholder="外部URL地址, eg:http://..." class="input-xlarge pull-left">
+					<a class="btn btn-sm btn-primary pull-left" target="_blank" href="{{custom_url}}">
+						<i class="fa fa-eye"></i>
+						预览页面
+					</a>
+				</div>
+				<hr>
+			</tplswitchers>
+		</tplswitcherswrap>
+	</div>
+</div>
+
+
+
+
+<!-- ===========遮罩弹框 Start========================== -->            
+<div id="modal-container-window" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				 <h4 class="modal-title" id="myModalLabel">修改元素</h4>
+			</div>
+			<div id="window" class="modal-body">
+				<p id="window-content" ></p>
+				<center><button id="choosepic" class="btn" style="display:none;">选择图片</button> 
+				&nbsp; 
+				&nbsp; 
+				<button id="picupload" class="btn" style="display:none;">上传</button></center>
+				<center>
+					<div id="addselect" class="form-horizental" style="display:none;">
+						<div class="control-group">
+							<label class="control-label" for="title">修改选项：</label>
+							<div class="controls" id="optionlist">
+								<span class="oneselection"><input class='optiontxt' value="选择项" type="text" /> &nbsp; <span class="label label-important removeme">&nbsp;-&nbsp;</span><br/></span>
+							</div>
+								<span id="addoption" class="btn btn-success">+</span><br/>
+						</div>
+					</div>
+				</center>
+				<div id="showedit" style="display:none">
+					<!--<script id="myEditor" name="content" type="text/plain"></script>-->
+					<textarea id="myeditor" style="height:150px;" id="content" ></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				 <button class="btn closethis" data-dismiss="modal" aria-hidden="true">取消</button> <button id="ok"  class="btn btn-success" data-dismiss="modal" aria-hidden="true" >确定</button>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<!-- ===========遮罩弹框 End ========================== -->   
+<!-- ===========遮罩弹框 广告选择 ========================== -->   
+<a id="modal-selectads" href="#modal-container-selectads" role="button" class="btn" data-toggle="modal" style="display:none;">AdsSelect</a>
+<div id="modal-container-selectads" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">选择广告</h3>
+	</div>
+	<div class="modal-body">
+		<p>
+			<table id="adlist" class="table  table-hover table-condensed" >
+				<tr>
+					<th>名称</th><th>点击数</th><th>描述</th><th>图</th>
+				</tr>
+				<tr>
+					
+				</tr>
+			</table>
+		</p>
+	</div>
+	<div class="modal-footer">
+		 <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+		 <button id="insertAds" class="btn btn-primary" data-dismiss="modal" aria-hidden="true" >插入广告</button>
+	</div>
+</div>
+<!-- ===========遮罩弹框 广告选择 End ========================== -->   
+
+<!-- 文件上传 Start -->
+<form action="app/index.php/h5page/h5page/uploadfiles" method="post"  id="picform" style="display:none;" enctype="multipart/form-data" target="ifrcc">
+	<input id="fileupload" type="file" name="uppic">
+</form>
+<iframe name="ifrcc" style="display:none;" ></iframe>
+<!-- 文件上传  End -->
+
+<!-- ===========遮罩弹框 标签设定 End ========================== -->   
+<!--<link rel="stylesheet" href="assets/lib/kindeditor/themes/default/default.css" />-->
+<!--<script charset="utf-8" src="assets/lib/kindeditor/kindeditor-min.js"></script>-->
+<!--<script charset="utf-8" src="assets/lib/kindeditor/plugins/code/prettify.js"></script>-->
+<!--<script charset="utf-8" src="assets/lib/kindeditor/lang/zh_CN.js"></script>-->
+<link rel="stylesheet" href="assets/lib/umeditor/themes/default/css/umeditor.min.css"/>
+<script>
+
+function editVal(vals){
+	loadUMEditor();
+	if(typeof ue == 'undefined'){
+		var setNum = 0;
+		var dt = setInterval(function(){
+			if(setNum > 10){
+				clearInterval(dt);
+				return;
+			}
+			setNum++;
+			if(typeof ue != 'undefined'){
+				ue.ready(function() {
+					//设置编辑器的内容
+					ue.setContent(vals);
+				});
+			}
+		},200);
+	}else{
+		ue.ready(function() {
+			//设置编辑器的内容
+			ue.setContent(vals);
+		});
+	}
+};
+function loadUMEditor()
+{
+	var script = document.createElement("script");
+	script.setAttribute("type","text/javascript");
+
+	script.onload = script.onreadystatechange = function() {
+		initUMEditor();
+	}
+	script.src = "assets/lib/umeditor/umeditor.min.js";
+	document.body.appendChild(script);
+}
+function initUMEditor()
+{
+	if(typeof ue == 'undefined'){
+		window.UMEDITOR_CONFIG.toolbar= [
+			'undo redo | bold italic underline strikethrough | forecolor backcolor | selectall cleardoc fontfamily fontsize',
+			'| justifyleft justifycenter justifyright justifyjustify | link unlink | image'
+		];
+
+		// 设置编辑器的宽度和高度
+		window.UMEDITOR_CONFIG.initialFrameWidth = "550";
+		// 允许最大字符数
+		window.UMEDITOR_CONFIG.maximumWords = 10000;
+		window.UMEDITOR_CONFIG.initialFrameHeight = 200;
+		ue = UM.getEditor('myeditor',{
+			autoFloatEnabled: false,
+			elementPathEnabled:false
+//            imageScaleEnabled:false
+		});
+	}
+}
+
+// angularJS似乎不方便操作iframe，暂时先用jquery操作
+$('#ok').on('click', function(){
+	//var idx = $('#txtform').attr('idx');
+	//var typex = $('#txtform').attr('typex');
+	var idx = $('#txtform2').attr('idx');
+	var typex = $('#txtform2').attr('typex');
+	switch(typex){
+		case "text":
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').text($('#title').val());
+			break;
+		case "img":
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').attr('src', "../"+$('#newimg').attr('src'));
+			$('#picupload').css('display','block');
+			break;
+		case "rich":
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').html(ue.getContent());
+//            $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').html(editor.html());
+			break;
+		case "value":
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').val($('#title').val());
+			break;
+		case "tip":
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').attr('placeholder', $('#title').val());
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').attr('name', $('#title').val());
+			break;
+		case "radio":
+			var html = '';
+				for (i = $('#title').val(); i > 0; i--) {
+					html += '<input id="radio'+i+'" name="radio'+i+'"  data-theme="c" type="radio" ><label for="radio'+i+'" ><span class="changex" typex="text">试用'+i+'</span></label>'
+				}
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').contents().find('input,label').remove();
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').append(html);
+			document.getElementById('#mobile-frame').contentWindow.refreshthis('.changex[idx="'+idx+'"]');
+			break;
+		case "select":
+			var i;
+			var html = '';
+			$('.optiontxt').each(function(k,v) {
+				i = $(this).val();
+				html += '<option value="'+i+'"  class="optionx" >'+i+'</option>'
+			});
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').empty();
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').append(html);
+			break;
+		case "option":
+				var html = '';
+			$('#options > input').each(function(k,v){
+				html += '<option value="'+$(this).val()+'" class="optionx"  >'+$(this).val()+'</option>'
+			});
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').empty();
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').append(html);
+			break;
+		case "check":
+			var i;
+			var html = '';
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').empty();
+			$('.optiontxt').each(function(k,v) {
+				i = $(this).val();
+				html += '<input data-role="none"  name="checkbox' + k + '" checkname="' + i + '" type="checkbox">' + i + ' <br/>';
+			});
+			$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').append(html);
+			//$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').trigger('create')
+			//$('#mobile-frame').contents().find('#multiselect').trigger('create');
+			break;
+	};  //End Switch
+	$('#showedit').css('display','none');
+	$('#picupload').css('display','none');
+	$('#choosepic').css('display','none');
+	$('#addselect').css('display','none');
+});
+
+// 头图上传按钮
+$('#choosepic').on('click', function(){
+	$('#fileupload').trigger('click');
+	$('#picupload').show();
+});
+
+$('#picupload').on('click', function(){
+	//$(this).text('上传中，请稍后...')
+	$('#picupload').text('上传中，请稍后...');
+	$('#picform').submit();
+	$('#picupload').hide();
+	$('#picupload').text('上传');
+});
+
+$('#fileupload').change( function(){
+	$('#picpath').html( '<center>图片路径： ' + $('#fileupload').val() + '</center>');
+
+	//====================================
+   // $('#picupload').text('上传中，请稍后...');
+   // $('#picform').submit();
+   // $('#picupload').text('上传');
+   // $('#picupload').css('display','none');
+   // $('#picupload').hide();
+	//====================================
+	return false;
+});
+</script>
+<input id="contenttext" type="hidden" name="textarea" value="" />

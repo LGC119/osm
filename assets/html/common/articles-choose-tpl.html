@@ -1,0 +1,59 @@
+<div class="modal-header">
+    <button ng-click="cancel()" type="button" class="close" >
+    ×
+    </button>
+    <h3 class="modal-title">图文选择</h3>
+</div>
+<div class="modal-body articles-choose clearfix">
+    <div ng-show="mediaData.code != 204" class="col-xs-12" style="margin: 3px 0;">
+        <div style="float:left;width:100%;padding: 6px;">
+            <select style="height: 30px;line-height: 30px;padding-left: 0" data-ng-model="search.status" class="col-xs-2" ng-options="v.id as v.name for (k,v) in search.tag">
+                <option value="">全部标签</option>
+            </select>
+            <input type="text" class="col-xs-2" data-ng-model="search.title" style="margin-left: 4px;"/>
+            <button class="btn" style="margin-left:4px;width: 100px;color:#333!important;border:1px solid #CCCCCC;background: #ffffff!important;" data-ng-click="media_search()">搜索</button>
+        </div>
+    </div>
+    <div ng-show="mediaData.code == 204">
+    暂无图文，请添加
+    </div>
+    <div class="col-xs-4 item" id="news_{{item.mediaid}}" ng-class="{true:'selected'}[common.itemSelected{{item.mediaid}}]" ng-repeat="item in mediaData.data.data">
+        <div class="widget-box widget-box-me">
+            <div class="widget-header">
+                <h5 class="widget-title bigger lighter">
+                    <div style="width: 100%;height:30px;line-height: 30px;overflow: hidden;">
+                        <a href="javascript:;">
+                            标题：{{item.title}}
+                        </a>
+                    </div>
+                </h5>
+                <div class="created-at">
+                    创建时间：{{item.created_at}}
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="header-pic" style="height:160px;overflow:hidden">
+                        <img ng-src="{{item.filepath}}" alt="" style="width:100%"/>
+                    </div>
+                    <div class="description" style="overflow:hidden;height:30px">
+                        {{item.description}}
+                    </div>
+                </div>
+            </div>
+            <div class="item-mask" ng-click="itemSelect(item.mediaid,item)"></div>
+            <i class="item-selected-icon" ng-click="itemSelect(item.mediaid,item)"></i>
+        </div>
+    </div>
+    <div class="col-xs-12" ng-show="mediaData.data.sum">
+        <pagination total-items="mediaData.data.sum" ng-model="mediaData.data.page" ng-click="get_media_list(mediaData.data.page)" items-per-page="mediaData.data.perpage" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+    </div>
+</div>
+<div class="modal-footer">
+    <button ng-click="cancel()" type="button" class="btn btn-default">
+    取消
+    </button>
+    <button ng-click="ok()" type="button" class="btn btn-primary">
+    确定
+    </button>
+</div>

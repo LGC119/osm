@@ -1,0 +1,208 @@
+<div class="page-header">
+    <h1>
+        微信信息推送
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            群发统计
+        </small>
+    </h1>
+</div>
+<div class="row" ng-controller="SendallListController">
+
+    <div class="col-xs-12">
+        <div class="col-xs-12" ng-show="params.perpage">
+            <pagination total-items="params.sum" ng-model="params.page" ng-click="get_list()" items-per-page="params.perpage" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+        </div>
+           <table class="table table-striped table-bordered table-hover" style="word-wrap:break-word;word-break:break-all;">
+               <thead>
+                   <tr>
+                       <th width="14%">发送日期</th>
+                       <th width="8%">发送类型</th>
+                       <th width="8%">活动类型</th>
+                       <th width="8%">活动行业</th>
+                       <th width="31%">内容</th>
+                       <th width="15%">接收成功人数/总人数</th>
+                       <th width="8%">群发状态</th>
+                       <th width="9%">操作</th>
+                   </tr>
+               </thead>
+               <tr data-ng-repeat="send in sendList">
+                   <td>{{send.exec_time}}</td>
+                   <td>{{sendType[send.msgtype]}}</td>
+                   <td>
+                       {{event.type[send.eventtype]}}
+                   </td>
+                   <td>
+                       {{event.industry[send.industry]}}
+                   </td>
+                   <td>
+                       <span ng-if="send.msgtype=='text'">
+                           {{send.data}}
+                       </span>
+                       <span ng-if="send.msgtype=='voice'" ng-show="send.data.filename">
+                           <span class="btn">
+                               <a href="uploads/voice/{{send.data.filename}}" target="_blank">语音播放</a>
+                           </span>
+                       </span>
+                       <span ng-if="send.msgtype=='image'" ng-show="send.data.filename" style="float:left;width: 100px;height: 60px;border: 1px solid #cccccc;">
+                            <img style="padding: 5px;" width="100" height="60" ng-src="uploads/images/{{send.data.filename}}" alt=""/>
+                       </span>
+                       <div ng-if="send.msgtype=='news'||send.msgtype=='articles'">
+                           <div ng-show="send.data.title">
+                                <span style="float:left;width: 100px;height: 100px;border: 1px solid #cccccc;">
+                                    <!--单图文-->
+                                   <div style="height: 40px;line-height: 20px;padding: 6px;">
+                                       {{send.data.title}} <br/>
+                                   </div>
+                                    <a href="#/h5page-list/{{send.data.url}}">
+                                   <img style="padding: 5px;" width="100" height="60" ng-src="uploads/images/{{send.data.filename}}" alt=""/>
+                                    </a>
+                                </span>
+                           </div>
+                           <div ng-show="!send.data.title">
+                                <span style="float:left;width: 100px;height: 100px;border: 1px solid #cccccc;" data-ng-repeat="articles in send.data">
+                                    <!--多图文-->
+                                   <div style="height: 40px;line-height: 20px;padding: 6px;">
+                                       {{articles.title}} <br/>
+                                   </div>
+                                    <a href="#/h5page-list/{{articles.url}}">
+                                        <img style="padding: 5px;" width="100" height="60" ng-src="uploads/images/{{articles.filename}}" alt=""/>
+                                    </a>
+                                </span>
+                           </div>
+
+                       </div>
+                   </td>
+                   <td>
+
+                       {{send.sentcount}} /
+                       <a href="#/wx-user/0/{{send.id}}/">
+                       {{send.totalcount}}
+                        </a>
+                   </td>
+                   <td>
+                       <span ng-if="send.status=='send success'" class="green">
+                            发送成功
+                       </span>
+                       <span ng-if="send.status=='send fail'" class="red">
+                            发送失败
+                       </span>
+                       <span ng-if="!send.status">
+                           <span ng-if="send.is_send==1" class="grey">
+                               <span ng-if="send.status!='send success'">发送失败</span>
+                           </span>
+                           <span ng-if="send.is_send==0" class="blue">未发送</span>
+                       </span>
+                   </td>
+                   <td>
+                       <button ng-disabled="send.is_send==1" class="btn btn-xs btn-success" data-ng-click="edit(send.id,send.exec_time)">
+                           <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                           修改
+                       </button>
+                       <button ng-disabled="send.is_send==1" class="btn btn-xs btn-danger" style="margin-top: 3px;"  data-ng-click="delete(send.id)">
+                           <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                           删除
+                       </button>
+                       <button class="btn btn-xs btn-info" style="margin-top: 3px;" data-ng-click="statistics(send.id);">
+                           <i class="ace-icon fa fa-bar-chart-o bigger-120 "></i>
+                           统计
+                       </button>
+                   </td>
+               </tr>
+           </table>
+        <div class="col-xs-12" ng-show="params.perpage">
+            <pagination total-items="params.sum" ng-model="params.page" ng-click="get_list()" items-per-page="params.perpage" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+        </div>
+    </div>
+
+
+    <!-- 删除模态框模板 -->
+    <script type="text/ng-template" id="delete-modal">
+        <div class="modal-body" style="font-size: 16px;height: 60px;">
+            确定删除？
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="delete_ok()">确定</button>
+            <button class="btn btn-default" ng-click="cancel()">取消</button>
+        </div>
+    </script>
+
+    <!-- 修改时间模板 -->
+    <script type="text/ng-template" id="edit-modal">
+        <div class="modal-body" style="font-size: 16px;height: 60px;">
+            <div class="datetimepicker col-xs-12 mt-20" style="padding-left:0;">
+                <div class="col-xs-4" style="display:inline-block; min-height:290px; min-width:344px">
+                    <datepicker ng-model="common.dt" min-date="common.minDate" show-weeks="true" class="well well-sm" style="min-width:334px"></datepicker>
+                </div>
+                <div class="col-xs-4" style="font-size: 13px;">
+                    <timepicker ng-model="common.dt" hour-step="common.hstep" minute-step="common.mstep" show-meridian="common.ismeridian"></timepicker>
+                    设置的时间为:
+                        <b id="exec_time">
+                            <pre><span>{{common.dt | date:'yyyy-MM-dd HH:mm' }}</span></pre>
+                        </b>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="edit_ok()">确定</button>
+            <button class="btn btn-default" ng-click="cancel()">取消</button>
+        </div>
+    </script>
+
+    <!-- 统计模板 -->
+    <script type="text/ng-template" id="info-modal">
+        <div class="modal-header">
+            <h3 class="modal-title">统计分析</h3>
+        </div>
+        <div class="modal-body">
+            <div class="tabbable">
+                <ul class="nav nav-tabs" id="myTab">
+                    <li class="active">
+                        <a data-toggle="tab" href="#home1">
+                            访问量(地区)
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#home2">
+                           访问量(性别)
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#home3">
+                           访问量(时间)
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="home1" class="tab-pane in active">
+                        <p>
+                            <span id="container1" style="width: 900px"></span>
+                        </p>
+                    </div>
+
+                    <div id="home2" class="tab-pane">
+                        <p>
+                            <span id="container2" style="width: 900px"></span>
+                        </p>
+                    </div>
+
+                    <div id="home3" class="tab-pane">
+                        <p>
+                            <span id="container3" style="width: 900px"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="container22" style="width: 33%;"></div>
+            <div id="container2" style="width: 33%;"></div>
+            <div id="container3" style="width: 33%;"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="info_ok()">关闭</button>
+            <!--<button class="btn btn-warning" ng-click="info_cancel()">Cancel</button>-->
+        </div>
+    </script>
+
+</div>

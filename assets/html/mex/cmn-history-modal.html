@@ -1,0 +1,107 @@
+<div class="modal-header">
+    <h3 class="modal-title">沟通记录</h3>
+</div>
+<div class="modal-body">
+    <div class="col-xs-12" style="overflow-y: scroll;max-height: 400px;">     
+        <!-- ngRepeat:  -->
+        <div class="row">
+            <div class="col-x" ng-show="!cmnHistory.feeds.length">
+                暂无沟通记录
+            </div>
+            <div class="profile-activity clearfix col-xs-12" ng-repeat="item in cmnHistory.feeds">
+                <div>
+                    <img class="pull-left" alt="{{item.nickname}}" ng-src="{{item.headimgurl}}">
+                    <a class="user" href="javascript:;"> {{item.nickname}} </a>
+                    <div class="content">
+                        <p ng-if="item.type=='text'" ng-bind-html="item.content"></p>
+                        <p ng-if="item.type=='location'">
+                            <i class="fa fa-map-marker red"></i> <a href="" ng-click="show_map=!show_map" ng-init="show_map=false" title="查看地图">{{item.label}}·查看</a> <br />
+                            <img ng-show='show_map' class="map" ng-src="http://st.map.qq.com/api?size=680*360&center={{item.location_y}},{{item.location_x}}&markers={{item.location_y}},{{item.location_x}},red&zoom={{item.scale}}" title="{{item.label}}" style="border-radius:0" />
+                        </p>
+                        <p ng-if="item.type=='image'">
+                            <i class="fa fa-image green"></i> <img ng-src="{{item.picurl}}" ng-class="{'auto':is_auto}" ng-click="is_auto=!is_auto" ng-init="is_auto=false" style="border-radius:0">
+                        </p>
+                        <p ng-if="item.type=='video'">
+                            <i class="fa fa-film purple"></i> 
+                            <!-- img ThumbNail -->
+                            <a href="#">打开视频</a>
+                        </p>
+                        <p ng-if="item.type=='voice'">
+                            <i class="fa fa-music pink"></i> <a href="#">打开音频</a>
+                        </p>
+                        <p ng-if="item.type=='link'">
+                            <i class="fa fa-external-link blue"></i> <a href="{{item.url}}" title="{{item.description}}" target="_blank">{{item.title}}</a>
+                        </p>
+                    </div>
+                    <div class="pull-left">
+                        <span class="created-at">
+                            <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                            {{item.created_at}}
+                        </span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="actions" cmn-id="{{item.id}}">
+                    <span ng-if='item.cate_names' class="label label-sm label-info arrowed-in-right arrowed-in">{{item.cate_names}}</span>
+                </div>
+                <div>
+                    <span ng-show="!item.reply">暂无回复</span>
+                </div>
+                <div class="reply" ng-show="item.reply">
+                    <div ng-if="item.staff_name">{{item.staff_name}} 回复：</div>
+                    <div ng-if="!item.staff_name">自动回复：</div>
+                    <!--文字-->
+                    <div ng-if="item.reply_type=='text'">
+                        {{item.reply}}
+                        <div class="reply-time" style="margin-top: 10px;">
+                            {{item.reply_time}}
+                        </div>
+                    </div>
+                    <!--语音-->
+                    <div ng-if="item.reply_type=='voice'">
+                        <!--<div style="width:200px;height:120px;border: 1px solid #CCCCCC;">-->
+                        <a ng-href="uploads/voice/{{item.reply.filename}}" target="_blank">
+                            <span class="btn">播放语音</span>
+                        </a>
+                        <div class="reply-time" style="margin-top: 10px;">
+                            {{item.reply_time}}
+                        </div>
+                        <!--</div>-->
+                    </div>
+                    <!--图片-->
+                    <div ng-if="item.reply_type=='image'">
+                        <div style="padding:15px;border: 1px solid #CCCCCC;">
+                            <img width="200" height="120" ng-src="uploads/images/{{item.reply.filename}}" alt=""/>
+                            <div class="reply-time" style="margin-top: 10px;">
+                                {{item.reply_time}}
+                            </div>
+                        </div>
+                    </div>
+                    <!--图文-->
+                    <div ng-if="item.reply_type=='news'">
+                        <div style="float:left;padding:15px;border: 1px solid #CCCCCC;">
+                                        <span ng-if="item.reply">
+                                            <span style="float:left;width:250px;margin:10px;" data-ng-repeat="articleReply in item.reply">
+                                                <h4>标题：{{articleReply.title}}</h4>
+                                                <img width="200" height="120" ng-src="uploads/images/{{articleReply.filename}}" alt=""/>
+                                            </span>
+                                        </span>
+                            <div class="reply-time" style="float:left;width:100%;margin-top: 10px;">
+                                {{item.reply_time}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end ngRepeat:  -->
+        <div class="row">
+            <div class="col-xs-12" ng-show="cmnHistory.total_number">
+                <pagination total-items="cmnHistory.total_number" ng-model="cmnHistory.current_page" ng-click="getCmnHistory()" items-per-page="cmnHistory.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">关闭</button>
+</div>

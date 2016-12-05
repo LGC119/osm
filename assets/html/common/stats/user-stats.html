@@ -1,0 +1,92 @@
+<div class="page-header">
+    <h1>
+        统计分析
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            粉丝信息分析
+        </small>
+    </h1>
+</div>
+<div class="row" ng-controller="StatsController" ng-init="getUserStats()">
+    <div class="col-xs-12">
+        <div class="well well-sm form-inline clearfix">
+            <div class="pull-left col-xs-4 col-sm-3">
+                <select ng-show="dataSource=='wb'" ng-options="i.id as i.screen_name for i in accounts" ng-model="selectedAccount" ng-change="getUserStats()">
+                    <option value="">--切换账号--</option>
+                </select>
+                <select ng-show="dataSource=='wx'" ng-options="i.id as i.nickname for i in accounts" ng-model="selectedAccount" ng-change="getUserStats()">
+                    <option value="">--切换账号--</option>
+                </select>
+            </div>
+            <div class="pull-right" style="margin-left:20px">
+                <button class="btn btn-primary btn-sm" ng-click="getUserStats()">确定</button>
+            </div>
+            <div class="pull-right input-daterange input-group col-xs-6 col-sm-4">
+                <span>
+                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="startDt" is-open="startOpened" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="关闭" clear-text="清除" current-text="今天" ng-click="open($event, 'startOpened', 'endOpened')" placeholder="选择开始日期" />
+                </span>
+                <span class="input-group-addon">
+                    <i class="fa fa-exchange"></i>
+                </span>
+                <span>
+                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="endDt" is-open="endOpened" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="关闭" clear-text="清除" current-text="今天" ng-click="open($event, 'endOpened', 'startOpened')" placeholder="选择结束日期" />
+                </span>
+            </div>
+        </div>
+        <div class="row" ng-init="showUserInfoPie()">
+            <div class="col-xs-6 col-sm-3 widget-container-col">
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h5 class="widget-title">性别比例</h5>
+                    </div>
+
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div id="user_gender_stats">{{statsEmpty}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-3 widget-container-col" ng-if="dataSource=='wb'">
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h5 class="widget-title">粉丝身份</h5>
+                    </div>
+
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div id="user_vt_stats">{{statsEmpty}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 widget-container-col" ng-class="{'col-sm-6':dataSource=='wb','col-sm-9':dataSource=='wx'}">
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h5 class="widget-title">地区分布</h5>
+                    </div>
+
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div id="user_region_stats">{{statsEmpty}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-init="showUserIncreaseLine()">
+            <div class="col-xs-12 widget-container-col">
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h5 class="widget-title">粉丝增长趋势</h5>
+                    </div>
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div id="user_increcement_stats">{{statsEmpty}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

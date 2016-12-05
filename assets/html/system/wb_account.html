@@ -1,0 +1,77 @@
+<div class="page-header">
+    <h1>
+        账号设置
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            微博账号
+        </small>
+    </h1>
+</div>
+<div ng-controller="WeiboAccountController" ng-init="get_accounts()">
+	<p><button class="btn btn-sm btn-primary" ng-click="initModal();">绑定微博账号</button></p>
+	<!-- 绑定新的账号Dialog -->
+	<div class="modal fade" id="add_new" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">绑定微博账号</h4>
+				</div>
+				<div class="modal-body">
+					<p ng-if="apps.length==0">{{app_empty}}</p>
+					<p ng-repeat="app in apps">
+						<a href="javascript:;" ng-click="get_wb_auth(app.id)" target="_blank">[{{platforms[app.platform]}}] - {{app.name}}</a>
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 绑定新的账号Dialog END -->
+<style type="text/css">.table>tbody>tr>td{line-height:24px;}td.expired{color:#d15b47;text-decoration:line-through;}</style>
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>账号</th>
+				<th>平台</th>
+				<th>关注数</th>
+				<th>粉丝数</th>
+				<th>微博数</th>
+				<th>授权过期时间</th>
+				<th>授权应用</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-if="wb_accounts.length<1">
+				<td colspan="8" align="center">{{wb_empty}}</td>
+			</tr>
+			<tr ng-repeat="item in wb_accounts">
+				<td>{{item.screen_name}}</td>
+				<td>
+					{{platforms[item.platform]}}
+					<img ng-src="assets/img/wb_48x48.png" alt="" ng-if="item.platform==1" width="20" height="20">
+					<img ng-src="assets/img/tx-icon-24X24.png" alt="" ng-if="item.platform==2" width="20" height="20">
+				</td>
+				<td>{{item.friends_count}}</td>
+				<td>{{item.followers_count}}</td>
+				<td>{{item.statuses_count}}</td>
+				<td ng-class="{expired:item.expired}">{{item.expire_date}}</td>
+				<td>{{item.app_name}}</td>
+				<td>
+					<div class="hidden-sm hidden-xs btn-group">
+						<button class="btn btn-xs btn-success" ng-click="get_wb_auth(item.app_id)">
+							<i class="ace-icon fa fa-refresh bigger-120"></i> 延期
+						</button>
+						<button class="btn btn-xs btn-danger" ng-click="delete(item.id, item.screen_name)">
+							<i class="ace-icon fa fa-trash-o bigger-120"></i> 解绑
+						</button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+</div>

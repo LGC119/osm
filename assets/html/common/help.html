@@ -1,0 +1,33 @@
+<style>
+	ul {
+		margin: 0;
+	}
+
+	ul li {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		text-indent: 0;
+	}
+	.m_l_10{
+		margin-left: 10px;
+	}
+	.m_b_20{
+		margin-bottom: 20px;
+	}
+</style>
+<div class="page-header">
+	<h1>
+		帮助文档
+	</h1>
+</div>
+<div data-ng-controller="HelpController">
+	<div class="pull-left col-md-12 m_b_20">
+		<span class="pull-left"><input type="text" ng-model="kw"/></span>
+		<span class="pull-left btn btn-primary btn-sm m_l_10" ng-click="search()">搜索</span>
+		<span class="pull-left btn btn-primary btn-sm m_l_10" ng-click="clear()">返回</span>
+	</div>
+	<div class="col-md-12" id="help" style="margin-bottom: 100px;">
+
+	</div>
+</div>

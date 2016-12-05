@@ -1,0 +1,268 @@
+<div class="page-header">
+    <h1>
+        微信消息推送
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            群发消息
+        </small>
+    </h1>
+
+</div>
+<div class="row" ng-controller="SendallController">
+    <!--发送的内容-->
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <div style="border: 1px solid #CCCCCC;padding: 20px;margin: 10px 0 10px" ng-show="sendValue.isImageDiv">
+                    <div style="width: 300px;height: 200px;border: 1px solid #cccccc;box-shadow: 2px  2px 5px #999999;">
+                        <div style="width: 100%;height: 40px;padding: 5px;font-size: 14px;">{{sendValue.imageDate}}</div>
+                        <img ng-src="{{sendValue.imageSrc}}" style="width: 250px;height:160px;padding: 5px;" alt=""/>
+                    </div>
+                </div>
+                <div style="border: 1px solid #CCCCCC;padding: 20px;margin: 10px 0 10px" ng-show="sendValue.isNewsDiv">
+                    <div style="width: 300px;height: 130px;border: 1px solid #cccccc;" data-ng-repeat="news in sendValue.newsData">
+                        <div style="float: left;width: 180px;height: 80px;margin-top: 30px;text-indent: 20px;">
+                            {{news.title}}
+                        </div>
+                        <div style="float:left;width: 110px;height: 90px;margin-top: 20px;">
+                            <img ng-src="{{news.filepath}}" style="width: 110px;height: 90px;" alt=""/>
+                        </div>
+                    </div>
+                </div>
+                <div style="border: 1px solid #CCCCCC;padding: 20px;margin: 10px 0 10px" ng-show="sendValue.isArticlesDiv">
+                    <div style="width: 300px;height: 130px;border: 1px solid #cccccc;" data-ng-repeat="articles in sendValue.articlesData.data">
+                        <div style="float: left;width: 180px;height: 80px;margin-top: 30px;text-indent: 20px;">
+                            {{articles.title}}
+                        </div>
+                        <div style="float:left;width: 110px;height: 90px;margin-top: 20px;">
+                            <img ng-src="uploads/images/{{articles.filename}}" style="width: 110px;height: 90px;" alt=""/>
+                        </div>
+                    </div>
+                </div>
+                <div style="border: 1px solid #CCCCCC;padding: 20px;margin: 10px 0 10px" ng-show="sendValue.isVoiceDiv">
+                    <div style="width: 300px;height: 200px;border: 1px solid #cccccc;box-shadow: 2px  2px 5px #999999;">
+                        <div style="width: 100%;height: 40px;padding: 5px;font-size: 14px;">{{sendValue.voiceDate}}</div>
+                        <a style="padding: 10px;" target="_blank" href="{{sendValue.voiceSrc}}">
+                            <button class="btn btn-success btn-lg">语音</button>
+                        </a>
+                    </div>
+                </div>
+                <textarea id="msg-content" class="weixin-text" rows="4" ng-model="weixinText" ng-show="sendValue.isText"></textarea>
+                <div class="elm-area">
+                    <div class="send-btn pull-right">
+                        <a href="javascript:;" class="btn btn-primary" title="群发按钮" ng-click="send()" ng-disabled="pending">
+                            发 布
+                        </a>
+                    </div>
+                    <div class="elms">
+                        <a class="icon-emotions elm" href="javascript:;" title="表情">
+                            <i class="fa fa-smile-o bigger-160"></i>
+                            表情
+                        </a>
+                        <a class="image elm" href="javascript:;" title="文字" ng-click="textBox('text')">
+                            <i class="fa fa-pencil-square-o bigger-160"></i>
+                            文字
+                        </a>
+                        <a class="image elm" href="javascript:;" title="单图文" ng-click="showBox('news')">
+                            <i class="fa fa-file-o bigger-160"></i>
+                            单图文
+                        </a>
+                        <a class="image elm" href="javascript:;" title="多图文" ng-click="showBox('articles')">
+                            <i class="fa fa-file-o bigger-160"></i>
+                            多图文
+                        </a>
+                        <a class="image elm" href="javascript:;" title="图片" ng-click="showBox('image')">
+                            <i class="fa fa-picture-o bigger-160"></i>
+                            图片
+                        </a>
+                        <!--<span class="preview-image" ng-show="true" style="margin:0 10px 0 -20px">-->
+                            <!--<a href="javascript:;" tooltip-placement="bottom" tooltip-html-unsafe="{{wbPrepare.imageHtml}}">-->
+                            <!--查看图片-->
+                            <!--</a>-->
+                            <!--<a href="javascript:;" class="red" ng-click="weixin.image=false">-->
+                                <!--<i class="fa fa-times bigger-120"></i>-->
+                            <!--</a>-->
+                        <!--</span>-->
+                        <a class="image elm" href="javascript:;" title="音频" ng-click="showBox('voice')">
+                            <i class="fa fa-volume-up bigger-160"></i>
+                            音频
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="space"></div>
+        <div class="row">
+            <div class="col-xs-12">
+                 <!--<tabset>-->
+                    <!--<tab heading="群发对象">-->
+                        <div class="col-xs-12">
+							<span class="f_l">活动标题：</span>
+							<span class="f_l"><input data-ng-model="event.name" style="width: 160px;height: 26px;line-height: 26px;margin-right: 20px;" type="text"/></span>
+                            <span class="f_l m_r_20 m_b_10">
+                                分组：
+                                <select ng-model="sendValue.sGroup">
+                                    <option value="false">全部用户</option>
+                                    <option value="true">按组选择</option>
+                                </select>
+                                <!--{{groupData.groups}}-->
+                                <select id="group" ng-model="data.group"  ng-show="sendValue.sGroup" ng-options="v.id as v.name for (k,v) in groupData" ng-change="test()">
+                                    <!--<option data-ng-repeat="groupV in groupData.groups" value="{{groupV.id}}">{{groupV.name}}</option>-->
+                                </select>
+                            </span>
+                            <span class="f_l m_r_20 m_b_10">
+                                性别：
+                                <select id="sex">
+                                    <option value="0" selected>全部</option>
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                </select>
+                            </span>
+                            <span class="f_l m_r_20 m_b_10">
+                                剩余发送次数：
+                                <select id="send_num">
+                                    <option value="99" selected>全部</option>
+                                    <option value="4">4</option>
+                                    <option value="3">3</option>
+                                    <option value="2">2</option>
+                                    <option value="1">1</option>
+                                    <!--<option value="0">0</option>-->
+                                </select>
+                            </span>
+                            <span class="f_l m_r_20 m_b_10">
+                                地区：
+                                <select id="country" data-ng-model="filter.sCountry">
+                                    <option value="false">全部</option>
+                                    <option value="true">中国</option>
+                                </select>
+                                <select id="province" ng-show="filter.sCountry"  ng-options="k for (k,v) in sendValue.sProvince" data-ng-model="filter.pro">
+                                    <option value="">全部</option>
+                                </select>
+                                <select id="city" ng-show="filter.pro && filter.sCountry" data-ng-model="filter.city" ng-options="v as v for (k,v) in filter.pro">
+                                    <option value="">全部</option>
+                                </select>
+                            </span>
+
+                            <span class="f_l m_r_20 m_b_10">
+                                <label> 活动类型：</label>
+                                <span>
+                                    <select ng-model="event.type">
+                                        <option value="0">默认</option>
+                                        <option value='1'>抽奖</option>
+                                        <option value='2'>线下</option>
+                                        <option value='3'>调查</option>
+                                        <option value='4'>会员绑定</option>
+                                    </select>
+                                </span>
+                            </span>
+                            <span class="f_l m_r_20 m_b_10">
+                                <label> 活动行业：</label>
+                                <span>
+                                    <select ng-model="event.industry">
+                                        <option value='0'>默认</option>
+                                        <option value='1'>快消</option>
+                                        <option value='2'>汽车</option>
+                                        <option value='3'>数码</option>
+                                    </select>
+                                </span>
+                            </span>
+                            <div class="f_l form-control" style="border: 0;padding-left: 0;color: #333333;">定时发送：</div>
+                            <div class="f_l form-control" style="padding-bottom: 300px;">
+                                    <!--<input id="exec_time" type="text" style="width: 120px;height: 30px;" placeholder="发送时间"/>-->
+                                    <div class="f_l datetimepicker col-xs-12 mt-20" ng-show="true" style="padding-left:0;">
+                                        <div id="bootDate" class="f_l col-xs-4" style="display:inline-block; min-height:290px; min-width:344px">
+                                            <datepicker class="f_l well well-sm" ng-model="common.dt" min-date="common.minDate" show-weeks="true" style="min-width:334px"></datepicker>
+                                        </div>
+                                        <div class="f_l col-xs-4">
+                                            <div class="f_l width-100">
+                                                <timepicker class="f_l" ng-model="common.dt" hour-step="common.hstep" minute-step="common.mstep" show-meridian="common.ismeridian"></timepicker>
+                                            </div>
+                                            <div class="f_l width-100">
+                                                <pre>设置的时间为: <b id="exec_time">{{common.dt | date:'yyyy-MM-dd HH:mm' }}</b></pre>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                            </div>
+                            <div class="f_l form-control m_b_10" id="selecNum" style="border: 0;padding-left: 0;">
+                                <label class="m_b_10">当前选中人数：</label>
+                                <span>
+                                    <font color="red">--</font>
+
+                                    <button class="btn btn-xs btn-success m_l_10" data-ng-click="refresh()">
+                                        <i style="margin-left: 10px;cursor: pointer" class="ace-icon fa fa-refresh" data-ng-click="refresh()">
+                                            刷新
+                                        </i>
+                                    </button>
+                                </span>
+                            </div>
+
+                            <!--<div class="clearfix"></div>-->
+                            <!--</tab>-->
+                            <!--<tab heading="定时发送">-->
+                            <!--<div class="col-xs-12" id="toggleDtPicker">-->
+                            <!--<label>-->
+                                <!--&lt;!&ndash;<input type="checkbox" class="ace" ng-model="common.showDtPiker">&ndash;&gt;-->
+                                <!--<span class="lbl"> 定时发送</span>-->
+                            <!--</label>-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--<div class="datetimepicker col-xs-12 mt-20" ng-show="true" style="padding-left:0;">-->
+                                <!--<div id="bootDate" class="col-xs-4" style="display:inline-block; min-height:290px; min-width:344px">-->
+                                    <!--<datepicker ng-model="common.dt" min-date="common.minDate" show-weeks="true" class="well well-sm" style="min-width:334px"></datepicker>-->
+                                <!--</div>-->
+                                <!--<div class="col-xs-4">-->
+                                    <!--<timepicker ng-model="common.dt" hour-step="common.hstep" minute-step="common.mstep" show-meridian="common.ismeridian"></timepicker>-->
+                                    <!--<pre>设置的时间为: <b id="exec_time">{{common.dt | date:'yyyy-MM-dd HH:mm' }}</b></pre>-->
+                                <!--</div>-->
+                                <!--<div class="clearfix"></div>-->
+                            <!--</div>-->
+                            <!--<div class="clearfix"></div>-->
+                            <!--</tab>-->
+                            <!--</tabset>-->
+
+
+                            <div class="f_l form-group">
+                                <button class="btn btn-md btn-primary" data-ng-click="getUser()">获取选中用户详情</button>
+                            </div>
+                            <div class="f_l form-group" style="padding-bottom: 150px;" ng-show="getUserInfo">
+                                <button data-ng-repeat="checkedName in userInfoALl" class="btn btn-white btn-default" style="margin: 5px;">
+                                    {{checkedName.nickname}} ( {{useropenid[checkedName.openid]}} )
+                                </button>
+                            </div>
+                        </div>
+
+
+            </div>
+        </div>
+    </div>
+
+<!--确认框框-->
+<div class="modal fade" id="cfm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 200px;">
+        <div class="modal-content">
+            <div class="modal-body">
+                是否不需要定时直接发送？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-ng-click="cfm()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--确认框框-->
+<div class="modal fade" id="cfmAll" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 200px;">
+        <div class="modal-content">
+            <div class="modal-body">
+                您将发送给全部用户，确定这样做吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-ng-click="cfmAll()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>

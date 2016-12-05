@@ -1,0 +1,205 @@
+<div class="page-header">
+	<h1>
+		素材及业务设置
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>
+                二维码详情
+		</small>
+	</h1>
+</div>
+<!-- tab页 -->
+<div class="row" ng-controller="TwodcodedetailController">
+	<div class="col-xs-12">
+        <div class="twodcode clearfix" >
+		<ul class="nav nav-tabs padding-18">
+			<li class="active">
+				<a data-toggle="tab" href="#introduce">
+					<i class="green ace-icon fa fa-pencil bigger-120"></i>
+					简介
+				</a>
+			</li>
+
+			<li>
+				<a data-toggle="tab" href="#users">
+					<i class="orange ace-icon fa fa-users bigger-120"></i>
+					用户列表
+				</a>
+			</li>
+			<a href='javascript:history.back(-1)' style="float:right"><button class="btn btn-sm btn-info" type="button">返回二维码列表</button></a>
+
+			<!-- <li>
+				<a data-toggle="tab" href="#chart">
+					<i class="blue ace-icon fa fa-bar-chart-o bigger-120"></i>
+					用户统计
+				</a>
+			</li>
+
+			<li>
+				<a data-toggle="tab" href="#pictures">
+					<i class="pink ace-icon fa fa-picture-o bigger-120"></i>
+					blablabla
+				</a>
+			</li> -->
+		</ul>
+		<!-- 简介 -->
+		<div class="tab-content no-border padding-24">
+			<div id="introduce" class="tab-pane in active">
+				<div class="row" ng-repeat="item in twodcodedetailData.data">
+					<div class="col-xs-12 col-sm-3 center">
+						<span class="profile-picture">
+							<img class="editable img-responsive" ng-src="{{item.pic_url}}" />
+						</span>
+
+						<div class="space space-4"></div>
+					</div>
+
+					<div class="col-xs-12 col-sm-9">
+						<div class="profile-user-info">
+							<div class="profile-info-row">
+								<div class="profile-info-name"> 名称 </div>
+
+								<div class="profile-info-value">
+									<span>{{item.title}}</span>
+								</div>
+							</div>
+
+							<div class="profile-info-row">
+								<div class="profile-info-name"> 创建时间 </div>
+
+								<div class="profile-info-value">
+									<span>{{item.created_at}}</span>
+								</div>
+							</div>
+
+							<div class="profile-info-row">
+								<div class="profile-info-name"> 二维码内容 </div>
+
+								<div class="profile-info-value">
+									<span>{{item.content}}</span>
+								</div>
+							</div>
+
+							<div class="profile-info-row">
+								<div class="profile-info-name"> scene_id </div>
+
+								<div class="profile-info-value">
+									<span>{{item.scene_id}}</span>
+								</div>
+							</div>
+
+							<div class="profile-info-row">
+								<div class="profile-info-name"> 关注用户数 </div>
+
+								<div class="profile-info-value">
+									<span>{{item.user_sum}}</span>
+								</div>
+							</div>
+
+							<div class="profile-info-row">
+								<div class="profile-info-name">
+						            <!-- <a class="btn btn-sm btn-info" href="http://localhost/me3/app/index.php/common/twodcode/get_code_pic?code_id={{item.id}}" > -->
+						            <a class="btn btn-sm btn-info" target="_blank" href="{{item.pic_url}}" >
+					                     导出二维码 
+					                </a>
+				                </div>
+							</div>
+						</div>
+
+						<div class="hr hr-8 dotted"></div>
+					</div><!-- /.col -->
+				</div>
+				<select class="" ng-model="years_num">
+	                <option value="2013">2013</option>
+	                <option value="2014">2014</option>
+	                <option value="2015">2015</option>
+	                <option value="2016">2016</option>
+	            </select>
+	            <button class="btn btn-sm btn-info" type="button" ng-click="get_user_data()">
+                    搜索 
+                </button>
+                <div ng-show="twodcodeuserData.code == 204">
+	            该二维码暂时没有用户...
+	            </div>
+				<div id="chart_created" ng-show="twodcodeuserData.code == 200"></div>
+			</div>
+			<div id="users" class="tab-pane">
+            <div ng-show="twodcodeuserData.code == 204">
+            该二维码暂时没有用户...
+            </div>
+				<table id="sample-table-1" class="table table-striped table-bordered table-hover" ng-show="twodcodeuserData.code ==200">
+					<thead>
+						<tr>
+							<th>头像</th>
+							<th>用户名</th>
+							<th>性别</th>
+							<th class="hidden-480">地区</th>
+
+							<th>
+								<i class="ace-icon fa fa-clock-o"></i>
+								关注时间
+							</th>
+							<th>
+								<i class="ace-icon fa fa-clock-o"></i>
+								扫描时间
+							</th>
+							<th>扫描前是否关注</th>
+							<!-- <th class="hidden-480">是否关注</th> -->
+
+							<!-- <th>操作</th> -->
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr ng-repeat="user in twodcodeuserData.data.data">
+							<td>
+								<a href=""><img src="{{user.headimgurl}}" style="height:50px;width:50px"></a>
+							</td>
+							<td>
+								{{user.nickname}}
+							</td>
+							<td><div ng-if='user.sex==1'>男</div><div ng-if='user.sex==2'>女</div></td>
+							<td class="hidden-480">{{user.province}}&nbsp&nbsp{{user.city}}</td>
+							<td>{{user.subscribe_time}}</td>
+							<td>{{user.created_at}}</td>
+
+							<td class="hidden-480">
+								<div ng-if="user.type==2" class="green">是</div><div ng-if="user.type==1" class="red">否</div>
+							</td>
+
+							<!-- <td>
+								<a href="">
+                                    <i class="ace-icon fa fa-search bigger-120"></i>
+                                    <span>详情</span>
+                                </a>
+								<div class="hidden-sm hidden-xs btn-group">
+									<button class="btn btn-xs btn-success">
+										<i class="ace-icon fa fa-check bigger-120"></i>
+									</button>
+
+									<button class="btn btn-xs btn-info">
+										<i class="ace-icon fa fa-pencil bigger-120"></i>
+									</button>
+
+									<button class="btn btn-xs btn-danger">
+										<i class="ace-icon fa fa-trash-o bigger-120"></i>
+									</button>
+
+									<button class="btn btn-xs btn-warning">
+										<i class="ace-icon fa fa-flag bigger-120"></i>
+									</button>
+								</div>
+							</td> -->
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div id="chart" class="tab-pane">
+				
+			</div>
+			<div id="pictures" class="tab-pane">
+				
+			</div>
+		</div>
+	</div>
+</div>
+</div>

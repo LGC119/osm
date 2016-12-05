@@ -1,0 +1,521 @@
+<style type="text/css">
+
+.msg-item-wrapper {
+	position: relative;
+	margin-bottom: 26px;
+	border: 1px solid #b8b8b8;
+	background-color: #f4f4f4;
+	box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+	-webkit-box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+.msg-item {
+	padding: 2px 0;
+	background-color: #fff;
+	border-bottom: 1px solid #ccc;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+	-webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+	border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 5px 5px 0 0;
+	-moz-border-radius: 5px 5px 0 0;
+}
+.msg-t {
+	margin: 6px 14px 0;
+	line-height: 28px;
+	max-height: 56px;
+	overflow: hidden;
+	font-size: 16px;
+	font-weight: 400;
+	letter-spacing: 1px;
+	padding: 0;
+}
+.msg-meta {
+	margin: 0 14px 6px;
+	font-size: 13px;
+}
+.cover {
+	margin: 0 14px 12px;
+	position: relative;
+	font-size: 0;
+	height: 160px;
+	overflow: hidden;
+}
+.cover img {
+	width: 100%;
+}
+.msg-text {
+	margin: 0 14px;
+	font-size: 14px;
+	line-height: 1.6;
+	padding-bottom: 8px;
+	text-align: left;
+}
+.msg-opr-list {
+	padding: 10px 0;
+	letter-spacing: -5px;
+	border-radius: 0 0 5px 5px;
+	-webkit-border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+	margin: 0;
+}
+.opr-item {
+	width: 50%;
+	font-size: 14px;
+	letter-spacing: normal;
+}
+.b-dib {
+	display: inline-block;
+}
+.block {
+	display: block;
+}
+.vt {
+	vertical-align: top;
+}
+
+.edit-icon {
+	background-position: 0 -139px;
+}
+.reset-icon {
+	background-position: 0 -454px;
+}
+.del-icon {
+	background-position: 0 -195px;
+}
+.edit-btn {
+	border-right: 1px solid #a3a3a3;
+}
+.opr-btn {
+	padding: 2px 0;
+}
+.msg-mask {
+	display: none;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.6)!important;
+	filter: progid:dximagetransform.microsoft.gradient(GradientType=0,startColorstr='#60000000',endColorstr='#60000000');
+}
+.msg-selected-tip {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background: transparent url('../images/selected-icon.png') no-repeat 50% 50%;
+}
+
+</style>
+    <div class="content">
+    	<div class="row-fluid">
+                <div id="name" style="flodat:left;">
+                    <select  name="status" class="list-filter" style="margin-bottom:10px;">
+                        <option value="" selected >状态：全部</option>
+                        <option value="1"  >状态：正在进行</option>
+                        <option value="0"  >状态：已经停止</option>
+                    </select>
+                    <select class="list-filter"  name="template" style="margin-bottom:10px;">
+                        <option value="" selected >类型：全部</option>
+                    </select>
+
+                    <link rel="stylesheet" href="../plugin/datepicker/public/css/default.css" type="text/css">
+                    <script src="../plugin/datepicker/public/javascript/zebra_datepicker.src.js"></script>
+                    
+                    <div class="btn-group" style="margin-bottom:0px;display:inline-block;">
+                        <input type="submit" name="time-gt" class="btn datepicker list-filter" style="cursor:pointer;margin-bottom: 10px;margin-left: 5px;margin-top: 0px;" value="开始日期" />
+                        <input type="submit" name="time-lt" class="btn datepicker list-filter" style="cursor:pointer;margin-bottom: 10px;margin-top: 0px;" value="结束日期" />
+                    </div>
+                    <input class="list-filter" type="text" name="search" placeholder="关键字" style="width:100px;" value=""/>
+                    <button id="do-filter" class="btn" style="dispdlay:none;margin-bottom:10px;" >筛选</button>
+                </div>
+                <div id="rightf" style="flodat:right">
+                </div>
+    		<!-- div class="span12" -->
+			<div class="page-bd">
+                <div id="leftbox" class="span6">
+                </div>
+                <div id="rightbox" class="span6">
+                </div>
+                <script id="script"  type="text/template" >
+							<div class="msg-item-wrapper this-activity"  idx="{{=it.id}}" data-create-time="{{=it.createtime}}" style="max-width:400px;"  >
+								<div id="appmsgItem1" class="msg-item appmsgItem">
+									<h4 class="msg-t">
+										<a href="{{=it.url}}"  hrefT="{{=it.url}}?id={{=it.id}}" class="i-title" target="_blank">
+											{{=it.name}}
+                                        </a>
+                                 
+                                        {{? it.status == 1}}
+                                        <span class="label label-success   offset3 changestatus" idx="{{=it.id}}" 
+                                            isstatus="{{=it.status}}" ising="正在进行" isstop="已经停止" isswitch="点击更改" style="cursor:pointer;"
+                                            >正在进行</span>
+                                        {{??}}
+                                        <span class="label label-important offset3 changestatus" idx="{{=it.id}}" 
+                                            isstatus="{{=it.status}}" ising="正在进行" isstop="已经停止" isswitch="点击更改" style="cursor:pointer;"
+                                            >已经停止</span>
+                                        {{?}}
+                                        <span class="label label-important show-delete-window" idx="{{=it.id}}">删除</span>
+									</h4>
+									<p class="msg-meta">
+										<span class="msg-date" >
+											创建时间：{{=it.createtime}}
+                                        </span>
+									</p>
+                                    <p class="msg-meta">
+                                        <span class="msg-date copyurl" idx="{{=it.id}}"  >
+                                            活动网址：{{=it.surl}}
+                                        </span>
+                                    </p>
+									<div class="cover">
+                                        {{? it.htmlss[1] == '../../../../public/images/h5page/h5_empty.png'}}
+										<p class="default-tip" style="displsay:none">
+											无封面图
+										</p>
+                                        {{??}}
+                                        <img src="{{=it.htmlss[1]}}" class="i-img" style="">
+                                        {{?}}
+									</div>
+									<div class="overflow-div" idx="{{=it.id}}" style="height:100px; overflow: hidden;padding-left:15px;padding-right:15px;">
+									    <p class="msg-text" >
+									        {{=it.htmlss[2]}}
+									    </p>
+                                    </div>
+                                    <center class="overflow-center" idx="{{=it.id}}"><i class="icon-chevron-down" idx="{{=it.id}}" ></i></center>
+                                    <p>
+                                        <center>
+                                            <span class="dothis loadpage" pid="99" style="display:none;" href="./h5page/H_dpd_activity_manage_detail.html"
+                                            idx="{{=it.id}}"
+                                            ></span>
+                                            <span class="label {{? it.submitnum > 0}}label-info{{?}} showdetails st" href="./h5page/H_dpd_activity_manage_detail.html" 
+                                            idx="{{=it.id}}"
+                                            isswitch=" &nbsp;查看统计&nbsp;" istext="<b> &nbsp; {{=it.submitnum}} </b>条记录 &nbsp; " style="cursor:pointer;"
+                                            ><b> &nbsp; {{=it.submitnum}} </b>条记录 &nbsp; </span>
+                                            <span class="label {{? it.clicknum > 0}}label-info{{?}} " idx="{{=it.id}}" ><b> &nbsp; {{=it.clicknum}} </b>次点击 &nbsp; </span>
+                                        </center>
+                                    </p>
+								</div>
+								<div class="msg-opr">
+								<!--
+									<ul class="f0 msg-opr-list">
+									<li class="b-dib opr-item">
+											<a class="block tc opr-btn edit-btn" href="javascript:;" data-mid="{{=it.id}}" filename="{{=it.pic}}">
+												<span class="th vm dib opr-icon edit-icon" >
+													编辑
+												</span>
+											</a>
+										</li>
+                                        <li class="b-dib opr-item">
+											<a class="block tc opr-btn del-btn show-delete-window" idx="{{=it.id}}" >
+												<span class="th vm dib opr-icon del-icon" >
+													删除
+												</span>
+											</a>
+										</li>
+									</ul>
+                                -->
+								</div>
+								<div class="msg-hover-mask">
+								</div>
+								<div class="msg-mask">
+									<span class="dib msg-selected-tip">
+									</span>
+								</div>
+							</div>
+                </script>
+                <div id="test">
+                    
+                </div>
+<!-- =========================================================== -->
+    		 </div>
+    	</div>
+    <!-- ======弹出窗体 : 删除 ========================================================== -->
+        <a id="modal-del-window" style="display:none;" href="#modal-container-del-window" role="button" class="btn" data-toggle="modal">触发遮罩窗体</a>
+    	<div id="modal-container-del-window" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    		<div class="modal-header">
+    			 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    			<h3 id="myModalLabel">
+    				删除确认
+    			</h3>
+    		</div>
+    		<div class="modal-body">
+    			<p>
+    				<center>确认要删除这个页面么?</center>
+    			</p>
+    		</div>
+    		<div class="modal-footer">
+    			 <button class="btn btn-info" data-dismiss="modal" aria-hidden="true">否</button>
+    			 <button id="do-delete" class="btn btn-warning"
+                    data-dismiss="modal" 
+                    aria-hidden="true" 
+                    >是</button>
+    		</div>
+    	</div>
+    <!-- ================================================================ -->
+    <!-- ======弹出窗体 : 用户详情 ========================================================== -->
+        <a id="modal-del-window" style="display:none;" href="#modal-container-del-window" role="button" class="btn" data-toggle="modal">触发遮罩窗体</a>
+    	<div id="modal-container-del-window" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    		<div class="modal-header">
+    			 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    			<h3 id="myModalLabel">
+    				记录详情
+    			</h3>
+    		</div>
+    		<div class="modal-body">
+    			<p>
+    				确认要删除这个页面么？
+    			</p>
+    		</div>
+    		<div class="modal-footer">
+    			 <button class="btn btn-info" data-dismiss="modal" aria-hidden="true">否</button>
+    			 <button id="do-delete" class="btn btn-warning"
+                    data-dismiss="modal" 
+                    aria-hidden="true" 
+                    >是</button>
+    		</div>
+    	</div>
+    <!-- ================================================================ -->
+    </div>   <!-- End of div class="content" -->
+<script type ="text/javascript" charset="utf-8">
+// 获取并返回当前url路径           
+function getpath(baseUrl){
+	var arrp = document.location.href.split('/');
+	var tmpp = new Array();
+	var lenp = arrp.length;
+	var ip = 1;
+	$.each(arrp, function(k,v) {
+		if (ip < lenp)
+		{
+			tmpp[k] = v;
+		};
+		ip++;
+	});
+	tmpp = tmpp.join('/');
+	if ( typeof(baseUrl) == 'undefined' )
+	{
+		tmpp = tmpp + '/index.php/h5page/wxh5_ext/go';
+	}
+	return tmpp;
+};
+var path =  getpath();
+
+function makeDotList(tplId, obj, data) {
+    var tmpl = $(tplId).html();
+    var dotTemplate = doT.template(tmpl);
+    $(obj).html(dotTemplate(data));
+};
+function makedot(tplId, obj, data) {
+    var tmpl = $(tplId).html();
+    var dotTemplate = doT.template(tmpl);
+    $(obj).append(dotTemplate(data));
+};
+
+$(function() {
+    ZENG.msgbox.show('载入中...',6);
+    function loading(filter){
+        var ff = filter;
+        $.ajax({
+        	type     : "POST",
+	        url      :  _c.baseUrl + 'getdata/e_h5page-wxh5.json?method=listActivity',
+        	datatype : 'json',
+            data     : { 'filter':filter },
+        	//timeout  : 2000,
+        	success  : function(data) {
+			    var data = JSON.parse(data);
+                ZENG.msgbox.hide();
+                if (data.info == 'nodata'){
+                    ZENG.msgbox.show('目前没有数据',3);
+                }
+                
+                $('#leftbox').html('');
+                $('#rightbox').html('');
+                $.each(data, function(k,v) {
+                    //v['url'] = path + 'index.php/wxh5_ext/go'; 
+                    if (k % 2 == 0){
+                        makedot('#script', '#leftbox', v);
+                    } else {
+                        makedot('#script', '#rightbox', v);
+                    };
+                });
+        	},
+        });
+    };
+    loading('first');
+
+    //获取模板类型列表
+    function getTplList() {
+        $.ajax({
+            type     : "POST",
+            url      :  _c.baseUrl + 'getdata/e_h5page-wxh5.json?method=getTemplateList',
+            datatype : 'json',
+            data     : { 'type':'1' },
+            //timeout  : 2000,
+            success  : function(data) {
+                var data = JSON.parse(data);
+                var append = '<option value="" selected >模板：全部</option>';
+                $.each(data, function(k,v){
+                    append +=  '<option value="' + v.tplname + '"     > ' + v.name + '</option >';   
+                });
+                $('.list-filter[name=template]').html('');
+                $('.list-filter[name=template]').append(append);
+            },
+        });
+    }
+    getTplList();
+
+	$('.content').on('click', '.overflow-center', function() {
+		var idx = $(this).attr('idx');
+		$('.overflow-div[idx="' + idx + '"]').trigger('click');
+	});
+	$('.content').on('click', '.overflow-div', function() {
+		var idx = $(this).attr('idx');
+		var hidden = $(this).css('overflow');
+		if (hidden == 'visible') {
+			$(this).css('overflow', 'hidden');
+			$(this).height(100);
+			$('i[idx="' + idx + '"]').removeClass('icon-chevron-up');
+			$('i[idx="' + idx + '"]').addClass('icon-chevron-down');
+		} else {
+			$(this).height('auto');
+			$(this).css('overflow', 'visible');
+			$('i[idx="' + idx + '"]').removeClass('icon-chevron-down');
+			$('i[idx="' + idx + '"]').addClass('icon-chevron-up');
+		};
+	});
+	
+	$('.content').on('click', '.show-delete-window', function() {
+		$('#do-delete').attr('idx', $(this).attr('idx'));
+		$('#modal-del-window').trigger('click');
+	});
+	
+	$('.content').on('click', '#do-delete', function() {
+		var delid = $(this).attr('idx');
+		$.ajax({
+			type     : "POST",
+			url      :  _c.baseUrl + 'getdata/e_h5page-wxh5.json?method=delActivity',
+			datatype : 'json',
+			data     : {'delid' : delid},
+			//timeout  : 2000,
+			success  : function(data) {
+				$('.this-activity[idx="' + delid + '"]').remove();
+				ZENG.msgbox.show('已删除',3,1200);
+			},
+		});
+	});
+
+
+	$('.content').on('mouseover', '.st', function() {
+		var me = $(this);
+		me.removeClass('label-info');
+		me.addClass('label-warning');
+		me.html(me.attr('isswitch'));
+	});
+	$('.content').on('mouseleave', '.st', function() {
+		var me = $(this);
+		me.removeClass('label-warning');
+		me.addClass('label-info');
+		me.html(me.attr('istext'));
+	});
+
+
+
+	$('.content').on('mouseleave', '.changestatus', function() {
+		var me = $(this);
+		me.removeClass('label-warning');
+		if (me.attr('isstatus') == 1) {
+			me.addClass('label-success');
+			me.removeClass('label-important');
+			me.text(me.attr('ising'))
+		} else {
+			me.removeClass('label-success');
+			me.addClass('label-important');
+			me.text(me.attr('isstop'))
+		}
+	});
+
+	$('.content').on('mouseover', '.changestatus', function() {
+		var me = $(this);
+		me.removeClass('label-success');
+		me.removeClass('label-important');
+		me.addClass('label-warning');
+		me.text(me.attr('isswitch'));
+	});
+
+	$('.content').on('click', '.changestatus', function() {
+			var idx = $(this).attr('idx');
+			var me = $(this);
+		$.ajax({
+			type     : "POST",
+			url      :  _c.baseUrl + 'getdata/e_h5page-wxh5.json?method=switchStatus',
+			datatype : 'json',
+			data     : {'idx' : idx},
+			//timeout  : 2000,
+			success  : function(data) {
+				eval('var rst=' + data);
+				if (rst.error == '0') {
+					me.removeClass('label-warning');
+					if (rst.stat == '0'){
+						me.removeClass('label-success');
+						me.addClass('label-important');
+						me.text(me.attr('isstop'));
+						
+					} else {
+						me.addClass('label-success');
+						me.removeClass('label-important');
+						me.text(me.attr('ising'));
+					};
+					me.attr('isstatus', rst.stat);
+				} else {
+					alert('error');
+				};
+
+			},
+		});
+	});
+var details_idx = 0;
+	$('.content').on('click', '.showdetails', function() {
+		var idx = $(this).attr('idx');
+		details_idx = idx;
+		$.ajax({
+			type     : "POST",
+			url      :  _c.baseUrl + 'getdata/e_h5page-wxh5.json?method=loadActivity',
+			datatype : 'json',
+			data     : {'idx' : idx},
+			async    : false,  //同步请求
+			//timeout  : 2000,
+			success  : function(data) {
+				if (data == 2) {
+					$('.h5manage').removeClass('active');
+					$('#h5manage').addClass('active');
+					//$('.dothis[idx='+idx+']').click();
+					$('.container-fluid').load($('.dothis[idx='+idx+']').attr('href'));
+				};
+			},
+		});
+	});
+
+	$('.content').on('click', '#do-filter', function() {
+			var filter = {};
+			filter['status'] = $('.list-filter[name="status"]').select().val();
+			filter['template']   = $('.list-filter[name="template"]').select().val();
+			filter['search']   = $('.list-filter[name="search"]').val();
+			filter['time']   = {};
+			filter['time']['gt'] = $('.list-filter[name="time-gt"]').val();
+			filter['time']['lt'] = $('.list-filter[name="time-lt"]').val();
+			loading(filter);
+	});
+
+	$('.datepicker').Zebra_DatePicker({
+		show_icon:false,
+		show_clear_date:false,
+	});
+});
+
+</script>
+<script type="text/javascript" charset="utf-8">
+  ZENG.msgbox.hide();
+  $('.left-nav ul li').removeClass('active');
+  $('#h5manage').addClass("active");
+      close_shade();
+</script>

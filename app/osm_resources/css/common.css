@@ -1,0 +1,16 @@
+@charset "utf-8";
+/* CSS Document */
+*{margin:0px auto;text-align:center;font-family:Arial,Simsun;color:#58595b;}
+img{border:0px}
+ul li{list-style:none}
+/*html{height:100%;}*/
+/*body{text-align:center;}*/
+a{color:#3b3a3a;text-decoration:none}
+a:hover{color:#176f95;}
+h1,h2,h3{font-weight:normal;overflow:hidden}
+
+.left{float:left}
+.right{float:right}
+.clear{clear:both}
+.mid{width:540px;position:relative;}
+

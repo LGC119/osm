@@ -1,0 +1,85 @@
+<div class="page-header" ng-controller="StatsController">
+    <h1>
+        统计分析
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            <span ng-if="dataSource== 'wb'">微博内容分析</span>
+            <span ng-if="dataSource== 'wx'">消息内容分析</span>
+        </small>
+    </h1>
+</div>
+<div class="row" ng-controller="StatsController" ng-init="getCategoryStats()">
+    <div class="col-xs-12">
+        <div class="well well-sm form-inline clearfix">
+            <div class="pull-left col-xs-4 col-sm-3">
+                <select ng-show="dataSource=='wb'" ng-options="i.id as i.screen_name for i in accounts" ng-model="selectedAccount" ng-change="getCategoryStats()">
+                    <option value="">--切换账号--</option>
+                </select>
+                <select ng-show="dataSource=='wx'" ng-options="i.id as i.nickname for i in accounts" ng-model="selectedAccount" ng-change="getCategoryStats()">
+                    <option value="">--切换账号--</option>
+                </select>
+            </div>
+            <div class="pull-right" style="margin-left:20px">
+                <button class="btn btn-primary btn-sm" ng-click="getCategoryStats()">确定</button>
+            </div>
+            <div class="pull-right input-daterange input-group col-xs-6 col-sm-4">
+                <span>
+                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="startDt" is-open="startOpened" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="关闭" clear-text="清除" current-text="今天" ng-click="open($event, 'startOpened', 'endOpened')" placeholder="选择开始日期"/>
+                </span>
+                <span class="input-group-addon">
+                    <i class="fa fa-exchange"></i>
+                </span>
+                <span>
+                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="endDt" is-open="endOpened" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="关闭" clear-text="清除" current-text="今天" ng-click="open($event, 'endOpened', 'startOpened')" placeholder="选择结束日期"/>
+                </span> 
+            </div>
+        </div>
+        
+        <!-- <div class="space-6"></div> -->
+        <div class="row">
+            <div class="col-xs-12 col-sm-5 widget-container-col">
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h5 class="widget-title">交互量</h5>
+                    </div>
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div id="interacts_stats">{{statsEmpty}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-7 widget-container-col">
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h5 class="widget-title">微博舆情分类</h5>
+                        <div class="widget-toolbar">
+                            <select ng-model="selectedCategory" ng-options="i.id as i.cat_name for i in topCategories" ng-change="drawCategoryChart()">
+                                <option value="">--主分类--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <div class="widget-main clearfix">
+                            <div id="category_stats">{{statsEmpty}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 widget-container-col">
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h5 class="widget-title">交互时间段趋势</h5>
+                    </div>
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div id="hourly_interact">{{statsEmpty}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

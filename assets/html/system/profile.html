@@ -1,0 +1,141 @@
+<div class="page-header">
+    <h1>
+    	账号设置 
+        <small><i class="ace-icon fa fa-angle-double-right"></i>个人设置</small>
+    </h1>
+</div>
+<style type="text/css">
+p.edit_field{margin:0}
+p.edit_field i{margin:0 3px 0;cursor:pointer;}
+input[type="text"].edit_input{border:0;padding:0 0 0 3px;margin:0 3px 0 0;border-bottom:1px solid #ccc;width:auto;}
+</style>
+<div ng-controller="ProfileController" ng-init="get_profile()">
+	<div ng-show="user" class="row">
+		<div class="col-xs-12">
+			<ul class="nav nav-tabs padding-12">
+				<li class="active">
+					<a data-toggle="tab" href="#profile">个人信息</a>
+				</li>
+				<li>
+					<a data-toggle="tab" href="#password">修改密码</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div id="profile" class="active tab-pane">
+					<p ng-hide="user">{{empty}}</p>
+					<!-- 用户信息数据 -->
+					<div class="profile-user-info profile-user-info-striped">
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 姓名 </div>
+							<div class="profile-info-value">
+								<span class="editable editable-click" ng-hide="name!=null" ng-click="edit('name')">
+									<strong ng-if="!user.name">设置姓名</strong>
+									{{user.name}}
+								</span>
+								<p class="edit_field" ng-show="name!=null">
+									<input class="edit_input" type="text" ng-model="name">
+									<i class="ace-icon fa fa-check bigger-120 text-success" title="确定" ng-click="edit_profile('name')"></i>
+									<i class="ace-icon fa fa-times bigger-120 text-danger" title="取消" ng-click="name=null"></i>
+								</p>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 登录名 </div>
+							<div class="profile-info-value">
+								<span>{{user.login_name}}</span>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 职位 </div>
+							<div class="profile-info-value">
+								<span>{{user.position_name}}</span>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> Email </div>
+							<div class="profile-info-value">
+								<span class="editable editable-click" ng-hide="email!=null" ng-click="edit('email')">
+									<strong ng-if="!user.email">设置邮箱</strong>
+									{{user.email}}
+								</span>
+								<p class="edit_field" ng-show="email!=null">
+									<input class="edit_input" size="50" type="text" ng-model="email">
+									<i class="ace-icon fa fa-check bigger-120 text-success" title="确定" ng-click="edit_profile('email')"></i>
+									<i class="ace-icon fa fa-times bigger-120 text-danger" title="取消" ng-click="email=null"></i>
+								</p>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> Phone </div>
+							<div class="profile-info-value">
+								<span class="editable editable-click" ng-click="edit('tel')" ng-hide="tel!=null">
+									<strong ng-if="!user.tel">设置手机</strong>
+									{{user.tel}}
+								</span>
+								<p class="edit_field" ng-show="tel!=null">
+									<input class="edit_input" type="text" ng-model="tel">
+									<i class="ace-icon fa fa-check bigger-120 text-success" title="确定" ng-click="edit_profile('tel')"></i>
+									<i class="ace-icon fa fa-times bigger-120 text-danger" title="取消" ng-click="tel=null"></i>
+								</p>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 上次登陆IP </div>
+							<div class="profile-info-value">
+								<span>{{user.last_ip}}</span>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 上次登陆时间 </div>
+							<div class="profile-info-value">
+								<span>{{user.last_login}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="password" class="tab-pane form-horizontal">
+					<div class="alert alert-info">
+						<button type="button" class="close" data-dismiss="alert">
+							<i class="ace-icon fa fa-times"></i>
+						</button>
+						<strong>提示！</strong>
+						为了您的账号安全，请在设置了新密码后，立刻重新登陆一次。
+						<br>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right"> 原始密码 </label>
+						<div class="col-sm-9">
+							<input type="password" ng-model="oldpass" class="input-large">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right"> 新密码 </label>
+						<div class="col-sm-9">
+							<input type="password" ng-model="newpass" class="input-large">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right"> 确认新密码 </label>
+						<div class="col-sm-9">
+							<input type="password" ng-model="newpassconfirm" class="input-large">
+						</div>
+					</div>
+					<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-info" type="button" ng-click="edit_password()">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								确认修改
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset" ng-click="reset()">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

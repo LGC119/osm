@@ -1,0 +1,35 @@
+<div class="page-header">
+	<h1>
+		信息监控
+		<small><i class="ace-icon fa fa-angle-double-right"></i> 信息分类监控 </small>
+	</h1>
+</div>
+<div class="row" ng-controller="MonitorWeixinCategoryController" ng-init="getCategories()">
+	<div class="col-xs-12">
+		<table class="table table-striped table-bordered table-hover">
+			<thead class="thin-border-bottom">
+				<tr>
+					<th>分类名称</th>
+					<th width="160">当前总量</th>
+					<th width="240"><i class="ace-icon fa fa-signal"></i> 监控阈值</th>
+					<th width="120">警戒比例</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-if="!categories||categories.length==0">
+					<td colspan="4" align="center">{{empty}}</td>
+				</tr>
+				<tr ng-repeat="item in categories">
+					<td>{{item.pname}} - {{item.sname}}</td>
+					<td>
+						<span class="{{item.class}}">{{item.total}}</span>
+					</td>
+					<td>{{item.wx_threshold}}</td>
+					<td>
+						<span class="{{item.class}}">{{item.percentage}}</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

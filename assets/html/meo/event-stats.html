@@ -1,0 +1,90 @@
+<div class="event-stats row">
+    <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+        <!-- #section:custom/widget-box -->
+        <div class="widget-box">
+            <div class="widget-header">
+                <h5 class="widget-title">活动走势</h5>
+                <!-- #section:custom/widget-box.toolbar -->
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="ace-icon fa fa-chevron-up"></i>
+                    </a>
+                </div>
+                <!-- /section:custom/widget-box.toolbar -->
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div id="timelineChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- /section:custom/widget-box -->
+    </div>
+</div>
+<div class="users-stats row">
+    <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+        <!-- #section:custom/widget-box -->
+        <div class="widget-box">
+            <div class="widget-header">
+                <h5 class="widget-title">用户统计</h5>
+                <!-- #section:custom/widget-box.toolbar -->
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="ace-icon fa fa-chevron-up"></i>
+                    </a>
+                </div>
+                <!-- /section:custom/widget-box.toolbar -->
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <ul class="nav nav-pills">
+                        <li ng-class="{'active':if_p}" ng-click="if_p=true" ng-init="if_p=true">
+                            <a href="javascript:;">参与者</a>
+                        </li>
+                        <li ng-class="{'active':!if_p}" ng-click="if_p=false">
+                            <a href="javascript:;">未参与者</a>
+                        </li>
+                    </ul>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="row" ng-show="if_p">
+                                <div id="location_stats_p" class="col-xs-5"></div>
+                                <div id="vt_stats_p" class="col-xs-4"></div>
+                                <div id="gender_stats_p" class="col-xs-3"></div>
+                            </div>
+                            <div class="row" ng-hide="if_p">
+                                <div id="location_stats_unp" class="col-xs-5"></div>
+                                <div id="vt_stats_unp" class="col-xs-4"></div>
+                                <div id="gender_stats_unp" class="col-xs-3"></div>
+                            </div>
+                            <hr>
+                            <div class="row" style="margin-left:25px;display:none">
+                                <div class="col-xs-12">
+                                    <label style="font-size:18px">用户热门标签</label>
+                                </div>  
+                                <div class="col-xs-12 hot-tags">
+                                    <span class="blue" rel="30.66" style="font-size: 18pt;">自恋狂</span>
+                                    <span class="blue" rel="19.00" style="font-size: 16.37264480111654pt;">痴情汉</span>
+                                    <span class="blue" rel="19.00" style="font-size: 16.37264480111654pt;">价格敏感</span>
+                                    <span class="blue" rel="19.00" style="font-size: 16.37264480111654pt;">测试</span>
+                                    <span class="blue" rel="19.00" style="font-size: 16.37264480111654pt;">小盆友</span>
+                                    <span class="blue" rel="19.00" style="font-size: 16.37264480111654pt;">低购买力</span>
+                                    <span class="blue" rel="19.00" style="font-size: 16.37264480111654pt;">好孩子</span>
+                                    <span class="blue" rel="13.14" style="font-size: 15.554780181437543pt;">闷骚</span>
+                                    <span class="blue" rel="7.00" style="font-size: 13.697836706210747pt;">矫情</span>
+                                    <span class="blue" rel="3.00" style="font-size: 12.139567341242149pt;">很宅</span>
+                                    <span class="blue" rel="2.00" style="font-size: 12pt;">御姐</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- /section:custom/widget-box -->
+    </div>
+</div>

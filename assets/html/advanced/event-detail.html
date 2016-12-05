@@ -1,0 +1,37 @@
+<div class="page-header">
+	<h1>
+		高级营销
+		<small><i class="ace-icon fa fa-angle-double-right"></i> 活动详情 </small>
+	</h1>
+</div>
+<div class="row" ng-controller="AdvEventDetailController">
+	<div class="col-xs-12">
+		<ul class="nav nav-tabs padding-18">
+			<li ng-class="{true:'active'}[type=='event-info']">
+				<a ng-href="#/adv-event-detail/event-info/{{id}}">
+				活动信息
+				</a>
+			</li>
+			<li ng-class="{true:'active'}[type=='event-push-list']">
+				<a href="#/adv-event-detail/event-push-list/{{id}}">
+				推送用户列表	
+				</a>
+			</li>
+			<li ng-class="{true:'active'}[type=='event-parti-list']">
+				<a ng-href="#/adv-event-detail/event-parti-list/{{id}}">
+				参与用户列表
+				</a>
+			</li>
+			<li ng-class="{true:'active'}[type=='event-stats']">
+				<a ng-href="#/adv-event-detail/event-stats/{{id}}">
+				活动统计
+				</a>
+			</li>
+            <li ng-class="{true:'active'}[type=='adv-event-manage']" class="pull-right">
+                <a class="btn btn-yellow" ng-href="#/adv-event-manage">返回活动管理列表</a>
+            </li>
+		</ul>
+		<div class="tab-content no-border padding-24" ng-include="url"></div>
+	</div>
+</div>
+

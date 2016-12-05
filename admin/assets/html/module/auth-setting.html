@@ -1,0 +1,99 @@
+<div class="page-header">
+	<h1>
+		功能模块设定
+		<small><i class="ace-icon fa fa-angle-double-right"></i>权限模块设定</small>
+	</h1>
+</div>
+
+<div ng-controller="AuthSettingController" ng-init="getMenuTree()" class="row">
+	<div class="col-xs-12">
+		<!-- 左侧菜单树START -->
+		<div class="col-xs-3">
+			<!-- 一级菜单 -->
+			<ul class="list-unstyled spaced">
+				<li ng-repeat="sid in menu.tree.0">
+					<a href="javascript:;" ng-click="show_sub=!show_sub;getMenuAuth(sid)">
+						<i ng-if="menu.tree[sid]&&!show_sub" class="fa fa-plus green"></i>
+						<i ng-if="menu.tree[sid]&&show_sub" class="fa fa-minus green"></i>
+						{{menu.list[sid].name}}
+					</a>
+					<!-- 二级菜单 -->
+					<ul ng-if="menu.tree[sid]" ng-show="$parent.show_sub" class="list-unstyled spaced" style="padding-left:2em;">
+						<li ng-repeat="sid in menu.tree[sid]">
+							<a href="javascript:;" ng-click="sub_sub=!sub_sub;getMenuAuth(sid)">
+								<i ng-if="menu.tree[sid]&&!sub_sub" class="fa fa-plus green"></i>
+								<i ng-if="menu.tree[sid]&&sub_sub" class="fa fa-minus green"></i>
+								{{menu.list[sid].name}}
+							</a>
+							<!-- 三级菜单 -->
+							<ul ng-if="menu.tree[sid]" ng-show="$parent.sub_sub" class="list-unstyled spaced" style="padding-left:2em;">
+								<li ng-repeat="sid in menu.tree[sid]">
+									<a href="javascript:;" ng-click="getMenuAuth(sid)">{{menu.list[sid].name}}</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<!-- 左侧菜单树END -->
+		<div class="col-xs-9">
+			<p ng-show="post.menuid>0">
+				<button class="btn btn-primary btn-sm" ng-click="showAuthActsModal()">添加权限项</button>
+			</p>
+			<p ng-show="!auth_acts">{{auth_empty}}</p>
+			<div ng-show="auth_acts">
+				<ul class="list-unstyled spaced">
+					<li ng-repeat="act in auth_acts">{{act.title}} [{{act.module}} | {{act.controller}} | {{act.method}}]</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="authActsModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button ng-click="cancel()" type="button" class="close" >×</button>
+					<h3 class="modal-title">编辑权限项</h3>
+				</div>
+				<div class="modal-body form-horizontal clearfix">
+					<div class="alert alert-danger">
+						<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>
+						<strong>提示！</strong> 非技术人员请谨慎操作！！！<br>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">权限项名称：</label>
+						<div class="col-sm-9">
+							<input class="form-control input-sm" placeholder="信息列表" ng-model="post.title">
+						</div>
+					</div>
+					<div class="space-6"></div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">模块：</label>
+						<div class="col-sm-9">
+							<input class="form-control input-sm" placeholder="meo, mex, common..." ng-model="post.module">
+						</div>
+					</div>
+					<div class="space-6"></div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">控制器：</label>
+						<div class="col-sm-9">
+							<input class="form-control input-sm" placeholder="communication..." ng-model="post.controller">
+						</div>
+					</div>
+					<div class="space-6"></div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">方法：</label>
+						<div class="col-sm-9">
+							<input class="form-control input-sm" placeholder="get_communications..." ng-model="post.method">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button ng-click="addAuthAct()" type="button" class="btn btn-primary">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

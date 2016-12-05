@@ -1,0 +1,292 @@
+<div class="modal-header">
+	<button ng-click="cancel()" type="button" class="close" >
+	×
+	</button>
+	<h3 class="modal-title">用户信息</h3>
+</div>
+<div class="modal-body articles-choose clearfix">
+	<tabset>
+		<tab heading="基本信息">
+			<div class="profile-user-info profile-user-info-striped" id="bootDate">
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 真实姓名 </div>
+
+					<div class="profile-info-value">
+						<span class="editable" id="full_name" ng-show="!showEditInput">{{userData.full_name}}</span>
+						<input ng-show="showEditInput" ng-model="userData.full_name">
+					</div>
+				</div>
+
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 性别 </div>
+
+					<div class="profile-info-value">
+						<select ng-disabled="!showEditInput" ng-model="userData.gender" style="width: 150px;">
+							<option value="1">男</option>
+							<option value="2">女</option>
+							<option value="0">未知</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 生日 </div>
+
+					<div class="profile-info-value">
+						<span ng-show="!showEditInput">{{userData.birthday}}</span>
+						<input type="text" datepicker-popup="{{format}}" is-open="showDateSelect" max-date="" datepicker-options="dateOptions" date-disabled="dtdisabled(date, mode)" ng-click="showDateSelect=true" clear-text="清除" current-text="今天" close-text="关闭" ng-model="userData.birthdate" ng-show="showEditInput"/>
+					</div>
+				</div>
+
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 血型 </div>
+
+					<div class="profile-info-value">
+						<select ng-disabled="!showEditInput" ng-model="userData.blood_type" style="width: 150px;">
+							<option value="1">A型</option>
+							<option value="2">B型</option>
+							<option value="3">AB型</option>
+							<option value="4">O型</option>
+							<option value="0">未知</option>
+						</select>
+					</div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 星座 </div>
+
+					<div class="profile-info-value">
+						<select ng-disabled="!showEditInput" ng-model="userData.constellation" style="width: 150px;">
+							<option value="1">白羊座</option>
+							<option value="2">金牛座</option>
+							<option value="3">双子座</option>
+							<option value="4">巨蟹座</option>
+							<option value="5">狮子座</option>
+							<option value="6">处女座</option>
+							<option value="7">天秤座</option>
+							<option value="8">天蝎座</option>
+							<option value="9">射手座</option>
+							<option value="10">摩羯座</option>
+							<option value="11">水瓶座</option>
+							<option value="12">双鱼座</option>
+							<option value="0">未知</option>
+						</select>
+					</div>
+				</div>
+				 <div class="profile-info-row">
+					<div class="profile-info-name"> 地址 </div>
+
+					<div class="profile-info-value">
+						<span class="editable">{{userData.location}}</span>
+						<!-- <input ng-show="showEditInput" ng-model="userData.address1"> -->
+					</div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 电话 </div>
+
+					<div class="profile-info-value">
+						<span class="editable" ng-show="!showEditInput">{{userData.tel1}}</span>
+						<input ng-show="showEditInput" ng-model="userData.tel1">
+					</div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 邮箱 </div>
+
+					<div class="profile-info-value">
+						<span class="editable" ng-show="!showEditInput">{{userData.email1}}</span>
+						<input ng-show="showEditInput" ng-model="userData.email1">
+					</div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> QQ </div>
+					<div class="profile-info-value">
+						<span class="editable" ng-show="!showEditInput">{{userData.qq1}}</span>
+						<input ng-show="showEditInput" ng-model="userData.qq1">
+					</div>
+				</div>
+			</div>
+			<style type="text/css">
+			.user_tags{padding:12px;}
+			.user_tags span{margin:2px;}
+			</style>
+			<div class="user_tags" style="padding:12px;">
+				<button ng-click="showTagModal(userData.user_id, userData.tags)" class="btn btn-xs btn-info">编辑标签</button>
+				<span class="label label-info arrowed arrowed-right" ng-repeat="item in userData.tags">{{item.tag_name}}</span>
+				<span class="label label-light arrowed arrowed-right" ng-if="userData.tags.length==0">无标签</span>
+			</div>
+		</tab>
+		<!-- <tab heading="社媒信息">
+			<div class="user-card" style="height:auto">
+				<div class="card-title" style="margin-bottom:15px">
+					<h4>微博信息</h4>
+				</div>
+				<div class="face">
+					<a target="_blank" href="/ys1990?from=myfollow_all">
+						<img ng-src="http://tp1.sinaimg.cn/1683555092/50/5678518519/0" alt="夜晚在摇曳" src="http://tp1.sinaimg.cn/1683555092/50/5678518519/0">
+					</a>
+				</div>
+				<ul class="wb-info list-unstyled pull-left">
+					<li>
+							<a target="_blank" class="nickname ng-binding" href="http://weibo.com/u/1683555092?from=myfollow_all" title="夜晚在摇曳">乐儿_leer</a>
+							<img class="verified-type" ng-src="">
+					</li>
+					<li>
+						<span class="relation">关注我的</span>
+					</li>
+					<li>
+						<span class="location ng-binding">北京 朝阳区</span>
+					</li>
+
+				</ul>
+				<ul class="other-info list-unstyled">
+					<li>
+						<ul class="list-unstyled list-inline user-wb-data">
+							<li class="ng-binding"><a target="_blank" href="http://weibo.com/1683555092/follow?refer=usercard&amp;wvr=5&amp;from=usercardnew">关注</a>813</li>
+							<li class="W_vline">|</li>
+							<li class="ng-binding"><a target="_blank" href="http://weibo.com/1683555092/fans?refer=usercard&amp;wvr=5&amp;from=usercardnew">粉丝</a>1056</li>
+							<li class="W_vline">|</li>
+							<li class="ng-binding"><a target="_blank" href="http://weibo.com/1683555092/profile?refer=usercard&amp;wvr=5&amp;from=usercardnew&amp;mod=weibo">微博</a>2559</li>
+						</ul>
+					</li>
+					<li id="">
+						标签：
+						<a target="_blank" href="/ys1990?from=myfollow_all" title="夜晚在摇曳">
+							潜客 热心 旅游
+						</a>
+					</li>
+					<li>
+						属组：
+						<a class="S_link2" href="javascript:;" title="未分组">
+						铁杆粉丝组 大咖组 潜客组
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="space"></div>
+			<div class="user-card" style="height:auto">
+				<div class="card-title" style="margin-bottom:15px">
+					<h4>微信信息</h4>
+				</div>
+				<div class="face">
+					<a target="_blank" href="#">
+						<img ng-src="http://tp1.sinaimg.cn/1683555092/50/5678518519/0" alt="夜晚在摇曳" src="http://tp1.sinaimg.cn/1683555092/50/5678518519/0">
+					</a>
+				</div>
+				<ul class="wb-info list-unstyled pull-left">
+					<li>
+							<a target="_blank" class="nickname ng-binding" href="http://weibo.com/u/1683555092?from=myfollow_all" title="夜晚在摇曳">乐儿_leer</a>
+							<img class="verified-type" ng-src="">
+					</li>
+					<li>
+						<span class="location ng-binding">北京 朝阳区</span>
+					</li>
+
+				</ul>
+				<ul class="other-info list-unstyled">
+					<li id="">
+						标签：
+						<a target="_blank" href="/ys1990?from=myfollow_all" title="夜晚在摇曳">
+							潜客 热心 旅游
+						</a>
+					</li>
+					<li>
+						属组：
+						<a class="S_link2" href="javascript:;" title="未分组">
+						铁杆粉丝组 大咖组 潜客组
+						</a>
+					</li>
+				</ul>
+			</div>
+		</tab> -->
+		<tab heading="沟通记录" ng-click="getCommunicationHistory()">
+			<div class="col-xs-12" style="overflow-y: scroll;max-height: 400px;">
+				<div ng-if="cmnHistory==undefined||cmnHistory.feeds.length==0">
+					<p>没有该用户的沟通记录</p>
+				</div>
+				<!-- ngRepeat:  -->
+				<div class="row">
+					<div class="profile-activity clearfix col-xs-12" ng-repeat="item in cmnHistory.feeds">
+						<div>
+							<p>
+								<span class="label label-info arrowed-right arrowed-in">[{{communicationType[item.type]}}]</span>
+								{{item.content}}
+							</p>
+							<p>
+								<i class="ace-icon fa fa-clock-o bigger-110"></i>
+								<span>{{item.sent_at}}</span>
+							</p>
+						</div>
+						<div class="clearfix form-actions" ng-show="item.reply" style="padding: 3px 8px;margin: 0;">
+							<div ng-repeat="reply in item.reply">
+								<b>回复：</b>{{reply.content}} <span class="text-muted">{{reply.created_at}}</span>
+							</div>
+						</div>
+					</div>
+				</div><!-- end ngRepeat:  -->
+				<div class="row">
+					<div class="col-xs-12" ng-show="cmnHistory.total_number">
+						<pagination total-items="cmnHistory.total_number" ng-model="cmnHistory.current_page" ng-click="getCommunicationHistory()" items-per-page="cmnHistory.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</tab>
+		<!-- <tab heading="活动历史">
+			<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>活动名称</th>
+						<th>活动类型</th>
+						<th>起止日期</th>
+						<th>
+							<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
+							创建时间
+						</th>
+						<th>状态</th>
+			
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-if="userData.event_history==undefined||userData.event_history.length==0">
+						<td colspan="6" align="center">没有参加活动记录！</td>
+					</tr>
+					<tr ng-repeat="item in userData.event_history">
+						<td>
+							<span>{{item.event_title}}</span>
+							&lt;!&ndash; <a href="#">绑定会员</a> &ndash;&gt;
+						</td>
+						<td>{{item.type}}</td>
+						<td>{{item.start_time}} ~ {{item.end_time}}</td>
+						<td>{{item.created_at}}</td>
+			
+						<td>
+							<span class="label label-sm label-success">{{item.status}}</span>
+						</td>
+			
+						<td>
+							<div class="hidden-sm hidden-xs btn-group">
+								<button class="btn btn-xs btn-success">
+									详情
+								</button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</tab> -->
+	</tabset>
+</div>
+<div class="modal-footer">
+	<button ng-click="edit()" ng-show="!showEditInput" type="button" class="btn btn-primary">
+	编辑
+	</button>
+	<button ng-click="confirmEdit()" ng-show="showEditInput" type="button" class="btn btn-primary">
+	确定
+	</button>
+	<button ng-click="cancelEdit()" ng-show="showEditInput" type="button" class="btn btn-warning">
+	取消
+	</button>
+	<button ng-click="cancel()" type="button" class="btn btn-default">
+	关闭
+	</button>
+</div>

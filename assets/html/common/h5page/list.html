@@ -1,0 +1,126 @@
+<div class="page-header">
+	<h1>
+		活动页面
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>
+			活动页面管理
+		</small>
+	</h1>
+</div>
+<div class="row" ng-controller="H5pageController" ng-init="pagesList()">
+	<!-- 列表页面 -->
+	<div id="pages_list" ng-show="!is_view">
+		<div class="col-lg-2 col-md-3 col-sm-4" ng-repeat="page in pages.data">
+			<div class="widget-box widget-color-dark">
+				<div class="widget-header widget-header-sm" style="height:1em;overflow:hidden">
+					<h5 class="widget-title smaller">{{page.title}}</h5>
+				</div>
+				<div class="widget-body">
+					<div class="widget-main" id="h5page{{page.id}}">
+						<div class="header-pic" style="height:120px;overflow:hidden">
+							<img ng-src="{{page.html_code[1]}}" style="width:100%">
+						</div>
+						<div class="price" ng-bind-html="page.html_code[2]" style="overflow:hidden;height:120px">
+						</div>
+					</div>
+					<div class="widget-toolbox padding-8 clearfix">
+						<button class="btn btn-xs btn-danger pull-left" ng-click="delete(page.id, page.title)">
+							<i class="ace-icon fa fa-times"></i><span class="bigger-110">删除</span>
+						</button>
+						<button class="btn btn-xs btn-success pull-right" ng-click="page_view(page.id)">
+							<span class="bigger-110">查看详情</span><i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12" ng-show="pages.data.length">
+				<pagination total-items="pages.total_number" ng-model="pages.current_page" ng-click="pagesList()" items-per-page="pages.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+			</div>
+		</div>
+	</div>
+	<!-- 列表页面 -->
+
+	<!-- 查看某个H5页面详情 -->
+	<div ng-show="is_view">
+		<div class="col-sm-4">
+			<div class="widget-box widget-color-dark">
+				<div class="widget-header widget-header-small">
+					<h6 class="widget-title">页面预览 - {{view_page.title}}</h6>
+				</div>
+				<div class="widget-body" style="height:600px;overflow:auto">
+					<div>
+						<img ng-src="{{view_page.html_code[1]}}" style="width:100%">
+					</div>
+					<div class="price" ng-bind-html="view_page.html_code[2]">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-8">
+			<h3 class="pull-left header smaller lighter blue col-sm-12">
+			<span class="pull-left">
+				基本信息
+			</span>
+			<span class="pull-right">
+				<button class="btn btn-sm btn-yellow">
+					<a href="javascript:;" ng-click="list_view()">返回活动列表</a>
+				</button>
+				<button class="btn btn-sm btn-yellow">
+					<a href="#wx-list-sendall">返回群发列表</a>
+				</button>
+			</span>
+			</h3>
+
+			<div class="profile-user-info profile-user-info-striped">
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 页面标题 </div>
+					<div class="profile-info-value"><span>{{view_page.title}}</span></div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 标签信息 </div>
+					<div class="profile-info-value"><span>{{view_page.tags}}</span></div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 广告点击次数 </div>
+					<div class="profile-info-value"><span>{{view_page.ad_click_count}}</span></div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 总流量 </div>
+					<div class="profile-info-value"><span>{{view_page.clicknum}}</span></div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 预览 </div>
+					<div class="profile-info-value">
+						<a href="{{view_page.url}}" target="_blank"><span>页面预览 <i class="ace-icon fa fa-external-link"></i></span></a>
+					</div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 创建时间 </div>
+					<div class="profile-info-value"><span>{{view_page.created_at}}</span></div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 浏览人数 </div>
+					<div class="profile-info-value"><span>{{view_page.visitor_num}}</span></div>
+				</div>
+			</div>
+			<h3 class="header smaller lighter blue"> 活动信息 </h3>
+			<div class="profile-user-info profile-user-info-striped">
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 活动名称 </div>
+					<div class="profile-info-value"><span>测试活动</span></div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 活动描述 </div>
+					<div class="profile-info-value"><span>测试活动描述</span></div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name"> 参与人数 </div>
+					<div class="profile-info-value">800</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 查看某个H5页面详情 -->
+</div>

@@ -1,0 +1,409 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * User: Xujian
+ * Date: 14-7-29
+ * Time: 18:59
+ */
+
+class Stats_model extends ME_Model
+{
+
+    public function __construct(){
+        parent::__construct();
+        $this->cid = $this->session->userdata('company_id');
+        // $this ->load ->library('Wxapi');
+    }
+
+    public function top_interact_users()
+    {
+        $wx_aid = $this->session->userdata('wx_aid');
+        $rst = $this->db->select('u.nickname, COUNT(c.id) commu_count', FALSE)
+            ->from('wx_user u')
+            ->join('wx_communication c', 'u.openid = c.openid', 'left')
+            ->where('u.wx_aid', $wx_aid)
+            // ->where('COUNT(c.id) >', 0)
+            ->group_by('u.id')
+            ->order_by('commu_count', 'desc')
+            ->limit(10)
+            ->get()->result_array();
+        return $rst;
+    }
+
+    public function get_wx_user_data($wx_aid, $wx_data, $start_date, $end_date, $alias)
+    {
+        $this->db
+                ->select("{$wx_data} AS {$alias}, count(*) AS {$alias}_number")
+                ->from("wx_user")
+                ->where("wx_aid", $wx_aid)
+                ->where("created_at >=", $start_date)
+                ->where("created_at <", $end_date)
+                ->group_by("{$alias}")
+                ->order_by("{$alias}_number", 'DESC')
+                ->limit(10);
+        $wx_data_rs = $this->db->get()->result_array();
+
+        /*$wx_data_number = array();
+        foreach ($wx_data_rs as $val)
+        {
+            if ("" == $val[$wx_data]) continue;
+            $wx_data_number[$val[$wx_data]] = $val["{$wx_data}_number"];
+        }*/
+
+        return $wx_data_rs;
+    }
+
+    function get_fans_increasement($wx_aid, $start_date, $end_date)
+    {
+        // 当统计周期大于30天时，只取从结束时间往前推30天的数据
+        if ((strtotime($end_date) - strtotime($start_date)) > 2592000)
+        {
+            $start_date = date("Y-m-d", strtotime($end_date) - 2592000);
+        }
+
+        $company_id = $this->cid;
+        $this->db
+                ->select("DATE_FORMAT(`subscribe_time`, '%Y-%m-%d') as day, count(*) as day_total", FALSE)
+                ->from("wx_user")
+                ->where("company_id", $company_id)
+                ->where("wx_aid", $wx_aid)
+                ->where("subscribe_time >=", $start_date)
+                ->where("subscribe_time <", $end_date)
+                ->group_by("day");
+        $increasement_rs = $this->db->get()->result_array();
+
+        // 如果第一个元素不等于查询开始的时间，说明开始时间的值为0
+        // 设置开始的时间为0，便于遍历数组，插入没有的日期
+        if (empty($increasement_rs) || $start_date != $increasement_rs[0]['day'])
+        {
+            array_unshift($increasement_rs, array('day' => $start_date, 'day_total' => 0));
+        }
+
+        // 时间查出来可能是不连续的
+        // 当某天没有值的情况下，设置那天为0
+        foreach ($increasement_rs as $key => $day_data)
+        {
+            if (0 == $key) continue;
+            $last_key = $key - 1;
+
+            $day_stamp = strtotime($day_data['day']);
+            $last_stamp = strtotime($increasement_rs[$last_key]['day']);
+
+            if (($diff_seconds = $day_stamp - $last_stamp) > 86400)
+            {
+                // 去掉开始的那天，以免重复
+                $unshfit_day = $day_stamp - $diff_seconds + 86400;
+                for ($i = $unshfit_day; $i < $day_stamp; $i += 86400)
+                {
+                    array_push($increasement_rs, array('day' => date("Y-m-d", $i), 'day_total' => 0));
+                }
+
+            }
+        }
+        usort($increasement_rs, array('Stats_model', 'cmp'));
+
+        return $increasement_rs;
+    }
+
+    public function get_category_info_number($wx_aid, $start_date, $end_date)
+    {
+        $company_id = $this->cid;
+        $this->db
+                ->select("rwcc.cat_id, count(*) as category_number")
+                ->from("wx_communication wc")
+                ->join("rl_wx_communication_category rwcc", "wc.id = rwcc.cmn_id")
+                ->where("wc.company_id", $company_id)
+                ->where("wc.wx_aid", $wx_aid)
+                ->where("wc.created_at >=", $start_date)
+                ->where("wc.created_at <", $end_date)
+                ->group_by("rwcc.cat_id");
+
+        $category_info_number = $this->db->get()->result_array();
+
+        if (empty($category_info_number)) return $category_info_number;
+
+	    $cats_numbers = array();
+	    foreach ($category_info_number as $val)
+		    $cats_numbers[$val['cat_id']] = $val['category_number'];
+
+	    /* 获取全部的分类信息 */
+	    $this->load->model('common/category_model', 'category');
+	    $category_info = $this->category->get_quick_cats($this->cid);
+
+	    foreach ($category_info['category'] as &$category)
+	    {
+		    if (isset($cats_numbers[$category['id']])) $category['category_number'] = $cats_numbers[$category['id']];
+		    else $category['category_number'] = 0;
+	    }
+
+	    return $category_info;
+
+        $category_ids = array();
+        foreach ($category_info_number as $data)
+        {
+            $category_ids[] = $data['cat_id'];
+        }
+
+        $cats_numbers = array();
+        foreach ($category_info_number as $val)
+            $cats_numbers[$val['cat_id']] = $val['category_number'];
+
+        /* 获取全部的分类信息 */
+        $this->load->model('common/category_model', 'category');
+        $category_info = $this->category->get_quick_cats($this->cid);
+
+        foreach ($category_info['category'] as &$category)
+        {
+            if (isset($cats_numbers[$category['id']])) $category['category_number'] = $cats_numbers[$category['id']];
+            else $category['category_number'] = 0;
+        }
+
+        return $category_info;
+    }
+
+    public function get_interact_number($wx_aid, $start_date, $end_date)
+    {
+        $company_id = $this->cid;
+        $this->db
+                ->select("DATE_FORMAT(`created_at`, '%H') as hour, type, count(*) as type_number", FALSE)
+                ->from("wx_communication")
+                ->where("company_id", $company_id)
+                ->where("wx_aid", $wx_aid)
+                ->where("created_at >=", $start_date)
+                ->where("created_at <", $end_date)
+                ->group_by("type")
+                ->group_by("hour");
+        $rs = $this->db->get()->result_array();
+
+	    if ( ! $rs) return FALSE;
+
+        foreach ($rs as $hour_type_data)
+        {
+            if (! isset($type_interact_number[$hour_type_data['type']]))
+            {
+                $type_interact_number[$hour_type_data['type']] = 0;
+            }
+            $type_interact_number[$hour_type_data['type']] += $hour_type_data['type_number'];
+
+            if (! isset($hour_type_interact_number[$hour_type_data['type']][$hour_type_data['hour']]))
+            {
+                $hour_type_interact_number[$hour_type_data['type']][$hour_type_data['hour']] = 0;
+            }
+            $hour_type_interact_number[$hour_type_data['type']][$hour_type_data['hour']] += $hour_type_data['type_number'];
+        }
+
+        // 遍历每小时交互量，没有那个小时的代表是0，补上
+        foreach ($hour_type_interact_number as $type => $data)
+        {
+            for ($i = 0; $i <= 23; $i++)
+            {
+                if (10 > $i) $i = 0 . $i;
+                if (! isset($data[$i]))
+                    $hour_type_interact_number[$type][$i] = 0;
+            }
+            ksort($hour_type_interact_number[$type]);
+            $hour_type_interact_number[$type] = array_values($hour_type_interact_number[$type]);
+        }
+
+        $interact_data['type_interact_number'] = $type_interact_number;
+        $interact_data['hour_type_interact_number'] = $hour_type_interact_number;
+        return $interact_data;
+    }
+
+    public function get_rule_number($wx_aid, $start_date, $end_date)
+    {
+        $company_id = $this->cid;
+        $this->db
+                ->select("rule_id, count(*) as rule_number")
+                ->from("wx_communication")
+                ->where("company_id", $company_id)
+                ->where("wx_aid", $wx_aid)
+                ->where("created_at >=", $start_date)
+                ->where("created_at <", $end_date)
+                ->where("rule_id !=", 0)
+                ->group_by("rule_id");
+        $rule_number = $this->db->get()->result_array();
+
+        if (empty($rule_number)) return $rule_number;
+
+        $rule_ids = array();
+        foreach ($rule_number as $rule_data)
+        {
+            $rule_ids[] = $rule_data['rule_id'];
+        }
+
+        $this->db
+                ->select("id, name")
+                ->from("wx_rule")
+                ->where("company_id", $company_id)
+                ->where_in("id", $rule_ids);
+        $rule_name_rs = $this->db->get()->result_array();
+
+        $rule_names = array();
+        foreach ($rule_name_rs as $rule_name_data)
+        {
+            $rule_names[$rule_name_data['id']] = $rule_name_data['name'];
+        }
+
+        foreach ($rule_number as $key => $rule_data)
+        {
+            if (isset($rule_names[$rule_data['rule_id']]))
+            {
+                $rule_number[$key]['rule_name'] = $rule_names[$rule_data['rule_id']];
+            }
+            else
+            {
+                unset($rule_number[$key]);
+            }
+        }
+
+        return $rule_number;
+    }
+
+    public function get_pm_keyword_number($wx_aid, $start_date, $end_date)
+    {
+        $company_id = $this->cid;
+        $this->db
+                ->select("keyword_id, count(*) as keyword_number")
+                ->from("wx_communication")
+                ->where("company_id", $company_id)
+                ->where("wx_aid", $wx_aid)
+                ->where("created_at >=", $start_date)
+                ->where("created_at <", $end_date)
+                ->where("rule_id !=", 0)
+                ->group_by("keyword_id")
+                ->order_by("keyword_number", "DESC")
+                ->limit(10);
+        $pm_keyword_number = $this->db->get()->result_array();
+
+        if (empty($pm_keyword_number)) return $pm_keyword_number;
+
+        $pm_keyword_ids = array();
+        foreach ($pm_keyword_number as $key => $pm_data)
+        {
+            $pm_keyword_ids[] = $pm_data['keyword_id'];
+        }
+
+        $this->db
+                ->select("id, name")
+                ->from("wx_keyword")
+                ->where_in("id", $pm_keyword_ids);
+        $pm_keyword_name_rs = $this->db->get()->result_array();
+
+        $pm_keyword_names = array();
+        foreach ($pm_keyword_name_rs as $pm_keyword_name_data)
+        {
+            $pm_keyword_names[$pm_keyword_name_data['id']] = $pm_keyword_name_data['name'];
+        }
+
+        foreach ($pm_keyword_number as $key => $pm_keyword_data)
+        {
+            if (isset($pm_keyword_names[$pm_keyword_data['keyword_id']]))
+            {
+                $pm_keyword_number[$key]['keyword_name'] = $pm_keyword_names[$pm_keyword_data['keyword_id']];
+            }
+            else
+            {
+                unset($pm_keyword_number[$key]);
+            }
+
+        }
+
+        return $pm_keyword_number;
+    }
+
+    public function get_staff_info($start_date, $end_date)
+    {
+        $company_id = $this->cid;
+
+        $this->db
+                ->select("staff_id, operation, count(*) as operation_number")
+                ->from("wx_operation_history")
+                ->where("company_id", $company_id)
+                ->where("created_at >=", $start_date)
+                ->where("created_at <", $end_date)
+                ->where_in("operation", array(0, 3, 7, 9))
+                ->group_by("staff_id")
+                ->group_by("operation");
+        $staff_rs = $this->db->get()->result_array();
+
+        if (empty($staff_rs)) return $staff_rs;
+
+        $staff_ids = array();
+        $staff_info = array();
+        foreach ($staff_rs as $staff_data)
+        {
+            $staff_ids[] = $staff_data['staff_id'];
+            $staff_info[$staff_data['staff_id']][$staff_data['operation']] = $staff_data['operation_number'];
+        }
+
+        $this->db
+                ->select("id, name")
+                ->from("staff")
+                ->where_in("id", $staff_ids);
+        $staff_name_rs = $this->db->get()->result_array();
+        $staff_names = array();
+        foreach ($staff_name_rs as $staff_name_data)
+        {
+            $staff_names[$staff_name_data['id']] = $staff_name_data['name'];
+        }
+
+        foreach ($staff_info as $key => $staff_data)
+        {
+            if (isset($staff_names[$key]))
+                $staff_info[$key]['staff_name'] = $staff_names[$key];
+            else
+                unset($staff_info[$key]);
+        }
+
+        return $staff_info;
+    }
+
+    public function get_tag_info()
+    {
+        $company_id = $this->cid;
+        $this->db
+                ->select("tag_id, SUM(link_tag_hits + rule_tag_hits + manual_tag_hits + event_tag_hits) as tag_number")
+                ->from("rl_wx_user_tag")
+                ->where("company_id", $company_id)
+                ->group_by("tag_id")
+                ->order_by("tag_number", "DESC")
+                ->limit(15);
+        $tag_info = $this->db->get()->result_array();
+
+        if ( ! $tag_info) return array ();
+
+        $tag_ids = array();
+        foreach ($tag_info as $tag_info_data)
+        {
+            $tag_ids[] = $tag_info_data['tag_id'];
+        }
+
+        $this->db
+                ->select("id, tag_name")
+                ->from("tag")
+                ->where_in("id", $tag_ids);
+        $tag_name_rs = $this->db->get()->result_array();
+        $tag_names = array();
+        foreach ($tag_name_rs as $tag_name_rs_data)
+        {
+            $tag_names[$tag_name_rs_data['id']] = $tag_name_rs_data['tag_name'];
+        }
+
+        foreach ($tag_info as $key => $tag_info_data)
+        {
+            if (isset($tag_names[$tag_info_data['tag_id']]))
+                $tag_info[$key]['tag_name'] = $tag_names[$tag_info_data['tag_id']];
+        }
+
+        return $tag_info;
+    }
+
+    // 将数组结果根据日期排序
+    public function cmp($a, $b)
+    {
+        if (strtotime($a['day']) == strtotime($b['day']))
+            return 0;
+
+        return (strtotime($a['day']) < strtotime($b['day'])) ? -1 : 1;
+    }
+}

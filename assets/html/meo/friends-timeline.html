@@ -1,0 +1,43 @@
+<div class="page-header">
+    <h1>
+        微博
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            微博发布
+        </small>
+    </h1>
+</div>
+<div class="row" ng-controller="WeiboSendController" ng-init="friendsTimeline()">
+    <div class="col-xs-12">
+        <ul class="nav nav-tabs padding-18">
+            <li>
+                <a ng-href="#/weibo-send">发微博</a>
+            </li>
+            <li class="active">
+                <a href="#/friends-timeline">微博首页</a>
+            </li>
+            <li>
+                <a ng-href="#/user-timeline">已发布微博</a>
+            </li>
+            <li>
+                <a ng-href="#/weibo-crontab">定时发布管理</a>
+            </li>
+        </ul>
+        <div class="space-6"></div>
+        <div class="row">
+            <div class="col-xs-12" ng-show="timeline.page.currentPage">
+                <pagination total-items="timeline.page.totalCount" ng-model="timeline.page.currentPage" ng-click="friendsTimeline()" items-per-page="timeline.page.itemsPerPage" max-size="timeline.page.maxSize" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+            </div>
+        </div>
+        <div class="span6 timeline-item">
+            <div class="profile-activity clearfix" ng-repeat="item in timeline.list.data.statuses">
+                <div ng-include src="'assets/html/meo/wb_communication.html'"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" ng-show="timeline.page.currentPage">
+                <pagination total-items="timeline.page.totalCount" ng-model="timeline.page.currentPage" ng-click="friendsTimeline()" items-per-page="timeline.page.itemsPerPage" max-size="timeline.page.maxSize" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+            </div>
+        </div>
+    </div>
+</div>

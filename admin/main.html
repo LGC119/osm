@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Welcome to MasEngine ! </title>
+	<link rel="stylesheet" href="../assets/lib/bootstrap/bootstrap.min.css" >
+	<link rel="stylesheet" href="../assets/lib/gritter/jquery.gritter.css"/>
+	<link rel="stylesheet" href="../assets/lib/uploadify/uploadify.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/lib/ace/ace.min.css">
+	<link rel="stylesheet" type="text/css" href="../assets/lib/jquery/chosen.css">
+	<link rel="stylesheet" type="text/css" href="../assets/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="../assets/css/main.css">
+	</head>
+
+	<body class="no-skin">
+		<!-- #section:basics/navbar.layout -->
+		<div ng-controller="HeaderController" ng-include src="'assets/html/header.html'" id="navbar" style="background: #2c6aa0;" class="navbar navbar-default"></div>
+
+		<!-- /section:basics/navbar.layout -->
+		<div class="main-container" id="main-container">
+			<div ng-include src="'assets/html/menu.html'" class="sidebar responsive"></div>
+
+			<div class="main-content">
+				<div ng-view class="page-content"></div>
+			</div>
+
+			<div ng-include src="'assets/html/footer.html'"  class="footer"></div>
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+	</body>
+<script data-main="assets/js/main" src="../assets/lib/require/require.min.js"></script>
+<script src="../assets/lib/jquery/jquery.min.js"></script>
+<script src="../assets/lib/ace/ace.min.js"></script>
+<script src="../assets/lib/ace/ace-elements.min.js"></script>
+</html>

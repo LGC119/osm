@@ -1,0 +1,61 @@
+<div class="page-header">
+	<h1>
+		品牌用户管理
+		<small><i class="ace-icon fa fa-angle-double-right"></i>品牌客户管理</small>
+	</h1>
+</div>
+<div ng-controller="CompanyController" ng-init="get_companies()" class="row">
+	<div class="col-xs-12">
+		<div ng-show="addnew">
+			<input type="text" ng-model="name" />
+			<button class="btn btn-sm btn-primary" ng-click="create_company()">
+				添加客户
+			</button>
+		</div>
+		<p><button ng-hide="addnew" class="btn btn-sm btn-primary" ng-click="addnew=true">添加客户</button></p>
+
+		<!-- 品牌公司列表START -->
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>公司名称</th>
+					<th>创建时间</th>
+					<th>是否可用</th>
+					<th>可绑定微博数量</th>
+					<th>可绑定微信数量</th>
+					<th>可设置关键词数量</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="companies.list==undefined||companies.list.length==0">
+					<td colspan="8" align="center">{{empty}}</td>
+				</tr>
+				<tr ng-repeat="item in companies.list">
+					<td>{{item.id}}</td>
+					<td>{{item.name}}</td>
+					<td>{{item.created_at}}</td>
+					<td>
+						<label style="height:20px;">
+							<input name="switch-field-1" ng-disabled="true" ng-checked="item.is_available==1" class="ace ace-switch ace-switch-6" type="checkbox">
+							<span class="lbl" ng-click="change_status(item.id)"></span>
+						</label>
+					</td>
+					<td>{{item.weibo_accounts_num}}/{{item.allow_wb_account_num}}</td>
+					<td>{{item.wechat_accounts_num}}/{{item.allow_wx_account_num}}</td>
+					<td>{{item.allow_wb_keywords_set_num}}</td>
+					<td>
+						<a href="javascript:;" staff-id="{{item.id}}" ng-click="delete_company(item)" >删除</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<!-- 品牌公司列表END -->
+	</div>
+
+	<!-- 添加编辑品牌的弹窗 -->
+	<script type="text/ng-template">
+	</script>
+	<!-- 添加编辑品牌的弹窗END -->
+</div>

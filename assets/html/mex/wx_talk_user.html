@@ -1,0 +1,98 @@
+<div class="user-icon pull-left">
+	<img class="avatar" alt="{{item.nickname}}" ng-src="{{item.headimgurl}}" width="50" height="50" ng-mouseover="showUserPop=true" ng-mouseleave="showUserPop=false">
+</div>
+<div class="user-pop-card" ng-show="showUserPop" ng-mouseover="showUserPop=true" ng-mouseleave="showUserPop=false">
+	<div style="width:256px;height:158px;box-shadow:1px 3px 4px #ececec;background:white;padding:10px;border:1px solid #dddddd;position:absolute;">
+		<div style="margin-bottom:10px;overflow:hidden">
+			<div class="face pull-left">
+				<img style="max-width:50px;max-height:50px;" ng-src="{{item.headimgurl}}">
+			</div>
+			<ul class="list-unstyled pull-left" style="margin:0;width:172px;">
+				<li style="height:25px;line-height:24px;overflow:hidden">
+					<span class="text-info" href="javascript:;" title="{{item.nickname}}">{{item.nickname}}</span>
+					<i class="fa bigger-120" ng-class="{'fa-mars text-info':item.sex==1,'fa-venus text-danger':item.sex==2}"></i>
+				</li>
+				<li style="height:25px;line-height:24px;overflow:hidden">
+					 <span class="location ng-binding curdefault">
+						{{item.country}} {{item.province}} {{item.city}}
+					 </span>
+				</li>
+			</ul>
+		</div>
+		<ul class="other-info list-unstyled pull-left" style="overflow:hidden;position:relative; top:0px;">
+			<li>
+				标签：
+				<span ng-show="!tagName[item.wx_user_id]" class=""> 暂无 </span>
+				<span style="padding:5px;" ng-repeat="tag in tagName[item.wx_user_id] |  limitTo: 3" class="text-info">
+					{{tag}}
+				</span>
+			</li>
+			<li>
+				属组：
+				<span ng-show="!groupIdName[item.wx_user_id]" class="ng-hide curdefault">暂无</span>
+				<span style="padding:5px;" class="text-info" ng-repeat="group in groupIdName[item.wx_user_id] |  limitTo: 3">
+					{{group}}
+				</span>
+			</li>
+		</ul>
+		<div style="position:absolute;right:16px;bottom:12px;">
+			<a href="javascript:;" ng-click="showUserModal(item.wx_user_id, $event)">查看详情</a>
+		</div>
+	</div>
+</div>
+<!-- <div class="user-pop-card" ng-show="showUserPop" ng-mouseover="showUserPop=true" ng-mouseleave="showUserPop=false">
+	<div style="width:300px;height:180px;box-shadow:1px 1px 2px #eeeeee;position:relative;background: white;padding: 10px;border: 1px solid #dddddd;">
+		<div class="face pull-left">
+			<span class="curdefault color1" target="_blank" href="javascript:;">
+				<img ng-src="{{item.headimgurl}}">
+			</span>
+		</div>
+		<ul class="list-unstyled pull-left" style="width: 200px;">
+			<li style="width:100%;height: 25px;">
+				<div ng-if="item.sex == 1" class="ng-scope pull-left">
+					<span target="_blank" style="width:50px;overflow:hidden;margin-left:8px;" class="nickname ng-binding curdefault color1" href="javascript:;" title="">{{item.nickname}}</span>
+					&nbsp;&nbsp;&nbsp;
+					<img style="max-width: 15px;min-width: 15px;max-height: 20px;min-height: 20px;" src="assets/img/boy.png">
+				</div>
+				<div ng-if="item.sex == 2" class="ng-scope">
+					<span target="_blank" style="float:left;width:50px;overflow:hidden;margin-left:8px;" class="nickname ng-binding curdefault color1" href="javascript:;" title="">{{item.nickname}}</span>
+					&nbsp;&nbsp;&nbsp;
+					<img style="max-width: 15px;min-width: 15px;max-height: 20px;min-height: 20px;" src="assets/img/girl.png">
+				</div>
+			</li>
+			<li style="height: 25px;line-height: 25px;">
+				 <span class="location ng-binding curdefault">
+					&nbsp;&nbsp;&nbsp;{{item.country}} {{item.province}} {{item.city}}
+				 </span>
+			</li>
+		</ul>
+		<ul class="other-info list-unstyled pull-left" style="overflow:hidden">
+			<li>
+				标签：
+				<span ng-show="!tagName[item.wx_user_id]" class="">
+					暂无
+				</span>
+				<span target="_blank" style="padding: 5px;" data-ng-repeat="tagV in tagName[item.wx_user_id] |  limitTo: 3"  href="javascript:;" class="ng-binding curdefault color1">
+					{{tagV}}
+				</span>
+			</li>
+			<li>
+				属组：
+				<span ng-show="!groupIdName[item.wx_user_id]" class="ng-hide curdefault">
+					暂无
+				</span>
+				<span style="padding: 5px;" class="S_link2 ng-binding curdefault color1" href="javascript:;" data-ng-repeat="groupName in groupIdName[item.wx_user_id] |  limitTo: 3">
+					{{groupName}}
+				</span>
+			</li>
+			<li>
+				<a href="javascript:;" class="pull-right" style="margin-top:20px;display:inline-block" ng-click="showUserModal(item.wx_user_id, $event)">查看详情</a>
+			</li>
+		</ul>
+	</div>
+</div> -->
+<p>
+    <a class="user" href="javascript:;" data-ng-click="get_timeline(1,item.openid)"> {{item.nickname}} </a>
+</p>
+<div class="time"><i class="ace-icon fa fa-envelope bigger-110"></i> {{item.num}}条信息</div>
+<!--<div style="clear:both"></div>-->

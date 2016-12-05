@@ -1,0 +1,29 @@
+<div class="modal-header">
+    <button ng-click="cancel()" type="button" class="close" >
+    ×
+    </button>
+    <h3 class="modal-title">文字</h3>
+</div>
+<div class="modal-body articles-choose clearfix">
+    <div class="col-xs-12 col-md-12">
+        <div class="widget-box widget-box" style="border:none">
+            <div class="widget-body">
+                <textarea id="text-content" class="form-control" rows="10" data-ng-model="text.textBox"></textarea>
+                <a class="icon-emotions elm" href="javascript:;" title="表情" style="text-decoration:none" ng-click="showEmotions()">
+                    <i class="fa fa-smile-o bigger-160"></i>
+                    表情
+                </a>
+                <span class="pull-right red">长度不可超过600字</span>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<div class="modal-footer">
+    <button ng-click="cancel()" type="button" class="btn btn-default">
+    取消  
+    </button>
+    <button ng-click="ok()" type="button" class="btn btn-primary">
+    确定
+    </button>
+</div>

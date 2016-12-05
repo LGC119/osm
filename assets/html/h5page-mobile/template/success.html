@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>提交成功</title>
+  <link rel="stylesheet" href="../../../html/h5page/css/jquery.mobile-1.3.2.min.css">
+  <script src="../../../html/js/jquery.min.js"></script>
+  <script src="../../../html/h5page/js/jquery.mobile-1.3.2.min.js"></script>
+</head>
+<body style="overflow-y:auto;" >
+<!-- Home -->
+<div data-role="page" id="page1">
+<!-- =============================================== -->
+    <div data-theme="a" data-role="header">
+        <h3 id="htmltitle" >
+            <span class="changex" typex="text"  >提交成功</span>
+        </h3>
+    </div>
+<!-- =============================================== -->
+    <div data-role="content" id="allhtml">
+<!-- =============================================== -->
+<!-- =============================================== -->
+		<div data-controltype="textblock" data-cid="text1" class="codiqa-control  changex" typex="rich" idx="heads" style="">
+			<p><strong>提交成功</strong></p>
+            <br/>
+            <p><center>感谢您的参与</center></p>
+        </div>
+ <!-- =============================================== -->
+<!-- =============================================== 
+ =============================================== -->
+ <!-- =============================================== -->
+<!--  
+<input type="date"  name="dar"  value="datepickek"/>
+-->
+            <!-- =============================================== -->
+    </div>
+</div>
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {  
+    function jump(count) {  
+        window.setTimeout(function(){  
+            count--;  
+            if(count > 0) {  
+                $('#num').attr('innerHTML', count);  
+                jump(count);  
+            } else {  
+                window.location='<?php echo isset($url) ? $url : '#'  ?>';
+            }  
+        }, 1000);  
+    }  
+    jump(2);  
+}); 
+</script>

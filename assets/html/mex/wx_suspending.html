@@ -1,0 +1,74 @@
+<div class="page-header">
+    <h1>微信人工客服 
+        <small><i class="ace-icon fa fa-angle-double-right"></i> 挂起中</small>
+    </h1>
+</div>
+<div class="row" ng-controller="WeixinOperationController" ng-init="get_timeline(5)">
+	<div class="col-xs-12">
+		<div id="feed" class="tab-content no-border padding-12">
+
+			<div class="profile-feed row-fluid">
+                <div style="color: #AAAAAA;margin-top: 55px;margin-left: 16px;" id="loading" ng-show={{'timeline.feeds==undefined||timeline.feeds.length==0'}}>
+                    {{empty}}
+                </div>
+				<div class="row" ng-show="{{'timeline.feeds!=undefined&&timeline.feeds.length!=0'}}">
+		            <div class="col-xs-12" ng-show="timeline.total_number">
+		                <pagination total-items="timeline.total_number" ng-model="timeline.current_page" ng-click="get_timeline(0)" items-per-page="timeline.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+		            </div>
+		        </div>
+				<div class="span6">
+					<div class="profile-activity clearfix" ng-repeat="item in timeline.feeds">
+						<div>
+							<div>分配给：{{item.name}}</div>
+							<div ng-include src="'assets/html/mex/wx_communication.html'"></div>
+							<div class="btn-group tools">
+								<button class="btn btn-sm btn-primary" ng-click="show_suspend(item.sid)">修改</button>
+								<button class="btn btn-sm btn-yellow" ng-click="unsuspend(item.sid)">取消提醒</button>
+							</div>
+						</div>
+					</div><!-- ng-repeat suspending -->
+					<div class="modal fade suspend" id="suspendbox" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									<h4 class="modal-title">挂起（定时提醒）</h4>
+								</div>
+								<div class="modal-body form-horizontal" style="padding-bottom:0">
+									<div class="form-group">
+										<div class="datetimepicker col-xs-12 mt-20" style="padding-left:0;">
+                                            <div class="col-xs-4" style="display:inline-block; min-height:290px; min-width:344px">
+                                                <datepicker ng-model="set_time" min-date="minDate" show-weeks="true" class="well well-sm" style="min-width:334px"></datepicker>
+                                            </div>
+                                            <div class="col-xs-4" style="margin-left:30px">
+                                                <timepicker ng-model="set_time" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <pre>设置的时间为: <b>{{set_time | date:'yyyy-MM-dd HH:mm' }}</b></pre>
+                                            </div>
+                                            
+                                            <div class="clearfix"></div>
+                                        </div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="name"> 提醒文字 </label>
+										<div class="col-sm-9"><textarea ng-model="set_desc" cols="38"></textarea></div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+									<button type="button" class="btn btn-primary" ng-click="suspend(item.id)" data-dismiss="modal">确定</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- /span -->
+				<div class="row" ng-show="{{'timeline.feeds!=undefined&&timeline.feeds.length!=0'}}">
+		            <div class="col-xs-12" ng-show="timeline.total_number">
+		                <pagination total-items="timeline.total_number" ng-model="timeline.current_page" ng-click="get_timeline(0)" items-per-page="timeline.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+		            </div>
+		        </div>
+			</div><!-- /row -->
+		</div>
+	</div>
+</div>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>MasEngine - 管理后台登陆</title>
+		<meta name="description" content="User login page" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<link rel="stylesheet" href="../assets/lib/bootstrap/bootstrap.min.css" />
+		<link rel="stylesheet" href="../assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="../assets/lib/ace/ace.min.css" />
+		<link rel="stylesheet" href="../assets/lib/ace/ace-rtl.min.css" />
+		<link rel="stylesheet" href="../assets/lib/ace/ace.onpage-help.css" />
+
+		<style type="text/css">
+		body, h1, h2, h3, h4, h5{font-family: "Microsoft YaHei", "Tahoma", "Arial", 'Times New Roman', Times, serif}
+		.login-container {width: 405px;}
+		</style>
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="../assets/css/ace-part2.min.css" />
+			<link rel="stylesheet" href="../assets/css/ace-ie.min.css" />
+			<script src="../assets/js/html5shiv.js"></script>
+			<script src="../assets/js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body class="login-layout login-layout blur-login" ng-controller="admin" ng-init="chkLogin()">
+		<div class="main-container">
+			<div class="main-content">
+				<div class="row">
+					<div class="col-sm-10 col-sm-offset-1">
+						<div class="login-container">
+						<div class="space-18"></div>
+							<div class="center">
+								<h1 style="font-size:72px;font-weight:700;font-family:Georgia;">
+									<span style="color:#35a1ff">mas</span><span style="color:#ffffff">engine</span>
+								</h1>
+								<h4 class="light-blue" id="id-company-text">&copy; 云点矩阵</h4>
+							</div>
+
+							<div class="space-6"></div>
+
+							<div class="position-relative">
+								<div id="login-box" class="login-box visible widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header blue lighter bigger">
+												<i class="ace-icon fa fa-home green"></i>
+												管理后台登陆
+											</h4>
+
+											<div class="space-6"></div>
+
+											<form name="loginForm" ng-submit="login()">
+												<fieldset>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" ng-model="pd.uname" placeholder="登录名" />
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" class="form-control" ng-model="pd.upass" placeholder="密码" />
+															<i class="ace-icon fa fa-lock"></i>
+														</span>
+													</label>
+
+													<div class="space"></div>
+
+													<div class="clearfix">
+														<button type="submit" class="btn btn-sm btn-primary btn-block">
+															<i class="ace-icon fa fa-key"></i>
+															<span class="bigger-110">登陆</span>
+														</button>
+													</div>
+
+													<div class="space-4"></div>
+												</fieldset>
+											</form>
+
+											<div class="social-or-login center">
+												<span class="bigger-110">ME3.0</span>
+											</div>
+										</div><!-- /.widget-main -->
+
+										<div class="toolbar clearfix">
+											<div class="center">
+												<span style="color:#fff;font-family:verdana">&copy; copyright 2014 - 2018</span>
+											</div>
+											<div>
+												<a href="../" class="forgot-password-link">
+													转到前台
+													<i class="ace-icon fa fa-arrow-right"></i>
+												</a>
+											</div>
+										</div>
+									</div><!-- /.widget-body -->
+								</div><!-- /.login-box -->
+
+							</div><!-- /.position-relative -->
+						</div>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+	</body>
+	<script type="text/javascript" src="../assets/lib/angular/angular.min.js"></script>
+	<script type="text/javascript" src='../assets/lib/jquery/jquery.min.js'></script>
+	<script type="text/javascript">
+		if('ontouchstart' in document.documentElement) document.write("<script src='../assets/lib/jquery/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+	</script>
+
+	<script type="text/javascript"> 
+	function admin ($scope, $http)  /* 登陆页面控制器 */
+	{
+		$scope.pd = {uname:'', upass:''};
+
+		/* 检测后台账号是否已登录 */
+		$scope.chkLogin = function () 
+		{
+			$http.get(
+				'admin.php/gate/chkLogin'
+			).success(function(res){
+				if (res !== 0 && res.admin_id > 0)
+					window.location.href = 'main.html';
+				return ;
+			});
+		}
+
+		/* 执行后台登陆操作 */
+		$scope.login = function () 
+		{
+			$http.post(
+				'admin.php/gate/login', 
+				$scope.pd, 
+				{
+					headers : { 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'}, 
+					transformRequest : function (data) {return $.param(data);}
+				}
+			).success(function(res){
+				if (res.err_msg != '') 
+					alert(res.err_msg || '登陆失败！');
+				else 
+					window.location.href = 'main.html';
+			}).error(function(){
+				alert('无法登陆后台！');
+			});
+		}
+	}
+	</script>
+</html>

@@ -1,0 +1,118 @@
+<div class="page-header">
+	<h1>
+		微信自动回复
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>
+			其他回复规则
+		</small>
+	</h1>
+</div>
+<div data-ng-controller="OtherruleController" style="margin-bottom: 50px;">
+	<div style="">
+		<h4>关注微信帐号：</h4>
+		<textarea ng-show="sendValue.isText" class="form-control" rows="5"
+				  data-ng-model="subscribedReply"></textarea>
+		<div style="width:100%;">
+			<div style="border: 1px solid #CCCCCC;padding: 20px;margin: 10px 0 10px" ng-show="sendValue.isImageDiv">
+				<div style="width: 300px;height: 200px;border: 1px solid #cccccc;box-shadow: 2px  2px 5px #999999;">
+					<div style="width: 100%;height: 30px;padding: 5px;font-size: 14px;">{{sendValue.imageDate}}</div>
+					<img ng-src="{{sendValue.imageSrc}}" style="width: 250px;height:160px;padding: 5px;" alt=""/>
+				</div>
+			</div>
+			<div style="border: 1px solid #CCCCCC;padding: 20px;margin: 10px 0 10px" ng-show="sendValue.isNewsDiv">
+				<div style="width: 300px;height: 130px;border: 1px solid #cccccc;"
+					 data-ng-repeat="news in sendValue.newsData">
+					<div style="float: left;width: 180px;height: 80px;margin-top: 30px;text-indent: 20px;">
+						{{news.title}}
+					</div>
+					<div style="float:left;width: 110px;height: 90px;margin-top: 20px;">
+						<img ng-src="{{news.filepath}}" style="width: 110px;height: 90px;" alt=""/>
+					</div>
+				</div>
+			</div>
+			<div style="border: 1px solid #CCCCCC;padding: 20px;margin: 10px 0 10px" ng-show="sendValue.isArticlesDiv">
+				<div style="width: 300px;height: 130px;border: 1px solid #cccccc;"
+					 data-ng-repeat="articles in sendValue.articlesData.data">
+					<div style="float: left;width: 180px;height: 80px;margin-top: 30px;text-indent: 20px;">
+						{{articles.title}}
+					</div>
+					<div style="float:left;width: 110px;height: 90px;margin-top: 20px;">
+						<img ng-src="uploads/images/{{articles.filename}}" style="width: 110px;height: 90px;" alt=""/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="elms" style="margin-top: 10px;">
+			<a class="image elm" href="javascript:;" title="文字" ng-click="textBox('text')">
+				<i class="fa fa-pencil-square-o bigger-160"></i>
+				文字
+			</a>
+			<a class="image elm" href="javascript:;" title="单图文" ng-click="showBox('news')">
+				<i class="fa fa-file-o bigger-160"></i>
+				单图文
+			</a>
+			<a class="image elm" href="javascript:;" title="多图文" ng-click="showBox('articles')">
+				<i class="fa fa-file-o bigger-160"></i>
+				多图文
+			</a>
+			<a class="image elm" href="javascript:;" title="图片" ng-click="showBox('image')">
+				<i class="fa fa-picture-o bigger-160"></i>
+				图片
+			</a>
+		</div>
+	</div>
+	<div style="">
+		<h4>无匹配关键词的回复：</h4>
+		<textarea class="form-control" ng-show="sendValue2.isText" rows="5" data-ng-model="noKeywordReply"></textarea>
+		<div style="width:100%;">
+			<div style="border: 1px solid #CCCCCC;padding: 20px;margin: 10px 0 10px" ng-show="sendValue2.isImageDiv">
+				<div style="width: 300px;height: 200px;border: 1px solid #cccccc;box-shadow: 2px  2px 5px #999999;">
+					<div style="width: 100%;height: 30px;padding: 5px;font-size: 14px;">{{sendValue2.imageDate}}</div>
+					<img ng-src="{{sendValue2.imageSrc}}" style="width: 250px;height:160px;padding: 5px;" alt=""/>
+				</div>
+			</div>
+			<div style="border: 1px solid #CCCCCC;padding: 20px;margin: 10px 0 10px" ng-show="sendValue2.isNewsDiv">
+				<div style="width: 300px;height: 130px;border: 1px solid #cccccc;"
+					 data-ng-repeat="news in sendValue2.newsData">
+					<div style="float: left;width: 180px;height: 80px;margin-top: 30px;text-indent: 20px;">
+						{{news.title}}
+					</div>
+					<div style="float:left;width: 110px;height: 90px;margin-top: 20px;">
+						<img ng-src="{{news.filepath}}" style="width: 110px;height: 90px;" alt=""/>
+					</div>
+				</div>
+			</div>
+			<div style="border: 1px solid #CCCCCC;padding: 20px;margin: 10px 0 10px" ng-show="sendValue2.isArticlesDiv">
+				<div style="width: 300px;height: 130px;border: 1px solid #cccccc;"
+					 data-ng-repeat="articles in sendValue2.articlesData.data">
+					<div style="float: left;width: 180px;height: 80px;margin-top: 30px;text-indent: 20px;">
+						{{articles.title}}
+					</div>
+					<div style="float:left;width: 110px;height: 90px;margin-top: 20px;">
+						<img ng-src="uploads/images/{{articles.filename}}" style="width: 110px;height: 90px;" alt=""/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="elms" style="margin-top: 10px;">
+			<a class="image elm" href="javascript:;" title="文字" ng-click="textBox2('text')">
+				<i class="fa fa-pencil-square-o bigger-160"></i>
+				文字
+			</a>
+			<a class="image elm" href="javascript:;" title="单图文" ng-click="showBox2('news')">
+				<i class="fa fa-file-o bigger-160"></i>
+				单图文
+			</a>
+			<a class="image elm" href="javascript:;" title="多图文" ng-click="showBox2('articles')">
+				<i class="fa fa-file-o bigger-160"></i>
+				多图文
+			</a>
+			<a class="image elm" href="javascript:;" title="图片" ng-click="showBox2('image')">
+				<i class="fa fa-picture-o bigger-160"></i>
+				图片
+			</a>
+		</div>
+	</div>
+	<br/>
+	<span class="btn btn-lg btn-info pull-right" data-ng-click="updateReply()">更新</span>
+</div>

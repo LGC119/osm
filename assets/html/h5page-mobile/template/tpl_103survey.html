@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Cache-Control" content="no-transform " />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <base href="<?php echo base_url();?>"/>
+    <title><?php echo isset($htmls) ? $htmls['title'] : '调研' ?></title>
+
+    <link rel="stylesheet" href="../assets/lib/jquery/jquery.mobile-1.3.2.min.css">
+    <script src="../assets/lib/jquery/jquery.min.js"></script>
+    <script src="../assets/lib/jquery/jquery.mobile-1.3.2.min.js"></script>
+
+</head>
+<body style="overflow-y:auto;" >
+<!-- Home -->
+<div data-role="page" id="page1">
+<!-- =============================================== -->
+    <div data-theme="a" data-role="header">
+        <h3 id="htmltitle" >
+            <span class="changex" typex="text"  ><?php echo isset($htmls) ? $htmls['title'] : '调研' ?></span>
+        </h3>
+    </div>
+<!-- =============================================== -->
+    <div data-role="content" id="allhtml">
+<!-- =============================================== -->
+        <div class="pic" style=" text-align:center">
+            <img id="pic" class="changex" typex="img" style="width: 100%; height: auto" srct="../assets/img/h5page/h5_tpl.png">
+        </div>
+<!-- =============================================== -->
+        <div data-controltype="textblock" data-cid="text1" class="codiqa-control  changex" typex="rich" idx="heads" style="">
+            <p><strong>Rolex</strong></p>
+            <p>劳力士创始人为汉斯.威尔斯多夫，1908年他在瑞士将劳力士注册为商标。</p>
+            <p><strong>Vacheron Constantin</strong></p>
+            <p>始创于1775年的江诗丹顿已有250年历史，是世界上历史最悠久、延续时间最长的名表之一。</p><p><strong>IWC</strong></p>
+            <p>创立于1868年的万国表有“机械表专家”之称。</p>
+            <strong>Cartier</strong>
+            <p>卡地亚拥有150多年历史，是法国珠宝金银首饰的制造名家。</p>
+        </div>
+<!-- =============================================== -->
+        <form method="POST" id="submitform" data-cid="form3" class="codiqa-control codiqa-container ui-sortable ui-sortable-disabled" style="">
+            <div data-role="fieldcontain">
+                <input name="PhoneNumber" class="changex" typex="tip" id="textinput1" placeholder="姓名" value="" type="text">
+            </div>
+<!-- =============================================== -->
+            <div data-role="fieldcontain">
+                <input name="Address" class="changex" typex="tip" id="textinput2" placeholder="手机号" value="" type="text">
+            </div>
+<!-- ============================================================ -->
+            <!--<div id="theid" data-role="fieldcontain">-->
+                    <!--<legend>-->
+                        <!--<span class="changex" typex="text">多选</span>-->
+                    <!--</legend>-->
+                    <!--<div class="changex" typex="check" style="list-style-type:none;">-->
+                            <!--<input data-role="none" id="checkbox3" name="checkbox1" checkname="多选A" type="checkbox">多选A <br/>-->
+                            <!--<input data-role="none" id="checkbox3" name="checkbox2" checkname="多选B" type="checkbox">多选B <br/>-->
+                            <!--<input data-role="none" id="checkbox3" name="checkbox3" checkname="多选C" type="checkbox">多选C <br/>-->
+                            <!--<input data-role="none" id="checkbox3" name="checkbox4" checkname="多选D" type="checkbox">多选D <br/>-->
+                    <!--</div>-->
+            <!--</div>-->
+<!-- =============================================== 
+ =============================================== -->
+
+ <!--<div data-role="fieldcontain">-->
+            <!--<label for="slider1">-->
+                <!--<span class="changex" typex="text" >认可程度</span>-->
+            <!--</label>-->
+            <!--<input id="slider1" type="range" readonly="readonly" name="slider" value="50" min="0" max="100" data-highlight="true">-->
+        <!--</div>-->
+
+
+<!--<textarea class="changex" typex="text" name="textarea" rows="8" cols="40" >留言/建议</textarea>-->
+<!-- =============================================== -->
+            <input class="changexxx" typex="value" data-theme="a"  value="参加活动" type="submit">
+            <!-- <div data-controltype="textblock" data-cid="text2" class="changex" typex="ads"></div> -->
+        </form>
+    </div>
+</div>
+<script type="text/javascript" charset="utf-8">
+    var prt = parent.document.getElementById('window');
+    if(prt){
+        $.getScript("../assets/js/h5page-mobile/js_editac.js");
+    } else {
+        $.getScript("../assets/js/h5page-mobile/js_view.js");
+    }
+</script>

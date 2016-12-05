@@ -1,0 +1,208 @@
+<div class="page-header">
+    <h1>
+        微博
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            微博发布
+        </small>
+    </h1>
+</div>
+<div class="row" ng-controller="WeiboCrontabController">
+    <div class="col-xs-12">
+        <ul class="nav nav-tabs padding-18">
+            <li>
+                <a ng-href="#/weibo-send">发微博</a>
+            </li>
+            <li>
+                <a href="#/friends-timeline">微博首页</a>
+            </li>
+            <li>
+                <a ng-href="#/user-timeline">已发布微博</a>
+            </li>
+            <li class="active">
+                <a ng-href="#/weibo-crontab">定时发布管理</a>
+            </li>
+        </ul>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="filter-sorter pull-left">
+                    <select class="" ng-model="filterData.is_sent" ng-options="c.id as c.is_sent for c in is_sent" ng-change="getCrontabList()">
+                    </select>
+                    <span class="input-group col-sm-3" style="width:160px;display:inline-table;">
+                        <span class="input-group-addon" ng-click="openDatepicker($event, 'opened1')"><i class="fa fa-calendar bigger-110"></i></span>
+                        <input type="text" datepicker-popup="{{format}}" ng-model="start_date" is-open="opened1" max-date="end_date" datepicker-options="dateOptions" placeholder="开始时间" date-disabled="disabled(date, mode)" style="width:120px;" ng-click="openDatepicker($event, 'opened1')" current-text="今天" clear-text="清除" close-text="关闭" />
+                    </span>
+                    至
+                    <span class="input-group col-sm-3" style="width:160px;display:inline-table;">
+                        <span class="input-group-addon" ng-click="openDatepicker($event, 'opened2')"><i class="fa fa-calendar bigger-110"></i></span>
+                        <input type="text" datepicker-popup="{{format}}" ng-model="end_date" is-open="opened2" max-date="dt" datepicker-options="dateOptions" placeholder="结束时间" date-disabled="disabled(date, mode)" style="width:120px;" ng-click="openDatepicker($event, 'opened2')" current-text="今天" clear-text="清除" close-text="关闭" />
+                    </span>
+                    <input type="text" placeholder="关键词" class="ui-autocomplete-input col-w-4" ng-model="keyword">
+                    <button class="btn btn-primary btn-sm" ng-disabled="getPending" ng-click="getCrontabList()">搜索</button>
+                </div>
+                <pagination ng-show="crontabList.crontabs.length" total-items="crontabList.total_number" ng-model="crontabList.current_page" ng-click="getCrontabList()" items-per-page="crontabList.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+            </div>
+        </div>
+        <div class="row" ng-show="!crontabList.crontabs.length"><div class="col-xs-12">{{list.empty}}</div></div>
+        <div class="row" ng-repeat="item in crontabList.crontabs">
+            <div class="col-xs-12">
+                <div class="timeline-item clearfix">
+                    <!-- #section:pages/timeline.info -->
+                    <div class="timeline-info">
+                        <img alt="{{crontabList.account.screen_name}}" ng-src="{{crontabList.account.profile_image_url}}">
+                    </div>
+                    <!-- /section:pages/timeline.info -->
+                    <div class="widget-box transparent">
+                        <div class="widget-header widget-header-small">
+                            <h5 class="widget-title smaller">
+                                <a ng-href="http://weibo.com/u/{{crontabList.account.weibo_id}}" target="_blank" class="blue">{{crontabList.account.screen_name}}</a>
+                            </h5>          
+                        </div>
+                        <div class="widget-body content">
+                            <div class="widget-body-inner" style="display: block;">
+                                <div class="widget-main">
+                                    {{item.text}}
+                                    <div class="space-6"></div>
+                                    <img  ng-if="item.pic_path" ng-src="{{item.pic_path}}" ng-if="item.pic_path"  ng-class="{'auto':is_auto,'thumb':!is_auto}" ng-click="is_auto=!is_auto" ng-init="is_auto=false" />
+                                    <!-- 转发原微博 -->
+                                    <div class="ori-status" ng-if="item.wb_info">
+                                        <div class="retweeted_user">
+                                            <a ng-href="http://weibo.com/u/{{item.wb_info.user.id}}" target="_blank">
+                                            @{{item.wb_info.user.screen_name}}
+                                            </a>
+                                        </div>
+                                        <div ng-bind-html="item.wb_info.text"></div>
+                                        <div class="space-6"></div>
+                                        <!-- 图片 -->
+                                        <div class="piclist" ng-if="item.wb_info.original_pic">
+                                            <img ng-src="{{item.wb_info.pic_urls[0].thumbnail_pic}}" class="thumb" ng-show="!is_auto" ng-click="is_auto=true" ng-init="is_auto=false">
+                                            <img ng-src="{{item.wb_info.original_pic}}" ng-show="is_auto"  class="auto" ng-click="is_auto=false">
+                                        </div>
+                                        <div class="space-6"></div>
+                                        <div class="action-buttons clearfix">
+                                            <div class="pull-left">
+                                                <span class="created-at"><i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                                {{item.wb_info.created_at}}
+                                                </span>
+                                                <span class="source ml-10" ng-bind-html="item.wb_info.source"></span>
+                                            </div>
+                                            <div class="pull-right">
+                                                <a href="javascript:;" class="repost_btn">转发({{item.wb_info.reposts_count}})</a>
+                                                <a href="javascript:;" class="comment_btn">评论({{item.wb_info.comments_count}})</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="space-6"></div>
+                                    <div class="widget-toolbox clearfix">
+                                        <div class="pull-left">
+                                            <span class="send-stauts" ng-switch="item.is_sent">
+                                                <span ng-switch-when="0" class="label">未发送
+                                                </span>
+                                                <span ng-switch-when="1" class="label label-success arrowed">
+                                                已发送
+                                                </span>
+                                                <span ng-switch-when="2" class="label label-warning">
+                                                发送失败
+                                                </span>
+                                                <span ng-switch-when="3" class="label label-danger">
+                                                发送失败
+                                                </span>
+                                            </span>
+                                            <span class="created-at orange">
+                                                <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                                发送时间：
+                                                {{item.send_at*1000 | date:'M/d/yy h:mm a'}}
+                                            </span>
+                                            &nbsp;&nbsp;
+                                            <span class="created-at text-muted">
+                                                <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                                设置时间：
+                                                {{item.set_at*1000 | date:'M/d/yy h:mm a'}}
+                                            </span>
+                                        </div>
+                                        <!-- #section:custom/extra.action-buttons -->
+                                        <div class="pull-right">
+                                            <a href="javascript:;" class="btn btn-primary btn-sm" ng-click="editCrontab(item)">
+                                                编辑
+                                            </a>
+                                            <a href="javascript:;" class="btn btn-danger btn-sm" ng-click="deleteCrontab(item.id)">
+                                                删除
+                                            </a>
+                                        </div>
+                                        <!-- /section:custom/extra.action-buttons -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" ng-show="crontabList.code==200">
+                <pagination total-items="crontabList.total_number" ng-model="crontabList.current_page" ng-click="getCrontabList()" items-per-page="crontabList.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑定时模态框模板 -->
+    <script type="text/ng-template" id="edit-crontab-modal">
+        <div class="modal-header">
+            <h3 class="modal-title">编辑</h3>
+        </div>
+        <div class="modal-body">
+            <div>
+                <label>微博内容</label>
+                <textarea class="form-control" id="form-field-8" ng-model="edit.text" ng-keyup="updateLength()"></textarea>
+                <span class="pull-right" ng-show="wordsRemain > 0" style="color:#808080">还可以输入 <b>{{wordsRemain}}</b> 字</span>
+                <span class="pull-right" ng-show="wordsRemain <= 0" style="color:#808080">已超出 <b style="color:#E44443">{{-wordsRemain}}</b> 字</span>
+            </div>
+            <div ng-show="!edit.sid">
+                <label></label>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <span id="img-uplaod" class="btn" ng-model="edit.pic_path" me-uploadify="{auto:false,buttonText:'图片上传'}"></span>
+                        <input type="text" ng-model="edit.pic_path" style="width:80%" placeholder="图片地址或链接">
+                    </div>
+                    <img ng-show="edit.pic_path" ng-src="{{edit.pic_path}}" ng-if="edit.pic_path" style="max-width:120px;max-height:120px;" />
+                </div>
+            </div>
+            <div class="space-12"></div>
+            <div>
+                <label>定时时间</label>
+                <div id="form-field-8" >
+                    <div class="datetimepicker col-xs-12 mt-20" style="padding-left:0;">
+                        <div class="col-xs-4" style="display:inline-block; min-height:290px; min-width:344px">
+                            <datepicker ng-model="edit.dt" min-date="minDate" show-weeks="true" class="well well-sm" style="min-width:334px"></datepicker>
+                        </div>
+                        <div class="col-xs-4">
+                            <timepicker ng-model="edit.dt" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                            <pre>设置的时间为: <b>{{edit.dt | date:'yyyy-MM-dd HH:mm' }}</b></pre>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">确定</button>
+            <button class="btn btn-default" ng-click="cancel()">取消</button>
+        </div>
+    </script>
+
+    <!-- 删除定时模态框模板 -->
+    <script type="text/ng-template" id="delete-crontab-modal">
+        <div class="modal-header">
+            <h3 class="modal-title">删除</h3>
+        </div>
+        <div class="modal-body">
+            确定删除该条定时？
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">确定</button>
+            <button class="btn btn-default" ng-click="cancel()">取消</button>
+        </div>
+    </script>
+</div>

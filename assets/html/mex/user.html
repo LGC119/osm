@@ -1,0 +1,325 @@
+<div class="page-header">
+    <h1>
+        微信用户管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            粉丝列表
+        </small>
+    </h1>
+</div>
+<div class="row" ng-controller="WeixinUserController">
+    <div class="col-xs-12">
+        <div class="row ctrl-btn">
+            <div class="col-xs-12">
+                <button class="btn btn-primary btn-sm" ng-click="showFilter=!showFilter">筛选条件</button>
+            </div>
+        </div>
+        <div class="space-6"></div>
+        <div class="row filter" ng-show="showFilter">
+            <div class="col-xs-12">
+                <tabset>
+                    <tab heading="基础信息">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label class="control-label no-padding-right" for="form-field-2"> 
+                                性别：
+                                </label>
+                                <select class="form-control" ng-model="post.sex" ng-options="v.key as v.val for v in filters.sex">
+                                    <option value="">全部</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="control-label no-padding-right" for="form-field-2">
+                                地区：
+                                </label>
+                                <!-- <select class="form-control" ng-model="post.province" ng-options="v.key as v.val for v in filters.province">
+                                    <option value="">全部</option>
+                                </select> -->
+                                <div>
+                                    <select id="country" ng-model="post.country" ng-change="post.province = ''">
+                                        <option value="">全部</option>
+                                        <option value="true">中国</option>
+                                    </select>
+                                    <select id="province" ng-show="post.country"  ng-options="k as k for (k,v) in filters.province" ng-model="post.province" ng-change="post.city = ''">
+                                        <option value="">全部</option>
+                                    </select>
+                                    <select id="city" ng-show="post.province && post.country" ng-options="v as v for (k,v) in filters.province[post.province]" ng-model="post.city">
+                                        <option value="">全部</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab heading="用户标签">
+                        <div class="hot-tags">
+                            <div>热门标签：</div>
+                            <div class="empty-hot-tags" ng-show="!common.hotTags.trigger.length">
+                            暂无热门标签
+                            </div>
+                            <div class="checkbox" style="display:inline-block;min-width:100px;" ng-repeat="hotTag in common.hotTags.trigger">
+                                <label>
+                                    <input type="checkbox" class="ace ng-pristine ng-valid" ng-click="pushTag(hotTag.tag_id, hotTag.tag_name)" ng-checked="selectedTags[hotTag.tag_id]">
+                                    <span class="lbl"> {{hotTag.tag_name}}</span>
+                                </label>
+                            </div>
+                            
+                        </div>
+                        <div class="more-tags">
+                            <button class="btn btn-primary btn-sm" ng-click="showTagModal()">更多标签</button>
+                            <button class="btn btn-primary btn-sm" ng-click="showTagModal_sub()">订阅标签</button>
+                        </div>    
+                        <hr>
+                        <div class="selected-tags">
+                            <span class="selected-tag label label-lg label-primary" ng-repeat="tag in selectedTags">
+                                {{tag.name}} 
+                                <a class="white" href="javascript:;" ng-click="removeSelectedTag(tag.id)">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </tab>
+                    <tab select="getGroupSendList()">
+                        <tab-heading>
+                            群发历史
+                        </tab-heading>
+                        <div>
+                            <div>
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th width="64">选择</th>
+                                            <th>创建时间</th>
+                                            <th>内容类型</th>
+                                            <th>接收人数</th>
+                                            <th>状态</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="val in groupSendList.list">
+                                            <td>
+                                                <label>
+                                                    <input type="checkbox" class="ace" ng-model="common.groupSend[val.id]">
+                                                    <span class="lbl"> </span>
+                                                </label>
+                                            </td>
+                                            <td>{{val.created_at}}</td>
+                                            <td>{{val.msgtype | mediaType}}</td>
+                                            <td>{{val.receivers_num}} 人</td>
+                                            <td>{{val.is_send | groupSendStatus}}</td>
+                                            
+                                        </tr>
+                                        <tr ng-show="!groupSendList.list">
+                                            <td colspan="5" align="center">{{groupSendList.empty}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="row">
+                                    <div class="col-xs-12" ng-show="groupSendList.list.length">
+                                        <pagination total-items="groupSendList.total_number" ng-model="groupSendList.current_page" ng-click="getGroupSendList()" items-per-page="groupSendList.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    <!-- <tab heading="活动历史">
+                    </tab> -->
+                    <!-- <tab heading="规则关键词">
+                    </tab> -->
+                </tabset>
+                <div class="space-6"></div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label class="control-label no-padding-right" for="form-field-2"> 
+                            关注日期：
+                        </label>
+                        <span class="col-xm-4">
+                            <input type="text" datepicker-popup="yyyy-MM-dd"
+                            ng-model="subscribe_start" is-open="open"
+                            datepicker-options="dateOptions" placeholder="开始时间"
+                            ng-click="openDatepicker($event, 'open')"
+                            clear-text="清除" current-text="今天" close-text="关闭"/>
+                        </span>
+                        <span class="col-xm-4">
+                            <input type="text" datepicker-popup="yyyy-MM-dd"
+                            ng-model="subscribe_end" is-open="opened2"
+                            datepicker-options="dateOptions" placeholder="结束时间"
+                            ng-click="openDatepicker($event, 'opened2')"
+                            clear-text="清除" current-text="今天" close-text="关闭"/>
+                        </span>
+                        <!--<label>-->
+                            <!--<input type="checkbox" name="no_communication" class="ace ace-checkbox-2" ng-model="post.no_communication" />-->
+                            <!--<span class="lbl">没有交互过的用户</span>-->
+                        <!--</label>-->
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label no-padding-right" for="form-field-2">
+                            未交互日期：
+                        </label>
+                        <span class="col-xm-4">
+                            <input type="text" datepicker-popup="yyyy-MM-dd"
+                            ng-model="communication_start" is-open="opened3"
+                            datepicker-options="dateOptions" placeholder="开始时间"
+                            ng-click="openDatepicker($event, 'opened3')"
+                            clear-text="清除" current-text="今天" close-text="关闭"/>
+                        </span>
+                        <span class="col-xm-4">
+                            <input type="text" datepicker-popup="yyyy-MM-dd"
+                            ng-model="communication_end" is-open="opened4"
+                            datepicker-options="dateOptions" placeholder="结束时间"
+                            ng-click="openDatepicker($event, 'opened4')"
+                            clear-text="清除" current-text="今天" close-text="关闭"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12" style="text-align:center;margin-top:10px;padding-bottom:10px; border-bottom:1px solid #ddd">
+                <button class="btn" ng-click="clear()">清空</button>
+                <button class="btn btn-primary" ng-click="search()">筛选</button>
+            </div>
+            <hr>
+        </div>
+        <div class="row opt-btn">
+            <div class="col-xs-12">
+                <div class="well well-sm no-margin-bottom form-inline clearfix">
+                    <div class="pull-left" style="padding-top: 7px;">
+                        <label>
+                            <input type="checkbox" class="ace" ng-model="common.isSelectAll" ng-click="common.selectAll()">
+                            <span class="lbl"> 全选 </span>
+                        </label>
+                        <span> 共 {{common.usersList.data.total_number}} 人 </span> |
+                        <span> 已选择 {{common.selectedCount}} 人 </span>
+                    </div>
+                    <div class="pull-right">
+                        <span>将所选用户加入：</span>
+                        <select ng-model="common.selectedGroup" class="form-control" ng-options="group.id as group.name for group in groupsList.data.groups" style="width:auto;display:inline-block">
+                            <option value="">选择组</option>
+                        </select>
+                        <button class="btn btn-yellow btn-sm" ng-click="common.intoGroup()">确定</button>
+                        <button class="btn btn-success btn-sm" ng-click="showGroupCreateModal()">新建组</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="space"></div>
+        <div class="row user-list">
+            <div class="col-xs-3 col-sm-3 col-lg-2" ng-repeat="user in common.usersList.data.users">
+                <div class="user-card" ng-class="{true:'selected'}[user.isSelected]" ng-click="common.selectUser(user)">
+                    <div class="face" style="margin-bottom:10px;">
+                        <a target="_blank" style="cursor: default;" href="javascript:;">
+                            <img ng-src="{{user.headimgurl}}" alt="{{user.nickname}}" style="width:50px;height:50px;">
+                        </a>
+                    </div>
+                    <ul class="wb-info list-unstyled pull-left">
+                        <li id="">
+                            <div ng-if="user.sex == 1">
+                                <span  style="color:#428bca;cursor: default;" target="_blank" class="nickname" href="javascript:;" title="{{user.nickname}}">{{user.nickname}}</span>
+                                <img src="assets/img/boy.png">
+                            </div>
+                            <div ng-if="user.sex == 2">
+                                <a target="_blank" class="nickname" href="javascript:;" title="{{user.nickname}}">{{user.nickname}}</a>
+                                <img src="assets/img/girl.png">
+                            </div>
+                                <!-- <img class="sex" ng-src="{{common.sexIcon[user.sex]}}"> -->
+                        </li>
+                        <li>
+                            <span class="location">
+                            {{user.country}} {{user.province}} {{user.city}}
+                            <!-- {{user.location}} -->
+                            </span> 
+                        </li>
+                        
+                    </ul>
+                    <!-- <a href="javascript:;" class="pull-right">查看详情</a> -->
+                    <ul class="other-info list-unstyled">
+                        <li>
+                            标签：
+                            <span ng-show="!user.tag_name">
+                                暂无
+                            </span>
+                            <a target="_blank" title="{{user.tag_name}}" href="javascript:;" ng-show="user.tag_name" style="cursor:default">
+                                {{user.tag_name}}
+                            </a>
+                        </li>
+                        <li>
+                            属组：
+                            <span ng-show="!user.group_name">
+                                暂无
+                            </span>
+                            <a class="S_link2" title="{{user.group_name}}" href="javascript:;" ng-show="user.group_name" style="cursor:default">
+                            {{user.group_name}}         
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" class="pull-right" style="margin-top:20px;display:inline-block" ng-click="showUserModal(user.id, $event)">查看详情</a>
+                        </li>
+                        
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-12" ng-show="common.usersList.data.users.length">
+                <pagination total-items="common.usersList.data.total_number" ng-model="common.usersList.data.page" ng-click="getUsersList()" items-per-page="common.usersList.data.perpage" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="groupCreateModal">
+        <div class="modal-header">
+            <button ng-click="cancel()" type="button" class="close" >
+            ×
+            </button>
+            <h3 class="modal-title">创建新分组</h3>
+        </div>
+        <div class="modal-body clearfix" id="bootDate">
+            <div>
+                <label for="group-name">组名称</label>
+                <input class="form-control" id="group-name" placeholder="输入组名称" ng-model="group.name">
+            </div>
+            <div class="space"></div>
+            <div>
+                <label for="group-expires-date" >有效期：</label>
+               <labe>
+                   <input type="radio" class="ace" data-ng-click="datePe(1);" ng-checked="group_date.group_date_1"/>
+                   <span class="lbl" data-ng-click="datePe(1);">&nbsp;永久&nbsp;&nbsp;</span>
+               </label>
+               <label>
+                   <input type="radio" class="ace" data-ng-click="datePe(2);" ng-checked="!group_date.group_date_1"/>
+                   <span class="lbl" data-ng-click="datePe(2);">&nbsp;固定时间</span>
+               </label>
+                <input current-text="今天" clear-text="清空" close-text="关闭" ng-show="!group_date.group_date_1" class="form-control" style="width: 20%" id="group-expires-date" placeholder="选择过期时间" ng-model="group.expires_in" datepicker-popup="yyyy-MM-dd" min-date="common.minDate" close-text="关闭" is-open="common.dtOpened" ng-click="openDatePicker($event)">
+            </div>
+            <div class="space"></div> 
+            <div>
+                <label for="group-feature">组特征（用户筛选条件）</label>
+                <textarea class="form-control" id="group-feature" disabled>{{group.feature}}</textarea>
+
+            </div>
+            <div class="space"></div> 
+            <div>
+                <label for="group-desc" >组描述</label>
+                <textarea class="form-control" id="group-desc" placeholder="输入组描述" ng-model="group.description"></textarea>
+            </div>
+            <div class="space"></div> 
+            <div>
+                <label>
+                    <input type="checkbox" class="ace" ng-model="common.isSelectAll" ng-click="common.selectAll()">
+                    <span class="lbl"> 将全部用户加入该组中</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" class="ace" ng-checked="common.checkedUser&&!common.isSelectAll" ng-click="common.checkedUser()">
+                    <span class="lbl"> 将已选中的用户添加到该组中</span>
+                </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button ng-click="cancel()" type="button" class="btn btn-default">
+            取消  
+            </button>
+            <button ng-click="ok()" type="button" class="btn btn-primary">
+            确定
+            </button>
+        </div>
+    </script>
+</div>

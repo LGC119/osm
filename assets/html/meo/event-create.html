@@ -1,0 +1,688 @@
+<div class="page-header">
+	<h1>
+		微博活动管理
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>
+			活动创建
+		</small>
+	</h1>
+</div>
+<div class="row" ng-controller="WbEventCreateController">
+<div class="col-xs-12">
+<div id="event-wizard" data-target="#step-container">
+	<ul class="wizard-steps">
+		<li data-target="#step1" class="active">
+			<span class="step">1</span>
+			<span class="title">活动信息</span>
+		</li>
+		<li data-target="#step2">
+			<span class="step">2</span>
+			<span class="title">目标用户组</span>
+		</li>
+		<li data-target="#step3">
+			<span class="step">3</span>
+			<span class="title">推送策略</span>
+		</li>
+	</ul>
+</div>
+<div class="spcace"></div>
+<!-- 选择标签 -->
+<div class="modal fade" id="TagChoose" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content modal-lg">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">标签选择</h3>
+			</div>
+			<div class="modal-body tag-choose">
+				<p ng-if="!tags">{{tag_empty}}</p>
+				<tabset ng-if="tags">
+					<tab ng-repeat="ptag in tags" heading="{{ptag.tag_name}}">
+						<div class="checkbox" ng-repeat="tag in ptag.tags"
+							 style="display:inline-block;min-width:130px;">
+							<label>
+								<input type="checkbox" class="ace" ng-click="pushTag(tag)"
+									   ng-checked="selectedTags[tag.id]">
+								<span class="lbl"> {{tag.tag_name}}</span>
+							</label>
+						</div>
+					</tab>
+				</tabset>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary" data-dismiss="modal">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 每步的内容体 -->
+<div id="step-container" class="step-content row">
+<!-- 第一步：填写基本信息 -->
+<div class="step-pane col-xs-12 active" id="step1">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+		<!-- #section:custom/widget-box -->
+		<div class="widget-box">
+			<div class="widget-header  widget-header-blue widget-header-flat">
+				<h5 class="widget-title">活动基本信息</h5>
+
+				<!-- #section:custom/widget-box.toolbar -->
+				<div class="widget-toolbar">
+					<a href="#" data-action="fullscreen" class="orange2">
+						<i class="ace-icon fa fa-expand"></i>
+					</a>
+					<a href="#" data-action="collapse">
+						<i class="ace-icon fa fa-chevron-up" id=""></i>
+					</a>
+				</div>
+				<!-- /section:custom/widget-box.toolbar -->
+			</div>
+
+			<div class="widget-body">
+				<div class="widget-body-inner" style="display: block;">
+					<div class="widget-main clearfix">
+						<div class="form-horizontal col-xs-6 event-base-info">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+									活动名称 </label>
+
+								<div class="col-sm-9">
+									<input type="text" ng-model="p.info.name" placeholder="活动名称"
+										   class="col-xs-10 col-sm-5" ng-minlength=2 ng-maxlength=40>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+									活动时间 </label>
+
+								<div class="col-sm-9">
+													<span class="input-group col-xs-4" style="float:left">
+														<span class="input-group-addon"
+															  ng-click="openDatepicker($event, 'opened1')"><i
+																class="fa fa-calendar bigger-110"></i></span>
+														<input type="text" datepicker-popup="yyyy-MM-dd"
+															   ng-model="p_info_start" is-open="opened1"
+															   min-date="minDate" max-date="'2050-10-10'"
+															   datepicker-options="dateOptions" placeholder="开始时间"
+															   date-disabled="disabled(date, mode)"
+															   ng-click="openDatepicker($event, 'opened1')"
+															   clear-text="清除" current-text="今天" close-text="关闭"/>
+													</span>
+									<span class="col-xs-1" style="margin:7px 0 0 -5px">至</span>
+													<span class="input-group col-xs-4">
+														<span class="input-group-addon"
+															  ng-click="openDatepicker($event, 'opened2')"><i
+																class="fa fa-calendar bigger-110"></i></span>
+														<input type="text" datepicker-popup="yyyy-MM-dd"
+															   ng-model="p_info_end" is-open="opened2"
+															   min-date="p_info_start" max-date="'2020-10-10'"
+															   datepicker-options="dateOptions" placeholder="结束时间"
+															   date-disabled="disabled(date, mode)"
+															   ng-click="openDatepicker($event, 'opened2')"
+															   clear-text="清除" current-text="今天" close-text="关闭"/>
+													</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+									开始推送时间 </label>
+
+								<div class="col-sm-9">
+													<span class="input-group col-xs-4">
+														<span class="input-group-addon"
+															  ng-click="openDatepicker($event, 'opened3')"><i
+																class="fa fa-calendar bigger-110"></i></span>
+														<input type="text" datepicker-popup="yyyy-MM-dd"
+															   ng-model="p_set_push_start" is-open="opened3"
+															   max-date="p_info_end" datepicker-options="dateOptions"
+															   placeholder="开始推送时间" date-disabled="disabled(date, mode)"
+															   ng-click="openDatepicker($event, 'opened3')"
+															   clear-text="清除" current-text="今天" close-text="关闭"/>
+													</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+									活动类型 </label>
+
+								<div class="col-sm-9">
+									<select class="col-xs-10 col-sm-5" ng-model="p.info.type">
+										<option value="0">默认</option>
+										<option value='1'>抽奖</option>
+										<option value='2'>线下</option>
+										<option value='3'>调查</option>
+										<option value='4'>会员绑定</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+									活动行业 </label>
+
+								<div class="col-sm-9">
+									<select class="col-xs-10 col-sm-5" ng-model="p.info.industry">
+										<option value='0'>默认</option>
+										<option value='1'>快消</option>
+										<option value='2'>汽车</option>
+										<option value='3'>数码</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+									推送方式 </label>
+
+								<div class="col-sm-9">
+									<select ng-init="p.set.push_mode=1" ng-change="fiSelect()" class="col-xs-10 col-sm-5" ng-model="p.set.push_mode">
+										<option value="1">评论中@</option>
+										<option value="2">内容中@</option>
+										<option value="3">私信群发</option>
+									</select>
+								</div>
+							</div>
+
+						</div>
+						<div class="col-xs-6" style="height:100%">
+							<div class="well tags-well">
+								<h4 class="green smaller lighter">
+									活动标签
+								</h4>
+
+								<div class="hot-tags">
+									<div>热门标签：</div>
+									<p ng-if="!hot_tags.length"><span>暂无热门标签</span></p>
+
+									<div class="checkbox ng-scope" style="display:inline-block;min-width:100px;"
+										 ng-repeat="tag in hot_tags">
+										<label>
+											<input type="checkbox" class="ace ng-pristine ng-valid"
+												   ng-click="pushTag(tag.id, tag.tag_name)"
+												   ng-checked="common.tempTags[tag.id]">
+											<span class="lbl ng-binding"> {{tag.name}}</span>
+										</label>
+									</div>
+								</div>
+								<div class="more-tags">
+									<button class="btn btn-primary btn-sm" onclick="$('#TagChoose').modal('show')">
+										选择标签
+									</button>
+								</div>
+								<hr>
+								<div class="seleted-tags">
+									<span class="label label-lg label-yellow"
+										  ng-repeat="item in selectedTags" style="margin-top:5px;">
+										{{item.tag_name}}|<b ng-click="popTag(item.id)"
+															 style="cursor:pointer">&times;</b>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /section:custom/widget-box -->
+	</div>
+</div>
+<div class="space"></div>
+<div ng-show="!sendStatus" class="row">
+	<div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+		<!-- #section:custom/widget-box -->
+		<div class="widget-box">
+			<div class="widget-header widget-header-blue widget-header-flat">
+				<h5 class="widget-title">推送微博内容</h5>
+
+				<!-- #section:custom/widget-box.toolbar -->
+				<div class="widget-toolbar">
+					<a href="#" data-action="fullscreen" class="orange2">
+						<i class="ace-icon fa fa-expand"></i>
+					</a>
+					<a href="#" data-action="collapse">
+						<i class="ace-icon fa fa-chevron-up" id=""></i>
+					</a>
+				</div>
+				<!-- /section:custom/widget-box.toolbar -->
+			</div>
+
+			<div class="widget-body">
+				<div class="widget-body-inner" style="display: block;">
+					<div class="widget-main clearfix">
+						<textarea class="weibo-text" rows="4" ng-model="p.set.content"></textarea>
+
+						<div class="elm-area">
+							<div class="elms">
+								<a class="emotions elm" href="javascript:;" title="表情">
+									<i class="fa fa-smile-o bigger-160"></i>
+									表情
+								</a>
+								<a class="image elm" href="javascript:;" title="图片" ng-click="imgModal()">
+									<i class="fa fa-picture-o bigger-160"></i>
+									图片
+								</a>
+												<span class="preview-image" ng-show="p.set.imgurl"
+													  style="margin:0 10px 0 -20px">
+													<a href="javascript:;" tooltip-placement="bottom"
+													   tooltip-html-unsafe="{{wbPrepare.imageHtml}}">
+														查看图片
+													</a>
+													<a href="javascript:;" class="red" ng-click="p.set.imgurl=false"><i
+															class="fa fa-times bigger-120"></i></a>
+												</span>
+
+								<a class="surl elm" href="javascript:;" title="短链接" ng-click="surlModal()">
+									<i class="fa fa-link bigger-160"></i>
+									短链接
+								</a>
+
+								<a class="surl elm" href="javascript:;" title="选择H5活动页面" ng-click="h5pageModal()">
+									<i class="fa fa-file-o bigger-160"></i>
+									选择H5活动页面
+								</a>
+							</div>
+                            <div class="space-6"></div>
+                            <div class="row" ng-show="h5show">
+                                <div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+                                    <div class="widget-box">
+                                        <div class="widget-header widget-header-blue widget-header-flat">
+                                            <h5 class="widget-title">活动页面选择</h5>
+                                            <div class="widget-toolbar">
+                                                <a href="#" data-action="collapse">
+                                                    <i class="ace-icon fa fa-chevron-up" id=""></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="widget-body">
+                                            <div class="widget-body-inner">
+                                                <div class="widget-main row">
+                                                    <div class="col-sm-3">
+                                                        <div class="widget-box widget-color-dark">
+                                                            <div class="widget-header widget-header-small">
+                                                                <h6 class="widget-title">{{pageTitle}}</h6>
+                                                            </div>
+                                                            <div class="widget-body" style="height:320px">
+                                                                <div style="height:200px;overflow:hidden">
+                                                                    <img ng-src="{{selectedPage.html_code.1}}" alt="" style="width:100%">
+                                                                </div>
+                                                                <div class="content" ng-bind-html="selectedPage.content" style="height:100px;overflow:hidden"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <div class="filters">
+                                                            <input type="text" ng-model="h5_title" placeholder="标题搜索">
+                                                            <button class="btn btn-sm btn-primary" style="margin-top:-3px;" ng-click="getH5Pages()">搜索H5页面</button>
+                                                        </div>
+                                                        <div class="space-6"></div>
+                                                        <table class="table table-striped table-bordered table-hover no-margin-bottom">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="50" class="center"> </th>
+                                                                    <th>页面标题</th>
+                                                                    <th width="240">
+                                                                        <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
+                                                                        创建时间
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr ng-if="!pagesList.data">
+                                                                <td colspan="3" align="center">{{pagesEmpty}}</td>
+                                                            </tr>
+                                                            <tr ng-repeat="item in pagesList.data">
+                                                                <td align="center">
+                                                                    <input type="radio" class="ace" ng-checked="selectedPage.id==item.id" ng-click="selectPage(item)">
+                                                                    <span class="lbl"></span>
+                                                                </td>
+                                                                <td>{{item.title}}</td>
+                                                                <td>{{item.created_at}}</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="col-sm-12" ng-show="pagesList.data.length>0">
+                                                            <pagination class="col-sm-12" total-items="pagesList.total_number" ng-model="pagesList.current_page" ng-click="getH5Pages()" items-per-page="pagesList.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+						<div style="margin-top:20px">
+							活动规则：
+							<label>
+								<input name="form-field-checkbox" type="checkbox" class="ace"
+									   ng-init="rule_checked=true"
+									   ng-click="rule_checked=rule_checked?false:true;p.info.rule=0">
+												<span class="lbl">
+													转发并@ <input ng-disabled="rule_checked"
+																ng-class="{disabled:rule_checked}" style="width:30px"
+																ng-model='p.info.rule'> 人
+												</span>
+							</label>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div ng-show="sendStatus" class="row">
+	<div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+		<!-- #section:custom/widget-box -->
+		<div class="widget-box">
+			<div class="widget-header widget-header-blue widget-header-flat">
+				<h5 class="widget-title">私信推送内容</h5>
+
+				<!-- #section:custom/widget-box.toolbar -->
+				<div class="widget-toolbar">
+					<a href="#" data-action="fullscreen" class="orange2">
+						<i class="ace-icon fa fa-expand"></i>
+					</a>
+					<a href="#" data-action="collapse">
+						<i class="ace-icon fa fa-chevron-up"></i>
+					</a>
+				</div>
+				<!-- /section:custom/widget-box.toolbar -->
+			</div>
+			<div class="widget-body">
+				<div class="widget-body-inner" style="display: block;">
+					<div class="widget-main clearfix">
+						<div class="elms">
+							<textarea class="weixin-text" rows="4" data-ng-model="con.tModel" ng-show="con.is_text"></textarea>
+							<div ng-show="!con.is_text" style="float: left;width: 100%;margin: 10px 0;padding: 0 10px;">
+								<div class="col-xs-4 item ng-scope"  >
+									<div class="widget-box widget-box-me">
+										<div class="widget-body">
+											<div ng-show="$index==0" data-ng-repeat="oModel in common.selectedMedia.articles[0].data" class="ng-scope" style="overflow: hidden;border-bottom: 1px solid #cccccc;">
+												<span style="float:left;width:100%;overflow:hidden;">
+													<img style="width: 100%;height:100px;" ng-src="uploads/images/{{oModel.filename}}" >
+												</span>
+												<span style="position:absolute;left:0;top:65px;width: 100%;height:35px;line-height:35px;text-indent:10px;overflow:hidden;background-color: rgba(0,0,0,0.5);color: white;font-weight: bold;" class="ng-binding">
+													{{oModel.title}}
+												</span>
+											</div>
+
+											<div ng-show="$index!=0" class="widget-main ng-scope" style="overflow: hidden;border-bottom: 1px solid #cccccc;" data-ng-repeat="oModel in common.selectedMedia.articles[0].data">
+												<span style="float:left;width: 60%;height:43px;white-space:normal;word-break:break-all;" class="ng-binding">
+													{{oModel.title}}
+												</span>
+												<span style="overflow:hidden;">
+													<img style="width: 40%;height:43px;" ng-src="uploads/images/{{oModel.filename}}">
+												</span>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="widget-main clearfix" ng-disabled="sendStatus">
+								<div class="elm-area">
+									<div class="elms">
+										<a class="image elm" href="javascript:;" title="文字" ng-click="textBox()">
+											<i class="fa fa-pencil-square-o bigger-160"></i>
+											文字
+										</a>
+										<a class="image elm" href="javascript:;" title="多图文"
+										   ng-click="showBox('articles')">
+											<i class="fa fa-file-o bigger-160"></i>
+											图文
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<!-- 第二步：选择用户组 -->
+<div class="step-pane col-xs-12" id="step2">
+	<div ng-if="!userGroups.groups">{{group_empty}}</div>
+	<div class="col-xs-12 clearfix" ng-show="userGroups.groups">
+		<pagination total-items="userGroups.total_number" ng-model="userGroups.current_page" ng-click="getGroups()"
+					items-per-page="userGroups.items_per_page" max-size="5" class="pagination-sm pull-right"
+					boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"
+					style="width:240px;"></pagination>
+	</div>
+	<div class="row groups-list">
+		<div class="col-xs-3 group-box" ng-repeat="item in userGroups.groups">
+			<div class="widget-box widget-box-me group-card" ng-class="{selected:p.groups[item.id]}"
+				 ng-click="pushGroup(item.id, item.group_name)">
+				<div class="widget-header" data-original-title="" id="">
+					<h5 class="widget-title bigger lighter pull-left">{{item.group_name}}</h5>
+
+					<div class="sync-switcher">
+						<i class="fa fa-lock bigger-160" ng-if="item.is_locked==1"></i>
+						<i class="fa fa-unlock bigger-160" ng-if="item.is_locked==0"></i>
+					</div>
+				</div>
+				<div class="widget-body">
+					<div class="widget-main">
+						<div class="alert alert-info description" data-html="true" data-placement="top"
+							 data-trigger="hover" data-original-title="组描述" data-content="aaa" style="cursor: default;"
+								>
+							{{item.description}}
+						</div>
+						<div class="basic-info clearfix">
+							<div class="alert alert-success">
+								<i class="icon icon-user">
+								</i>
+								{{item.members_count}}人
+							</div>
+
+							<div data-html="true" data-placement="top" data-trigger="hover" data-original-title="有效日期"
+								 class="alert alert-warning" data-toggle="tooltip"
+								 data-content="创建时间:<br>2014年06月05日 11时<br>过期时间:<br>2014年06月30日 00时"
+								 style="cursor: default;">
+								<i class="icon icon-time">
+								</i>
+								{{item.expires_in | expiresIn}}到期
+								<!-- 剩余：55天 -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 第三部：推送设置 -->
+<div class="step-pane col-xs-12" id="step3">
+	<div class="col-xs-12 col-sm-12 widget-container-col ui-sortable">
+		<!-- #section:custom/widget-box -->
+		<div class="widget-box">
+			<div class="widget-header  widget-header-blue widget-header-flat">
+				<h5 class="widget-title">推送策略设置</h5>
+				<!-- #section:custom/widget-box.toolbar -->
+				<div class="widget-toolbar">
+					<a href="#" data-action="fullscreen" class="orange2">
+						<i class="ace-icon fa fa-expand"></i>
+					</a>
+					<a href="#" data-action="collapse">
+						<i class="ace-icon fa fa-chevron-up"></i>
+					</a>
+				</div>
+				<!-- /section:custom/widget-box.toolbar -->
+			</div>
+
+			<div class="widget-body">
+				<div class="widget-body-inner" style="display: block;">
+					<div class="widget-main clearfix">
+						<div class="col-xs-6 push-tactics form-horizontal">
+							<div class="form-group" ng-show="!sendStatus">
+								<label for="wb-accounts" class="col-sm-3 control-label no-padding-right">推送账号</label>
+
+								<div class="col-sm-9">
+									<span ng-if="!accounts">{{account_empty}}</span>
+									<select ng-if="accounts" ng-model="p.set.account"
+											ng-options="v.id as v.screen_name for (i, v) in accounts"></select>
+								</div>
+							</div>
+							<!--<div class="form-group">-->
+								<!--<label for="push-mode" class="col-sm-3 control-label no-padding-right">推送方式</label>-->
+
+								<!--<div class="col-sm-9">-->
+									<!--<select ng-change="fiSelect()"  id="push-mode" ng-model="p.set.push_mode"-->
+											<!--ng-disabled="p.groups == undefined || p.groups.length == 0"-->
+											<!--ng-init="p.set.push_mode=1">-->
+										<!--<option value="1">评论中@</option>-->
+										<!--<option value="2">内容中@</option>-->
+										<!--<option value="3">私信群发</option>-->
+									<!--</select>-->
+								<!--</div>-->
+							<!--</div>-->
+						</div>
+
+						<div class="col-xs-6 push-tactics form-horizontal">
+							<div class="form-group">
+								<label for="wb-accounts" class="col-sm-3 control-label no-padding-right">推送时间段</label>
+
+								<div class="col-sm-9">
+									<!-- <select multiple="" ng-model="p.interval" class="chosen-select" data-placeholder="选择推送时间段..." ng-options="v for v in interval"> -->
+									<select multiple="" ng-model="p.set.interval" ng-disabled="p.groups==undefined||p.groups.length==0" class="chosen-select" data-placeholder="选择推送时间段..." style="width:268px;">
+										<option value="0">00h-01h</option>
+										<option value="1">01h-02h</option>
+										<option value="2">02h-03h</option>
+										<option value="3">03h-04h</option>
+										<option value="4">04h-05h</option>
+										<option value="5">05h-06h</option>
+										<option value="6">06h-07h</option>
+										<option value="7">07h-08h</option>
+										<option value="8">08h-09h</option>
+										<option value="9">09h-10h</option>
+										<option value="10">10h-11h</option>
+										<option value="11">11h-12h</option>
+										<option value="12">12h-13h</option>
+										<option value="13">13h-14h</option>
+										<option value="14">14h-15h</option>
+										<option value="15">15h-16h</option>
+										<option value="16">16h-17h</option>
+										<option value="17">17h-18h</option>
+										<option value="18">18h-19h</option>
+										<option value="19">19h-20h</option>
+										<option value="20">20h-21h</option>
+										<option value="21">21h-22h</option>
+										<option value="22">22h-23h</option>
+										<option value="23">23h-24h</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group" ng-show="!sendStatus">
+								<label for="push-mode" class="col-sm-3 control-label no-padding-right">每次推送人数</label>
+
+								<div class="col-sm-9">
+									<input type="text" ng-model="p.set.push_each"
+										   placeholder="每次推送人数" class="col-xs-6 col-sm-3">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<!-- 前进后退按钮 -->
+<div class="wizard-actions row">
+	<div class="col-xs-12">
+		<button class="btn-prev btn">
+			<i class="ace-icon fa fa-arrow-left"></i>
+			上一步
+		</button>
+		<button class="btn-next btn btn-success" data-last="完成 ">
+			下一步
+			<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+		</button>
+	</div>
+</div>
+</div>
+</div>
+
+<!-- 短链接生成弹框模板 -->
+<script type="text/ng-template" id="surlModal.html">
+	<div class="modal-header">
+		<button ng-click="cancel()" type="button" class="close">
+			×
+		</button>
+		<h3 class="modal-title">短连接生成</h3>
+	</div>
+	<div class="modal-body">
+		<label for="original-url">
+			输入原地址
+		</label>
+
+		<div>
+			<input id="original-url" type="text" class="form-control" ng-model="wbPrepare.originalUrl">
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button ng-click="cancel()" type="button" class="btn btn-default">
+			取消
+		</button>
+		<button ng-click="ok()" type="button" class="btn btn-primary" ng-disabled="pending">
+			确定
+		</button>
+	</div>
+</script>
+
+<!-- 添加图片弹框模板 -->
+<script type="text/ng-template" id="imgModal.html">
+	<div class="modal-header">
+		<button ng-click="cancel()" type="button" class="close">
+			×
+		</button>
+		<h3 class="modal-title">添加图片</h3>
+	</div>
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-xs-3">
+				<label>
+					<input type="radio" ng-model="wbPrepare.addType" value="uploadShow" class="ace"
+						   ng-change="toggleType()">
+					<span class="lbl"> 图片上传</span>
+				</label>
+			</div>
+			<div class="col-xs-3">
+				<label>
+					<input type="radio" ng-model="wbPrepare.addType" value="urlShow" class="ace"
+						   ng-change="toggleType()">
+					<span class="lbl"> 图片链接</span>
+				</label>
+			</div>
+		</div>
+		<div class="space"></div>
+		<div class="row">
+			<div class="col-xs-12" ng-show="imgUp.uploadShow">
+				<span id="img-uplaod" class="btn" ng-model="p.set.imgurl"
+					  me-uploadify="{auto:false,buttonText:'图片上传'}"></span>
+			</div>
+			<div class="col-xs-12" ng-show="imgUp.urlShow">
+				<input type="text" ng-model="imageUrl" style="width:80%">
+			</div>
+		</div>
+		<div class="space"></div>
+		<div class="row">
+			<div class="col-xs-12">
+				<img ng-show="p.set.imgurl" ng-src="{{p.set.imgurl}}" style="height: 80px;"/>
+			</div>
+		</div>
+
+
+	</div>
+	<div class="modal-footer">
+		<button ng-click="cancel()" type="button" class="btn btn-default">
+			取消
+		</button>
+		<button ng-click="ok()" type="button" class="btn btn-primary" ng-disabled="pending">
+			确定
+		</button>
+	</div>
+</script>

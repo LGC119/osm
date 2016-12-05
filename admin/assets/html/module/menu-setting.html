@@ -1,0 +1,110 @@
+<div class="page-header">
+	<h1>
+		功能模块设定
+		<small><i class="ace-icon fa fa-angle-double-right"></i>功能菜单设定</small>
+	</h1>
+</div>
+<style type="text/css">
+input[type="text"].edit_input {
+	border: 0;
+	padding: 0 0 0 3px;
+	margin: 0 3px 0 0;
+	border-bottom: 1px solid #ccc;
+	width: auto;
+}
+.menu_detail li i {cursor: pointer;}
+</style>
+<div ng-controller="MenuSettingController" ng-init="getMenuTree()" class="row">
+	<div class="col-xs-12">
+		<div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>
+			<strong>提示！</strong> 非技术人员请谨慎操作！！！<br>
+		</div>
+		<!-- 菜单列表START -->
+		<h4>菜单权限列表</h4>
+		<!-- 树形菜单 -->
+		<div class="tree tree-selectable col-sm-3 menu_tree">
+			<div ng-if="!menu.list" class="loading">{{menuEmpty}}</div>
+			<!-- 一级菜单 -->
+			<div ng-class="{'tree-item':!menu.tree[sid], 'tree-folder':menu.tree[sid]}" ng-repeat="sid in menu.tree.0">
+				<div class="tree-item-name" ng-if="!menu.tree[sid]" ng-click="getMenuDetail(sid)">{{menu.list[sid].name}}</div>
+				<div class="tree-folder-header" ng-if="menu.tree[sid]" ng-click="getMenuDetail(sid)" ng-init="fold[sid]=true">
+					<i ng-class="{'ace-icon':true,'tree-plus':fold[sid],'tree-minus':!fold[sid]}"></i>
+					<div class="tree-folder-name">{{menu.list[sid].name}}</div>
+				</div>
+				<div class="tree-folder-content" ng-if="menu.tree[sid]" ng-show="!fold[sid]">
+					<!-- 二级菜单 -->
+					<div ng-class="{'tree-item':!menu.tree[sid], 'tree-folder':menu.tree[sid]}" ng-repeat="sid in menu.tree[sid]">
+						<div class="tree-item-name" ng-if="!menu.tree[sid]" ng-click="getMenuDetail(sid)">{{menu.list[sid].name}}</div>
+						<div class="tree-folder-header" ng-if="menu.tree[sid]" ng-click="getMenuDetail(sid)" ng-init="fold[sid]=true">
+							<i ng-class="{'ace-icon':true,'tree-plus':fold[sid],'tree-minus':!fold[sid]}"></i>
+							<div class="tree-folder-name">{{menu.list[sid].name}}</div>
+						</div>
+						<div class="tree-folder-content" ng-if="menu.tree[sid]" ng-show="!fold[sid]">
+							<!-- 三级菜单 -->
+							<div ng-class="{'tree-item':!menu.tree[sid], 'tree-folder':menu.tree[sid]}" ng-repeat="sid in menu.tree[sid]">
+								<div class="tree-item-name" ng-click="getMenuDetail(sid)">{{menu.list[sid].name}}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 权限项选择框 -->
+		<div class="col-sm-9 menu_detail">
+			<span ng-if="!currentMenu.id">请点击左侧菜单查看权限项</span>
+			<div class="authList" ng-show="currentMenu.id>0">
+				<div class="page-header" style="padding:0 0 3px;">
+					<label>
+						<!-- 绑定原始数据后不会因为修改而变化 -->
+						<span class="lbl text-primary"> 『 {{menu.list[currentMenu.id].name}} 』</span>
+					</label>
+				</div>
+				<ul class="list-unstyled spaced">
+					<li>
+						<label>
+							菜单名 ：
+							<span ng-show="!edit_name" ng-click="edit_name=true" class="editable editable-click">
+								&nbsp;{{currentMenu.name}}&nbsp;
+							</span>
+							<span ng-show="edit_name">
+								<input type="text" ng-model="currentMenu.name" class="edit_input">
+								<i class="fa fa-check text-success" title="确定" ng-click="editMenu('name')"></i>
+								<i class="fa fa-times text-danger" title="取消" ng-click="edit_name=false"></i>
+							</span>
+						</label>
+					</li>
+					<!-- 不存在下级菜单 -->
+					<li ng-show="!menu.tree[currentMenu.id]">
+						<label ng-class="{'text-muted expired':show_add}">
+							URL ：
+							<span ng-show="!edit_url" ng-click="edit_url=true" class="editable editable-click">
+								&nbsp;{{currentMenu.url}}&nbsp;
+							</span>
+							<span ng-show="edit_url">
+								<input type="text" ng-model="currentMenu.url" class="edit_input">
+								<i class="fa fa-check text-success" title="确定" ng-click="editMenu('url')"></i>
+								<i class="fa fa-times text-danger" title="取消" ng-click="edit_url=false"></i>
+							</span>
+						</label>
+					</li>
+					<!-- 顶级菜单 -->
+					<li ng-show="currentMenu.pid==0">
+						<label>
+							图标 ：
+							<span ng-show="!edit_icon" ng-click="edit_icon=true" class="editable editable-click">
+								&nbsp;{{currentMenu.icon}}&nbsp;
+							</span>
+							<span ng-show="edit_icon">
+								<input type="text" ng-model="currentMenu.icon" class="edit_input">
+								<i class="fa fa-check text-success" title="确定" ng-click="editMenu('icon')"></i>
+								<i class="fa fa-times text-danger" title="取消" ng-click="edit_icon=false"></i>
+							</span>
+						</label>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- 菜单列表END -->
+	</div>
+</div>

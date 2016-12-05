@@ -1,0 +1,367 @@
+            <div class="navbar">
+                <ul class="relation-tab">
+                    <li><a href="library.html" class="loadpage">内容库</a></li>
+                    <li><a href="code.html" class="loadpage">二维码管理</a></li>
+                    <li><a href="html/H_dpd_activity.html" class="loadpage">H5页面创建</a></li>
+                    <li><a href="html/H_dpd_activity_manage.html" class="loadpage">H5管理</a></li>
+                    <li class="active"><a href="html/H_dpd_ads.html" class="loadpage">H5广告</a></li>
+                </ul>
+                <span class="show-help nav-help" help-item="library">?</span>
+            </div>
+<div class="content vt">
+    <div id="filterMod" class="wx-filter" style="">
+        <ul id="filter-list" class="filter-list" style="">
+            <li class="active loadpage" href="html/H_dpd_ads.html">H5广告库<div class="mactive"></div></li>
+            <li class="loadpage" href="html/H_dpd_ads_analysis.html">H5广告统计<div></div></li>
+        </ul>
+    </div> 
+
+    <div class="page-bd">
+        <div class="group">
+            <!--筛选部分开始-->
+            <div class="filter-sort">
+                <ul class="filter nav nav-pills">
+                    <li>
+                        <div class="groups-box filter-select">
+                            <select class="list-filter"  name="type" style="margin-bottom:10px;">
+                                <option value="" selected >广告类型：全部</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="city_select_province_city1" class="filter-dropdown filter-select">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="filter-dropdown filter-select">
+                            <select class="list-filter"  name="time" style="margin-bottom:10px;">
+                                <option value="desc" selected >排序：时间 &darr;</option>
+                                <option value="asc"  >排序：时间 &uarr;</option>
+                                <option value="click"  >排序：点击 &darr;</option>
+                                
+                            </select>
+                        </div>
+                    </li>
+                    <li>
+                        <input class="list-filter" type="text" name="like" placeholder="搜索广告" style="width:100px;" value=""/>
+                    </li>
+                    <li>
+                        <button  class="btn submit-filter" type="non-matched">筛选</button>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <!--筛选部分结束-->
+
+        </div>
+        <ul class="users-list"></ul>
+        <script id="userstpl" type="text/template">
+
+            <li class="liHead">
+            
+              <a id="modal-785036" href="#modal-container-785036" role="button" class="btn btn-primary" data-toggle="modal">添加广告</a>
+            </li>
+            {{ for(var i in it) { }}
+                <li class="user">
+                    <div class="info">
+                        <div class="m-info">
+                            <div class="left">
+                                <span class="badge badge-info">{{=it[i]['count']}}</span>
+                                <br/>
+                                <span class="label label-success">{{=it[i]['type']}}</span>
+                            </div>
+                            <div class="left">
+                                <div class="base-info">
+                                    <div class="nickname c-l f16 b">
+                                        <span class="left">
+                                            <span class="label label-warning">{{?it[i]['img']!=''}}图{{?}}</span>
+                                            {{=it[i]['name']}}
+                                            &nbsp; &nbsp; &nbsp; &nbsp;
+                                            
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <div class="location left">
+                                            <span class="b">广告词：</span>
+                                            <span>{{=it[i]['desc']}}</span>
+                                        </div>
+                                        <div class="location left">
+                                            <span class="b">链接地址：</span>
+                                            <span>
+                                                <a href="{{=it[i]['url']}}" title="{{=it[i]['desc']}}" target="_blank" >{{=it[i]['url']}}</a>
+                                            </span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right">
+                        {{?it[i]['count'] != '0'}}
+                            <button class="btn show-input" it="{{=i}}" >查看统计</button>
+                         {{?}}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </li>
+            {{ } }}
+        </script>
+        <div class="paging dataTables_paginate">
+            <script id="pagingtpl" type="text/template">
+            {{=it}}
+            </script>
+        </div>
+    </div>
+ <!-- ===============================================   -->
+    <div id="modal-container-785036" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">
+                新建广告
+            </h3>
+        </div>
+        <div class="modal-body">
+            <form id="createad"><fieldset style="margin:0px 70px;">
+                <p>
+                    <div class="input-prepend">
+                      <span class="add-on">名称</span>
+                      <input name="name" class="span2" id="prependedInput" type="text" placeholder="">
+                    </div>
+                <br/>
+                    <div class="input-prepend input-append">
+                        <span id="showtypelist" class="add-on">分类</span>
+                        <input id="newtype" class="span2"  type="text" name="newtype" placeholder="新分类" style="display:none;">
+                        <select id="selecttype" name="type">
+                            <option value="默认" >默认</option>
+                            <option value="new">新类型</option>
+                        </select>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="input-prepend">
+                      <span class="add-on">描述</span>
+                      <input name="desc" type="text" placeholder="填写广告描述">
+                    </div>
+                    <br/>
+                    <div class="input-prepend">
+                      <span class="add-on">链接</span>
+                      <input name="url" type="text" placeholder="http://" value="">
+                    </div>
+                    <br/>
+                    <label class="checkbox">
+                      <input id="picallow" type="checkbox"> 上传图片
+                    </label>
+                    <button id="choosepic" class="btn" style="display:none;" type="button">上传图片</button>
+                    <input type="hidden" name="img" id="picpath">
+                    <div id="imgpath"></div>
+                    <br/>
+                </p>
+
+            </fieldset></form>
+            <form id="tagbox" class="form-inline">
+                <div class="tabbable tabs-left"  id="adtagbox"></div>
+            </form>
+         
+        </div>
+        <div class="modal-footer">
+             <button class="btn" data-dismiss="modal" aria-hidden="true" id="cancelbtn">取消</button>
+             <button id="docreate" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">新建</button>
+        </div>
+    </div>
+    <!-- =================================================  -->
+    <!-- 文件上传 Start -->
+    <form action="./index.php/h5ads/picUpload" method="post"  id="picform" style="display:none;" enctype="multipart/form-data" target="ifrcc">
+        <input id="fileupload" type="file" name="uppic" >
+    </form>
+    <iframe name="ifrcc" style="display:none;" ></iframe>
+    <!-- 文件上传  End -->
+</div>
+<!-- =================================================  -->
+<!-- ======================= 赤裸裸的分割线==============================  -->
+<script type="text/javascript">
+var doAdId = 'noid' ; //当前查看的广告统计
+    function makeDotList(tplId, obj, data) {
+        var tmpl = $(tplId).html();
+        var dotTemplate = doT.template(tmpl);
+        $(obj).html(dotTemplate(data));
+    };
+
+    //获取类型列表
+    function getTypes(filter) {
+        $.ajax({
+            type     : "POST",
+            url      :  _c.baseUrl + 'getdata/e_h5page-h5ads.json?method=getAdType',
+            datatype : 'json',
+            data     : {'filter' : filter},
+            //timeout  : 2000,
+            async : false,  //同步请求
+            success  : function(data) {
+                var data = JSON.parse(data);
+                var append = '<option value="" selected >广告类型：全部</option>';
+                $.each(data, function(k,v){
+                    append +=  '<option value="' + v.type + '"     > ' + v.type + '</option >';   
+                });
+                $('.list-filter[name=type]').html('');
+                $('.list-filter[name=type]').append(append);
+            },
+        });
+    };
+
+    var global_ads_list = {} ;
+    //获取数据
+    function getUsers(filter) {
+        $.ajax({
+            type     : "POST",
+            url      :  _c.baseUrl + 'getdata/e_h5page-h5ads.json?method=getAdList',
+            datatype : 'json',
+            data     : {'filter' : filter},
+            //timeout  : 2000,
+            async : false,  //同步请求
+            success  : function(data) {
+                datas = JSON.parse(data);
+                global_ads_list = datas;
+                $('.users-list').empty();
+                makeDotList('#userstpl', '.users-list',datas);
+                ZENG.msgbox.hide();
+            },
+        });
+    };
+    function clearForm() {
+        document.getElementById('createad').reset();
+        $('#imgpath').empty();
+        $('#newtype').hide();
+        $('#selecttype').show();
+        $('#choosepic').hide();
+    }
+    function refreshList() {
+        getUsers(''); //触发
+        getTypes();
+        clearForm();
+    }
+    getUsers(''); //触发
+    getTypes();
+
+    $('.content').on('click', '#choosepic', function(){
+        $('#fileupload').trigger('click');
+        //$('#picupload').show();
+    });
+    //$('.content').on('chagne', '#fileupload', function(){
+    $('#fileupload').change( function(){
+        $('#picupload').text('上传中，请稍后...');
+        $('#picform').submit();
+        return false;
+    });
+    $('.content').on('change', '#picallow', function(){
+        if ( $(this).attr('checked')== 'checked') {
+            $('#choosepic').show();
+        } else {
+            $('#choosepic').hide();
+        }
+    });
+    $('.content').on('change', '#selecttype', function(){
+        //console.log($(this).val());
+        if ($(this).val() == 'new') {
+            $('#newtype').show();
+            $(this).hide();
+        } else {
+            $('#newtype').hide();
+            $(this).show();
+        }
+    });
+    $('.content').on('click', '#showtypelist', function(){
+        $('#newtype').hide();
+        $('#selecttype').show();
+    });
+    $('.content').on('click', '#docreate', function(){
+        $.ajax({
+            type     : "POST",
+            url      :  _c.baseUrl + 'getdata/e_h5page-h5ads.json?method=publish',
+            datatype : 'json',
+            data     : {'ad' : $('#createad').serialize(), 'tag' : $('#tagbox').serialize() },
+            //timeout  : 2000,
+            success  : function(rval) {
+                eval('var info=' + rval);
+                if (info == 'ok') {
+                    refreshList();
+                    ZENG.msgbox.show('发布成功',4,2000);
+                };
+            },
+        });
+
+    });
+
+    $('.content').on('click','#cancelbtn', function(){
+        clearForm();
+    });
+
+   $('.content').on('click', '.submit-filter', function() {
+        var filter = {};
+        filter['type'] = $('.list-filter[name="type"]').select().val();
+        filter['like'] = {};   
+        filter['like']['key'] = 'desc';
+        filter['like']['val'] = $('.list-filter[name="like"]').val();
+        filter['or_like'] = {};
+        filter['or_like']['key'] = 'name';
+        filter['or_like']['val'] = $('.list-filter[name="like"]').val();
+        switch ($('.list-filter[name="time"]').select().val()) {
+            case 'click' :  
+                filter['order'] = {};
+                filter['order']['key'] = 'count';
+                filter['order']['order'] = 'desc';
+            break;
+            case 'desc' :  
+                filter['order'] = {};
+                filter['order']['key'] = 'time';
+                filter['order']['order'] = 'desc';
+            break;
+            case 'asc' :  
+                filter['order'] = {};
+                filter['order']['key'] = 'time';
+                filter['order']['order'] = 'asc';
+            break;
+            case 'input' :  
+                filter['mass'] = {};
+                filter['mass']['key'] = 'info';
+                filter['mass']['cal'] = '!=';
+                filter['mass']['val'] = 'noooo';
+            break;
+        }
+        getUsers(filter);
+    });
+
+    //读取标签列表
+    $('.content').on('click', '#modal-785036', function(){
+        $.ajax({
+            type     : "POST",
+            url      :  _c.baseUrl + 'getdata/e_h5page-h5tag.json?method=getTagList',
+            datatype : 'json',
+            data     : {'filter' : '0'},
+            //timeout  : 2000,
+            async : false,  //同步请求
+            success  : function(data) {
+                datas = JSON.parse(data);
+                templateTags = datas;
+                var tmpList = '';
+                var tagsList ='';
+                $.each(templateTags[0],function(k,v){
+                    tagsList += '<div class="tab-pane" id="tab'+v.id+'"   >';
+                    if ( $.isArray(templateTags[v.id]) ) {
+                        $.each(templateTags[v.id], function(x,y){
+                            tagsList += '<label class="checkbox" ><input type="checkbox" name="'+y.id+'"  />'+y.name+'</label> &nbsp;  &nbsp;';
+                            '<div class="tab-pane" id="tab2"></div>'
+                        });
+                    }
+                    tagsList += '</div>';
+                    tmpList += '<li  ><a href="#tab'+v.id+'"  data-toggle="tab">'+v.name+'</a></li>';
+                    active = '';
+                });
+                //$('#adtagbox');
+                $('#adtagbox').empty().append('<div class="tabbable"><ul id="myTab" class="nav nav-tabs">' + tmpList + '</ul><div class="tab-content">' + tagsList + '</div></div>' );
+                $('#myTab a:first').tab('show')
+                //$('#active_me').toggle('click');
+            },
+        });
+    });
+    //ZENG.msgbox.hide();
+</script>

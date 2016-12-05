@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Cache-Control" content="no-transform " />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <base href="<?php echo base_url();?>"/>
+    <title><?php echo isset($htmls) ? $htmls['title'] : '信息模板' ?></title>
+
+    <link rel="stylesheet" href="../assets/lib/jquery/jquery.mobile-1.3.2.min.css">
+    <script src="../assets/lib/jquery/jquery.min.js"></script>
+    <script src="../assets/lib/jquery/jquery.mobile-1.3.2.min.js"></script>
+
+</head>
+<body style="overflow-y:auto;" >
+<!-- Home -->
+<div data-role="page" id="page1">
+<!-- =============================================== -->
+    <div data-theme="a" data-role="header">
+        <h3 id="htmltitle" >
+            <span class="changex" typex="text"><?php echo isset($htmls) ? $htmls['title'] : '信息模板' ?></span>
+        </h3>
+    </div>
+<!-- =============================================== -->
+    <div data-role="content" id="allhtml">
+<!-- =============================================== -->
+        <div class="pic" style=" text-align:center">
+            <img id="pic" class="changex" typex="img" style="width: 100%; height: auto" srct="../assets/img/h5page/h5_tpl.png">
+        </div>
+<!-- =============================================== -->
+        <div data-controltype="textblock" data-cid="text1" class="codiqa-control changex" typex="rich" idx="heads" style="">
+        </div>
+<!-- =============================================== -->
+        <form method="POST" id="submitform" data-cid="form3" class="codiqa-control codiqa-container ui-sortable ui-sortable-disabled" style="">
+		    <!-- <div data-controltype="textblock" data-cid="text2" class="changex" typex="ads"></div> -->
+        </form>
+    </div>
+</div>
+<script type="text/javascript" charset="utf-8">
+    var prt = parent.document.getElementById('window');
+    if(prt){
+        $.getScript("../assets/js/h5page-mobile/js_editac.js");
+    } else {
+        $.getScript("../assets/js/h5page-mobile/js_view.js");
+    }
+</script>

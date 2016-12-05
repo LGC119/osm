@@ -1,0 +1,73 @@
+<div class="event-info row">
+	<div class="widget-box transparent">
+		<div class="widget-header">
+			<h4 class="widget-title lighter">活动基本信息</h4>
+			<div class="widget-toolbar no-border">
+				<a ng-click="get_info()"><i class="ace-icon fa fa-refresh"></i></a>
+				<a data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+			</div>
+		</div>
+		<div class="widget-body">
+			<div class="widget-body-inner" style="display: block;">
+				<div class="widget-main padding-6 no-padding-left no-padding-right">
+					<div class="profile-user-info profile-user-info-striped">
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 活动名称 </div>
+							<div class="profile-info-value"> {{info.event_title}} </div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 标签 </div>
+							<div class="profile-info-value"> {{info.tags}} </div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 活动规则 </div>
+							<div class="profile-info-value" ng-if="info.push_mode==3"> 私信群发 </div>
+							<div class="profile-info-value" ng-if="info.push_mode==1||info.push_mode==2"> 转发并@{{info.status}}个好友 </div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 起止时间 </div>
+							<div class="profile-info-value"> {{info.start_time}} ~ {{info.end_time}} </div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 活动状态 </div>
+							<div class="profile-info-value">
+								<span ng-if="info.status==0" class="gray">未开始</span>
+								<span ng-if="info.status==1" class="green">已发布</span>
+								<span ng-if="info.status==2" class="red">已停止</span>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 推送组 </div>
+							<div class="profile-info-value"> {{info.groups}} </div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> 推送状态 </div>
+							<div class="profile-info-value">
+								<span ng-if="info.push_status==0" class="gray">推送中</span>
+								<span ng-if="info.push_status==1" class="green">推送完成</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="event-weibo row" ng-if="false">
+	<div class="widget-box transparent">
+		<div class="widget-header">
+			<h4 class="widget-title lighter">活动微博</h4>
+			<div class="widget-toolbar no-border">
+				<a ng-click="get_weibo()"><i class="ace-icon fa fa-refresh"></i></a>
+				<a data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+			</div>
+		</div>
+		<div class="widget-body">
+			<div class="widget-body-inner" style="display: block;">
+				<div class="widget-main padding-6 no-padding-left no-padding-right">
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis. Nullam interdum massa vel nisl fringilla sed viverra erat tincidunt. Phasellus in ipsum velit. Maecenas id erat vel sem convallis blandit. Nunc aliquam enim ut arcu aliquet adipiscing. Fusce dignissim volutpat justo non consectetur.
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

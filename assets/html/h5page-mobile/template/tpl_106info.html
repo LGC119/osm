@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Cache-Control" content="no-transform " />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <base href="<?php echo base_url();?>"/>
+    <title><?php echo isset($htmls) ? $htmls['title'] : '会员中心' ?></title>
+    <link rel="stylesheet" href="../assets/lib/jquery/jquery.mobile-1.3.2.min.css">
+    <style>
+        #userCenter{
+            margin-bottom: 50px;
+        }
+        #userCenter ul{
+            margin: 0;
+            padding: 0;
+        }
+        #userCenter ul li{
+            list-style: none;
+            line-height: 30px;
+            height: 30px;
+            border: 1px solid #CCCCCC;
+            padding: 5px;
+            cursor: pointer;
+        }
+        #userCenter ul li span{
+            float: right;
+            margin-right: 3px;
+            font-size: 12px;
+            color: #AAAAAA;
+        }
+        #userCenter ul li a{
+            text-decoration: none;
+            color: #666666;
+        }
+        #userCenter ul li a:hover{
+            text-decoration: none;
+        }
+        .padding2{padding:1em;}
+        #coupon_list {
+            display: block;
+            margin: 0;
+            text-indent: 0;
+            padding: 0;
+        }
+        #coupon_list li {
+            display: block;
+            margin: 5% auto;
+            width: 95%;
+            height:0;
+            padding-bottom:47.5%;
+            position:relative;
+            background: url(../assets/img/couponBG.png) no-repeat;
+            background-size: cover;
+        }
+        #coupon_list li b {
+            display: block;
+            padding: 15% 7% 0 32%;
+            text-align: center;
+            font-size: 2em;
+            line-height: 2em;
+            color:#e51f18;
+        }
+        #coupon_list li em {
+            position: absolute;
+            right: 10%;
+            bottom: 16%;
+            font-size: .5em;
+            font-style: normal;
+            color: gray;
+        }
+    </style>
+    <script src="../assets/lib/jquery/jquery.min.js"></script>
+    <script src="../assets/lib/jquery/jquery.mobile-1.3.2.min.js"></script>
+</head>
+<body style="overflow-y:auto;" >
+<!-- Home -->
+<div data-role="page" id="page1">
+    <div data-theme="a" data-role="header">
+        <h3 id="htmltitle" >
+            <span class="changex" typex="text"  >会员中心</span>
+        </h3>
+    </div>
+    <div data-role="content" id="allhtml">
+        <div class="pic" style=" text-align:center">
+            <img id="pic" class="changex" typex="img" style="width: 100%; height: auto" srct="../assets/img/h5page/h5_tpl.png">
+        </div>
+    </div>
+    <div data-role="content">
+        <ul data-role="listview" data-inset="true">
+            <li><a href="#page2">个人信息</a></li>
+            <li><a href="#page3">我的优惠券</a></li>
+            <li><a href="#page4">会员说明</a></li>
+        </ul>
+    </div>
+</div>
+
+<!--个人信息-->
+<div data-role="page" id="page2">
+    <div class="padding2">
+        <h2>个人信息</h2>
+        <p id="user_msg">正在载入个人信息...</p>
+        <div id="user_info" style="display:none">
+            <h5>真实姓名</h5>
+            <p id="user_name"></p>
+            <h5>联系电话</h5>
+            <p id="user_phone"></p>
+            <h5>注册时间</h5>
+            <p id="created_at"></p>
+        </div>
+        <a href="#page1" data-direction="reverse" data-role="button">
+            返回会员中心
+        </a>
+    </div>
+</div>
+<!--我的优惠券-->
+<div data-role="page" id="page3">
+    <div class="padding2">
+        <h2>我的优惠券</h2>
+        <p id="coupon_msg">正在载入优惠券信息...</p>
+        <ul id="coupon_list">
+        </ul>
+        <a href="#page1" data-direction="reverse" data-role="button">
+            返回会员中心
+        </a>
+    </div>
+</div>
+<!--会员中心-->
+<div data-role="page" id="page4">
+    <div class="padding2">
+        <h2>会员说明</h2>
+        <p>注册会员后，可以领取优惠券！！！</p>
+        <a href="#page1" data-direction="reverse" data-role="button">
+            返回会员中心
+        </a>
+    </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+
+    /* 方法：获取微信用户的授权码 */
+    function getCode ()
+    {
+        var url = window.location.href;
+        var reg = /(id|code)=([\w-]+)/ig;
+        var param =  url.match(reg);
+
+        if(typeof param[0] == 'undefined' || typeof param[1] == 'undefined'){
+            return {id:0, code:0};
+        }
+
+        if (param[0].search('id=') != -1){
+            var id = (param[0].split("="))[1];
+            var code = (param[1].split("="))[1];
+        }else{
+            var id = (param[1].split("="))[1];
+            var code = (param[0].split("="))[1];
+        }
+
+        return {id:id, code:code};
+    }
+
+    var prt = parent.document.getElementById('window');
+    if(prt){
+        $.getScript("../assets/js/h5page-mobile/js_editac.js");
+    } else {
+        $.getScript("../assets/js/h5page-mobile/js_view.js");
+    }
+
+    /* 载入完成后运行, 获取会员信息，和优惠券信息 */
+    $(function(){
+        var params = getCode();
+        if (params.id == 0) return true;
+        $.getJSON(
+                'index.php/h5page-mobile/user/getUserInfos?id=' + params.id + '&code=' + params.code,
+                function (res) {
+                    if (typeof res.errmsg == 'undefined') {
+                        if (typeof res.info.name != 'undefined') {
+                            $('#user_name').html(res.info.name);
+                            $('#user_phone').html(res.info.phone);
+                            $('#created_at').html(res.info.created_at);
+                            $('#user_info').show().siblings('#user_msg').html('');
+                        } else {
+                            $('#user_msg').html(res.errmsg || '获取会员信息失败！');
+                        }
+
+                        var items = '';
+                        if (res.coupons.length > 0) {
+                            for (var i in res.coupons) {
+                                var item = res.coupons[i];
+                                items += '<li><b>' + item.sn.substr(0, 4) + ' ' + item.sn.substr(4) + '</b><em>领取时间: ' + item.created_at + '</em></li>';
+                            }
+                        } else {
+                            items = '<li>没有优惠券数据</li>';
+                        }
+
+                        $('#coupon_list').html(items).siblings('#coupon_msg').html('');
+                        coupons.code = 200;
+                    } else {
+                        $('#coupon_msg').html(res.errmsg || '获取优惠券失败！');
+                    }
+                }, function () {
+                    $('#user_msg').html('无法获取会员信息！');
+                    $('#coupon_msg').html('无法获取优惠券信息！');
+                }
+        );
+    });
+
+</script>

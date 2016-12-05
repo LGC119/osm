@@ -1,0 +1,207 @@
+<div class="page-header">
+    <h1>
+        用户洞察
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            用户组管理
+        </small>
+    </h1>
+</div>
+
+<div class="row" data-ng-controller="AdvGroupController" ng-init="getGroups()">
+    <div class="col-xs-12">
+        <div ng-if="groups.length==0">{{empty}}</div>
+        <div class="row filter-sorter">
+            <div class="col-xs-3 input-group">
+                <input id="" type="text" class="form-control" ng-model="keyword">
+                <span class="input-group-btn">
+                    <button class="btn btn-sm btn-info" type="button" ng-click="searchGroups()">
+                       搜索 
+                    </button>
+                    <button data-toggle="dropdown" class="btn btn-sm dropdown-toggle">
+                        按创建时间{{radioModel || '倒序'}}
+                        <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-info dropdown-menu-right">
+                        <li>
+                            <a href="" ng-model="radioModel" btn-radio="'正序'" ng-click="listByRegular()">正序</a>
+                        </li>
+
+                        <li>
+                            <a href="" ng-model="radioModel" btn-radio="'倒序'" ng-click="listByGoofy()">倒序</a>
+                    </ul>
+                </span>
+            </div>
+            <div class="col-xs-12" ng-show="groupData.total_number">
+                <pagination total-items="groupData.total_number" ng-model="groupData.current_page" ng-click="getGroups()" items-per-page="groupData.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+            </div>
+        </div>
+        <div class="row groups-list">
+            <div ng-show="!groupList.list">
+                {{groupEmpty}}
+            </div>
+            <div class="col-xs-3 group-box" ng-repeat="(key, item) in groupList.list">
+                <div class="widget-box widget-box-me">
+                    <div class="widget-header" data-original-title="" id="">
+                        <h5 class="widget-title bigger lighter pull-left">{{item.name}}</h5>
+                        <div class="sync-switcher">
+                            <i class="fa fa-lock bigger-160" ng-if="item.is_locked==1"></i>
+                            <i class="fa fa-unlock bigger-160" ng-if="item.is_locked==0"></i>
+                        </div>
+                    </div>
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div class="alert alert-info description" data-html="true" data-placement="top"
+                            data-trigger="hover" data-original-title="组描述" data-content="aaa" style="cursor: default;"
+                            id="">
+                                {{item.description}}
+                            </div>
+                            <div class="alert alert-success clearfix">
+                                <a href="#/weibo-user/{{item.id}}" title="点击查看用户组成员" style="text-decoration:none">
+                                    <i class="icon icon-user"></i>
+                                    {{item.members_count}}人
+                                </a>
+                            </div>
+                        </div>
+                        <div class="opt-btn-grp clearfix">
+                            <a href="javascript:;" class="btn btn btn-success btn-sm" ng-click="show_filter_param(item.id) ">
+                                    组特征
+                            </a>
+                                <a href="javascript:;" class="btn btn-info btn-sm" ng-click="show_statistics(item.id)">
+                                    组统计
+                                </a>
+                            <a href="#/wb-event-create/{{item.id}}" class="btn btn-warning grp-create-btn" ng-disabled="item.expires_in <= dateTime">
+                                <span>创建活动</span>
+                            </a>
+
+                        </div>                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑组窗口 -->
+    <div class="modal fade" id="modify_group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">修改组信息</h4>
+                </div>
+                <form method="POST" class="form-horizontal" role="form" ng-submit="modify_group()">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right"> 组名称 </label>
+                        <div class="col-sm-9">
+                            <input type="text" placeholder="组名称" ng-model="group.name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right"> 组描述 </label>
+                        <div class="col-sm-9">
+                            <textarea ng-model="group.desc" cols="38" rows="3" placeholder="组描述"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right"> 用户人群特征 </label>
+                        <div class="col-sm-9">{{group.feature}}</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right"> 有效期 </label>
+                        <div class="col-sm-9">
+                            <input type="text" placeholder="2014-10-10" ng-model="group.expires_in">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right"> 是否锁定 </label>
+                        <div class="col-sm-9">
+                            <label>
+                                <input name="switch-field-1" ng-model="group.is_locked" value="1" ng-checked="group.is_locked==1" class="ace ace-switch ace-switch-6" type="checkbox">
+                                <span class="lbl"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">确定</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- 编辑组窗口 -->
+    <!-- 组特征窗口 -->
+    <div class="modal fade" id="filter_param" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">
+                        <span class="blue">{{filter_param.data.group_name}}</span>组特征
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div ng-show="filter_param.data.feature == ''">
+                        暂无组特征...
+                    </div>
+                    {{filter_param.data.feature}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 组统计窗口 -->
+    <div class="modal fade" id="show_statistics" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width:900px;height:550px">
+            <div class="modal-content">
+                <div class="modal-header background-blue">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">
+                        <span class="blue">{{filter_param.data.group_name}}</span>组统计
+                    </h4>
+                </div>
+                <div class="modal-body">
+                <div ng-show="statisticsData.code == 204">
+                    暂无用户信息...
+                </div>
+                    <div class="tabbable" ng-show="statisticsData.code == 200">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#chart_sex">
+                                    <i class="green ace-icon fa fa-pencil bigger-120"></i>
+                                   性别
+                                </a> 
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#chart_area">
+                                    <i class="green ace-icon fa fa-pencil bigger-120"></i>
+                                   地区
+                                </a> 
+                            </li>
+                            <!-- <li>
+                                <a data-toggle="tab" href="#chart_pay">
+                                <i class="green ace-icon fa fa-pencil bigger-120"></i>
+                                   购买力
+                                </a> 
+                            </li> -->
+                        </ul>
+                    <!--组统计内容-->
+                        <div class="tab-content no-border padding-24">
+                            <div id="chart_sex" class="tab-pane in active"></div>
+                            <div id="chart_area" class="tab-pane"></div>
+                            <!-- <div id="chart_pay" class="tab-pane"></div> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

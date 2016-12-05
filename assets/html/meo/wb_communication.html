@@ -1,0 +1,161 @@
+ <!-- 用户卡片 -->
+<div class="user-pop-card" ng-show="showUserPop" ng-mouseover="showUserPop=true" ng-mouseleave="showUserPop=false">
+	<table cellspacing="0" cellpadding="0" border="0">
+		<tbody>
+			<tr>
+				<td>
+					<div class="content clear" node-type="inner">
+						<div class="name_card">
+							<dl class="name clear">
+								<dt>
+									<a href="http://weibo.com/u/{{item.wb_info.user.id}}" target="__blank">
+										<img src="{{item.wb_info.user.profile_image_url}}" imgtype="head"
+										uid="{{item.wb_info.user.id}}" title="{{item.wb_info.user.screen_name}}" class="picborder_r">
+									</a>
+								</dt>
+								<dd>
+									<p>
+										{{item.wb_info.user.screen_name}}
+										<i title="微博达人" class="W_ico16 ico_club" node-type="daren"></i>
+										<i title="新浪个人认证 " class="W_ico16 approve"></i>
+										<i title="新浪机构认证" class="W_ico16 approve_co"></i>
+										<b class="vip" title="腾讯认证"></b>
+									</p>
+									<p class="address">
+										<em class="W_ico12 male" title="男"></em>
+										<em class="W_ico12 female" title="女"></em>
+										{{item.wb_info.user.location}}
+									</p>
+									<div>
+										<ul class="userdata clear">
+											<li>
+												关注
+												{{item.wb_info.user.friends_count}}
+											</li>
+											<li class="W_vline">|</li>
+											<li>
+												粉丝
+												{{item.wb_info.user.followers_count}}
+											</li>
+											<li class="W_vline">|</li>
+											<li>
+												微博
+												{{item.wb_info.user.statuses_count}}
+											</li>
+										</ul>
+									</div>
+								</dd>
+							</dl>
+							<dl class="info clear">
+								<dt></dt>
+								<dd>{{item.wb_info.user.description}}</dd>
+							</dl>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<!-- 用户卡片END -->
+
+<!-- 用户名&头像 -->
+<div class="user-icon pull-left">
+	<img class="avatar" alt="{{item.wb_info.user.screen_name}}" ng-src="{{item.wb_info.user.profile_image_url}}" ng-mouseover="showUserPop=true" ng-mouseleave="showUserPop=false">
+</div>
+<a class="user" href="http://weibo.com/u/{{item.wb_info.user.id}}" target="__blank">{{item.wb_info.user.screen_name}}</a> 
+<img ng-if="common.verifiedType[item.wb_info.user.verified_type]" ng-src="{{common.verifiedType[item.wb_info.user.verified_type]}}" class="verified_icon">
+<i class="ace-icon fa fa-angle-double-up bigger-130 text-danger" ng-if="item.is_top"></i>
+<!-- 用户名&头像END -->
+
+<div class="content">
+	<!-- 微博内容 -->
+	<p ng-bind-html="item.wb_info.text"></p>
+	<div class="piclist" ng-if="item.wb_info.original_pic">
+		<img ng-src="{{item.wb_info.pic_urls[0].thumbnail_pic}}" class="thumb" ng-show="!is_auto" ng-click="is_auto=true" ng-init="is_auto=false">
+		<img ng-src="{{item.wb_info.original_pic}}" ng-show="is_auto"  class="auto" ng-click="is_auto=false">
+	</div>
+	<div class="space-6"></div>
+	<!-- 微博内容END -->
+
+	<!-- 转发原微博 -->
+	<div class="ori-status" ng-if="item.wb_info.retweeted_status">
+		<div class="retweeted_user">
+			<a ng-href="http://weibo.com/u/{{item.wb_info.retweeted_status.user.id}}" target="_blank">
+			@{{item.wb_info.retweeted_status.user.screen_name}}
+			</a>
+		</div>
+		<div ng-bind-html="item.wb_info.retweeted_status.text"></div>
+		<!-- 图片 -->
+		<div class="piclist" ng-if="item.wb_info.retweeted_status.original_pic">
+			<div class="space-6"></div>
+			<img ng-src="{{item.wb_info.retweeted_status.pic_urls[0].thumbnail_pic}}" class="thumb" ng-show="!is_auto" ng-click="is_auto=true" ng-init="is_auto=false">
+			<img ng-src="{{item.wb_info.retweeted_status.original_pic}}" ng-show="is_auto"  class="auto" ng-click="is_auto=false">
+		</div>
+		<!-- 关键词页面不显示下面内容{type==2} -->
+		<div class="action-buttons clearfix" ng-if="item.type!=2">
+			<div class="space-6"></div>
+			<div class="pull-left">
+				<span class="created-at"><i class="ace-icon fa fa-clock-o bigger-110"></i>
+				{{item.wb_info.retweeted_status.created_at}}
+				</span>
+				<span class="source ml-10" ng-bind-html="item.wb_info.retweeted_status.source"></span>
+			</div>
+			<div class="pull-right">
+				<a href="javascript:;" class="repost_btn">转发({{item.wb_info.retweeted_status.reposts_count}})</a>
+				<a href="javascript:;" class="comment_btn">评论({{item.wb_info.retweeted_status.comments_count}})</a>
+			</div>
+		</div>
+	</div>
+	<!-- 转发原微博END -->
+	<!-- 评论原微博 -->
+	<div class="ori-status" ng-if="item.wb_info.status">
+		<div class="status_user">
+			<a ng-href="http://weibo.com/u/{{item.wb_info.status.user.id}}" target="_blank">
+			@{{item.wb_info.status.user.screen_name}}
+			</a>
+		</div>
+		<div ng-bind-html="item.wb_info.status.text"></div>
+		<div class="space-6"></div>
+		<!-- 图片 -->
+		<div class="piclist" ng-if="item.wb_info.status.original_pic">
+			<img ng-src="{{item.wb_info.status.pic_urls[0].thumbnail_pic}}" class="thumb" ng-show="!is_auto" ng-click="is_auto=true" ng-init="is_auto=false">
+			<img ng-src="{{item.wb_info.status.original_pic}}" ng-show="is_auto"  class="auto" ng-click="is_auto=false">
+		</div>
+		<div class="space-6"></div>
+		<div class="action-buttons clearfix">
+			<div class="pull-left">
+				<span class="created-at"><i class="ace-icon fa fa-clock-o bigger-110"></i>
+				{{item.wb_info.status.created_at}}
+				</span>
+				<span class="source ml-10" ng-bind-html="item.wb_info.status.source"></span>
+			</div>
+			<div class="pull-right">
+				<a href="javascript:;" class="repost_btn">转发({{item.wb_info.status.reposts_count}})</a>
+				<a href="javascript:;" class="comment_btn">评论({{item.wb_info.status.comments_count}})</a>
+			</div>
+		</div>
+		<div class="space-6"></div>
+	</div>
+	<!-- 评论原微博 -->
+
+	<!-- 评论转发，创建时间 -->
+	<div class="feed-footer clearfix">
+		<div class="pull-left">
+			<span ng-if="item.os==5">【<i class="fa fa-flag bigger-110"></i>{{status_names[item.status]}}】</span>
+			<span class="created-at">
+				<i class="ace-icon fa fa-clock-o bigger-110"></i> {{item.wb_info.created_at}}
+			</span>
+			<span ng-if="item.os==5" ng-class="{rm_expired:item.rm_expired}">
+				<i class="ace-icon fa fa-bell-o red bigger-110"></i> {{item.rm_time}}
+			</span>
+			<span ng-if="item.type!=3" class="source ml-10" ng-bind-html="item.wb_info.source"></span>
+		</div>
+		<div class="pull-right" ng-show="!item.wb_info.status" ng-hide="item.type==3||item.type==1||item.type==2">
+			<a href="javascript:;" class="repost_btn">转发({{item.wb_info.reposts_count}})</a>
+			<a href="javascript:;" class="comment_btn">评论({{item.wb_info.comments_count}})</a>
+			<a href="javascript:;" class="red" ng-if="isUserTimeline" ng-click="deleteTimeline(item.wb_info.wb_id,item.wb_info.idstr)">删除</a>
+		</div>
+	</div>
+	<!-- 评论转发，创建时间END -->
+</div>

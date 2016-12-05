@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../assets/lib/bootstrap/bootstrap.min.css" />
+	<link rel="stylesheet" href="../assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="../assets/lib/ace/ace.min.css" />
+	<!--[if lte IE 9]>
+		<link rel="stylesheet" href="../assets/css/ace-part2.min.css" />
+	<![endif]-->
+	<link rel="stylesheet" href="../assets/lib/ace/ace-rtl.min.css" />
+
+	<!--[if lte IE 9]>
+	  <link rel="stylesheet" href="../assets/css/ace-ie.min.css" />
+	<![endif]-->
+	<link rel="stylesheet" href="../assets/lib/ace/ace.onpage-help.css" />
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+	<!--[if lt IE 9]>
+	<script src="../assets/js/html5shiv.js"></script>
+	<script src="../assets/js/respond.min.js"></script>
+	<![endif]-->
+	<script type="text/javascript" src="../assets/lib/jquery/jquery.min.js"></script>
+	<style>
+	.center img{height:100px;}
+	</style>
+	<script>
+		$.get('./check_step.php',function(data){
+			if(2!=data){
+				window.location = "./index.html";
+			}
+		});
+	</script>
+</head>
+<body>
+	<div class="header">
+		<div class="center">
+			<img src="../assets/img/logo.png" alt="">				
+		</div>
+	</div>
+	<div>
+		<form  method="POST">
+			<table style="margin:0 auto;">
+				<tr>
+					<td>
+						<h3>数据库账号</h3>
+						<table>
+							<tr>
+								<td>数据库主机：</td>
+								<td ><input type="text" ng-model="pd.host"  required id="host" value="localhost"></td>
+								<td style="color:red;"></td>
+							</tr>
+							<tr>
+								<td>端口号：</td>
+								<td><input type="text" ng-model="pd.port" value="3306"  required id="port"></td>
+								<td style="color:red;"></td>
+							</tr>
+							<tr>
+								<td>用户名：</td>
+								<td><input type="text" ng-model="pd.user"  required   id="user"></td>
+								<td style="color:red;"></td>
+							</tr>
+							<tr>
+								<td>密码：</td>
+								<td><input type="password" ng-model="pd.password"  required   id="password"></td>
+								<td style="color:red;"></td>
+							</tr>
+							<tr>
+							<tr>
+								<td>数据库名：</td>
+								<td><input type="text" ng-model="pd.dbname"  required  id="dbname"></td>
+								<td style="color:red;"></td>
+							</tr>
+								<td>表前缀：</td>
+								<td ><input type="text" ng-model="pd.prefix" value="mas_"id="prefix"></td>
+								<td ><i>(建议您修改表前缀)</i></td>
+							</tr>
+							<tr id="db_attention" style="display:hidden;">
+								<td>提示信息：</td>
+								<td style="color:red;"></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h3>管理员账号</h3>
+						<table>
+							<tr>
+								<td>管理员姓名：</td>
+								<td><input type="text" ng-model="pd.ad_name" required   name="ad_name" id="ad_name"></td>
+								<td style="color:red;"></td>
+							</tr>
+							<tr>
+								<td>公司名字：</td>
+								<td><input type="text" ng-model="pd.ad_company_name" required   name="ad_company_name" id="ad_company_name"></td>
+								<td style="color:red;"></td>
+							</tr>
+							<tr>
+								<td>登录密码：</td>
+								<td><input type="password" ng-model="pd.ad_pwd" required   name="ad_pwd" id="ad_pwd"></td>
+								<td style="color:red;"></td>
+							</tr>
+							<tr>
+								<td>密码确认：</td>
+								<td><input type="password" ng-model="pd.ad_repwd" required   name="ad_repwd" id="ad_repwd"></td>
+								<td style="color:red;"></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<hr>
+			<div id="install" style="font-size:14px;color:red;" class="center"></div>
+			<div class="center">
+				<input type="button" value="上一步：检测系统环境" id="pre"   class="btn btn-danger">
+				<input type="button" value="立即安装" id="done"  class="btn btn-primary" disabled="disabled">
+			</div>		
+		</form>
+		
+	</div>
+	<div></div>
+	<script type="text/javascript" src="../assets/lib/angular/angular.min.js"></script>
+	
+	<script>
+	var tag1 = false;
+	var tag2 = false;
+
+	$("#dbname").blur(function(){
+		var host = $("#host").val();
+		var port = $("#port").val();
+		var user = $("#user").val();
+		var password = $("#password").val();
+		var dbname = $("#dbname").val();
+		var prefix = $("#prefix").val();
+
+		if(host.length<=0){
+			$("#host").parent().next().html("数据库主机不能为空");
+		}
+
+		if(port.length<=0){
+			$("#port").parent().next().html("连接的端口号不能为空");
+		}
+
+		if(dbname.length<=0){
+			$("#dbname").parent().next().html("数据库名不能为空");
+		}
+
+		if(user.length<=0){
+			$("#user").parent().next().html("密码不能为空");
+		}
+
+		if(host!='' && port!=''&&user!=''&&password!=''&&dbname!=''){
+			$.post("./step3.php",{host:host,port:port,user:user,password:password,dbname:dbname,prefix:prefix,method:1},function(data){
+				var info = "";
+				$("#db_attention").children("td").eq(1).html(info);
+				if(0==data){
+					$("#db_attention").attr("display","block");
+					info = "用户名密码错误";
+					$("#db_attention").children("td").eq(1).html(info);
+				}else if(2==data){
+					$("#db_attention").attr("display","block");
+					info ="数据库已存在，请重新输入...";
+					$("#db_attention").children("td").eq(1).html(info);
+				}else{
+					tag1 = true;
+					if(tag1&&tag2){
+						$("#done").removeAttr("disabled");
+					}
+				}
+			});	
+		}
+		
+	});
+
+	$("#ad_repwd").blur(function(){
+		var ad_name = $("#ad_name").val();
+		var ad_company_name = $("#ad_company_name").val();
+		var ad_pwd = $("#ad_pwd").val();
+		var ad_repwd = $("#ad_repwd").val();
+		if(ad_pwd.length<=0 || ad_repwd.length<=0){
+			$("#ad_repwd").parent().next().html("密码不能为空");
+		}
+
+		if(ad_pwd.length!=ad_repwd.length){
+			$("#ad_repwd").parent().next().html("两次输入密码不一致");
+		}
+
+		if(ad_name.length<=0){
+			$("#ad_name").parent().next().html("管理员姓名不能为空");
+		}
+
+		if(ad_company_name.length<=0){
+			 $("#ad_company_name").parent().next().html("公司名不能为空");
+		}
+
+		if((ad_pwd==ad_repwd) &&(ad_pwd.length>0) &&ad_name.length>0&&ad_company_name.length>0){
+			tag2 = true;
+			if(tag1&&tag2){
+				$("#done").removeAttr("disabled");
+			}						
+		}		
+	});
+
+	$("#pre").click(function(){
+		$.post('./check_step.php',{step:1},function(data){
+				window.location="./step2.html";
+			});
+	});
+
+
+	$("#done").click(function(){
+		var host = $("#host").val();
+		var port = $("#port").val();
+		var user = $("#user").val();
+		var password = $("#password").val();
+		var dbname = $("#dbname").val();
+		var prefix = $("#prefix").val();
+		var ad_name = $("#ad_name").val();
+		var ad_company_name = $("#ad_company_name").val();
+		var ad_pwd = $("#ad_pwd").val();
+		var ad_repwd = $("#ad_repwd").val();
+		$("#done").attr("disabled","disabled");
+		$("#install").html("正在安装请稍后......");
+		$.post("./step3.php",{host:host,port:port,user:user,password:password,dbname:dbname,prefix:prefix,ad_name:ad_name,ad_company_name:ad_company_name,ad_pwd:ad_pwd,method:2},function(data){
+			if(1==data){
+				window.location = "../index.html";
+			}else{
+				alert("安装失败，请重新配置");
+			}
+		});
+	});
+	</script>
+</body>
+</html>

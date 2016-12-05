@@ -1,0 +1,18 @@
+<div class="page-header">
+    <h1>
+        微博私信回复规则
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            其他回复规则
+        </small>
+    </h1>
+</div>
+<div data-ng-controller="MsgOtherruleController">
+    <h4>关注微博帐号：</h4>
+    <textarea class="form-control" rows="5" data-ng-model="subscribedReply"></textarea>
+    <br/>
+    <h4>无匹配关键词的回复：</h4>
+    <textarea class="form-control" rows="5" data-ng-model="noKeywordReply"></textarea>
+    <br/>
+    <span class="btn btn-lg btn-info pull-right" data-ng-click="updateReply()">更新</span>
+</div>

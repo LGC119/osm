@@ -1,0 +1,369 @@
+
+<div class="row-fluid" Tstyle="margin-top:0px">
+    <div class="widget-box">
+        <div class="widget-title">
+            <ul class="nav nav-tabs">
+                <li><a class="loadpage" href="" data-toggle="tab" linkhref="./h5page/H_dpd_activity_manage_detail.html">H5详情</a></li>
+                <li class="active"><a class="loadpage"  href=""  data-toggle="tab" linkhref="./h5page/H_dpd_activity_manage_analysis.html">访问统计</a></li>
+                <li><a class="loadpage" href="" data-toggle="tab" linkhref="./h5page/H_dpd_activity_manage_trace.html">访问跟踪</a></li>
+                <li style="float:right;margin: 3px 15px 0px 0px;"><button class="btn loadpage" linkhref="./h5page/H_dpd_activity_manage.html"  ><i class=" icon-backward"></i>&nbsp; 返回</button></li>
+            </ul>
+        </div>
+        <div class="widget-content tab-content" style="overflow: visible;">
+            <div class="content">
+                <div class="page-bd">
+                    <div id="name" class="filter-sort" style="flodat:left;text-align:center;">
+                        <select  name="sex" class="list-filter" style="margin-bottom:10px;">
+                            <option value="" selected >性别:全部</option>
+                            <option value="1"  >男</option>
+                            <option value="2"  >女</option>
+                        </select>
+                        <div id="city_select_province_city1" class="list-filter" style="display:inline;"></div>
+
+                        <link rel="stylesheet" href="../plugin/datepicker/public/css/default.css" type="text/css">
+                        <script src="../plugin/datepicker/public/javascript/zebra_datepicker.src.js"></script>
+                        <div class="btn-group" style="margin-bottom:0px;display:inline-block;">
+                            <input type="submit" name="time-gt" class="btn datepicker list-filter" style="cursor:pointer;margin-bottom: 10px;margin-left: 5px;margin-top: 0px;" value="开始日期" />
+                            <input type="submit" name="time-lt" class="btn datepicker list-filter" style="cursor:pointer;margin-bottom: 10px;margin-top: 0px;" value="结束日期" />
+                        </div>
+                        <button id="do-analysis" class="btn" style="dispdlay:none;margin-bottom:10px;" >显示</button>
+                        <button id="switch-view" class="btn" disabled="true" style="margin-bottom:10px;float:right;display:none;" >切换视图</button>
+                    </div>
+                    <div id="rightf" style="flodat:right"></div>
+                    <div id="tongji">
+
+                        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                        <hr/>
+                        <div id="district-analysis" style="min-width: 330px; height: 300px; margin: 0 auto;"></div>
+                        <hr/>
+                        <!--
+                        <div id="sex-analysis" style="min-width: 300px; height: 300px; margin: 0 auto;"></div>
+                        <div id="ad-analysis" style="min-width: 300px; height: 300px; margin: 0 auto;"></div>
+                        -->
+                        <hr/>
+                    </div>
+                </div>
+            </div>
+            <div style="display:block;clear:both;height:0px;width:100%;padding:0;margin:0;"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script type="text/javascript">
+var filter = {};
+function getFilter() {
+        filter = {};
+        if ($('.list-filter[name="sex"]').select().val() != '') {
+            filter['sex'] = $('.list-filter[name="sex"]').select().val();
+        }
+      //  filter['type']   = $('.list-filter[name="type"]').select().val();
+      //  filter['search'] = $('.list-filter[name="search"]').val();
+        filter['time']   = {};
+        filter['time']['gt'] = $('.list-filter[name="time-gt"]').val();
+        filter['time']['lt'] = $('.list-filter[name="time-lt"]').val();
+};
+$('.content').on('click', '#do-analysis', function() {
+     //   if ($('.list-filter[name="sex"]').select().val() != '') {
+     //       filter['sex'] = $('.list-filter[name="sex"]').select().val();
+     //   }
+     // //  filter['type']   = $('.list-filter[name="type"]').select().val();
+     // //  filter['search'] = $('.list-filter[name="search"]').val();
+     //   filter['time']   = {};
+     //   filter['time']['gt'] = $('.list-filter[name="time-gt"]').val();
+     //   filter['time']['lt'] = $('.list-filter[name="time-lt"]').val();
+        getFilter();
+        getData(filter,'getNumAccess', '');
+        getData(filter,'getNumDistrict', '');
+});
+$('.datepicker').Zebra_DatePicker({
+    show_icon:false,
+    show_clear_date:false,
+});
+
+// 地区选择插件			
+$('#city_select_province_city1').ajax_city_select({
+    'province':'province21',
+    'city':'city21'
+});
+function getNumDistrict(datas, unit) {
+     var colors = Highcharts.getOptions().colors;
+    $('#district-analysis').highcharts({
+        chart: {
+            //type: 'bar'
+            type: 'column'
+        },
+        title: {
+            text: '地区信息统计 TOP 10'
+        },
+        xAxis: {
+            categories: datas[0]
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '人数'
+            }
+        },
+		tooltip: {
+            crosshairs: true,
+			valueSuffix: '人',
+        },
+        legend: {
+            backgroundColor: '#FFFFFF',
+            reversed: true
+        },
+        plotOptions: {
+            series: {
+                stacking: 'normal'
+            },
+            column: {
+                   // pointPadding: 0.2,
+                   // borderWidth: 0,
+                   // pointWidth: 20
+                    
+                }
+        },
+        credits: {  
+            enabled: false  
+        }, 
+        series: 
+        [{
+                name: '访问量-男',
+                data: datas[1],
+                stack: 'male',
+                color : colors[0]
+            }, {
+                name: '访问量-女',
+                data: datas[2],
+                stack: 'male',
+                color : 'rgb(77,156,246)'
+            }, {
+                name: '参与量-男',
+                data: datas[4],
+                stack: 'fmale',
+                color : colors[5]
+            }, {
+                name: '参与量-女',
+                data: datas[5],
+                stack: 'fmale',
+                color : 'rgb(103,81,142)'
+            }, {
+                name: '广告点击-男',
+                data: datas[7],
+                stack: 'dmale',
+                color : colors[2]
+            }, {
+                name: '广告点击-女',
+                data: datas[8],
+                stack: 'dmale',
+                color : 'rgb(169,218,63)'
+            }]
+
+
+    //    [{
+    //            name: '访问-男',
+    //            data: datas[1],
+    //            stack: 'male',
+    //        }, {
+    //            name: '访问-女',
+    //            data: datas[2],
+    //            stack: 'male',
+    //        }, {
+    //            name: '访问-未知',
+    //            data: datas[3],
+    //            stack: 'male',
+    //        }, {
+    //            name: '参与-男',
+    //            data: datas[4],
+    //            stack: 'fmale',
+    //        }, {
+    //            name: '参与-女',
+    //            data: datas[5],
+    //            stack: 'fmale',
+    //        }, {
+    //            name: '参与-未知',
+    //            data: datas[6],
+    //            stack: 'fmale'
+    //        }, {
+    //            name: '广告-男',
+    //            data: datas[7],
+    //            stack: 'dmale',
+    //        }, {
+    //            name: '广告-女',
+    //            data: datas[8],
+    //            stack: 'dmale',
+    //        }, {
+    //            name: '广告-未知',
+    //            data: datas[9],
+    //            stack: 'dmale'
+    //        }]
+
+
+
+    });
+};
+function getNumAccess(datas, unit) {
+     $('#container').highcharts({
+		chart: {
+            zoomType: 'x',
+			type: 'spline',
+			renderTo : 'container'
+		},
+		title: {
+			text: '访问量/参与量 统计'
+		},
+		subtitle: {
+			//text: '访问量与提交量同步显示'
+		},
+		xAxis: {
+			type: 'datetime',
+			//title: {text: '时间'},
+			lineWidth: 1 ,
+			dateTimeLabelFormats:{
+				
+                second :  '%H:%M:%S',
+				minute :  '%m-%d %H:%M',
+				hour   :  '%Y-%m-%d %H:00',
+				day    :  '%Y-%m-%d',
+				week   :  '%Y-%m-%d',
+				month  :  '%Y-%m',
+				year   :  '%Y',
+
+            //    second :  '%H:%M:%S',
+			//	minute :  '%m月%d日 %H:%M',
+			//	hour   :  '%Y年%m月%d日 %H时',
+			//	day    :  '%Y年%m月%d日',
+			//	week   :  '%Y年%m月%d日',
+			//	month  :  '%Y年%m月',
+			//	year   :  '%Y年',
+			},
+			labels: {
+					 rotation: -30,  //逆时针旋转30°，标签名称太长。
+					 align: 'right'  //设置右对齐
+			},
+		},
+		yAxis: {
+			title: {
+				text: '访问量 (人)'
+			},
+			lineWidth:1,
+			min: 0,
+		},
+		tooltip: {
+            crosshairs: true,
+			valueSuffix: '人',
+			dateTimeLabelFormats:{
+				second: '%H:%M:%S',
+				minute: '%m月%d日 %H:%M',
+				hour: '%Y年%m月%d日 %H时',
+				day: '%Y年%m月%d日',
+				week: '%Y年%m月%d日',
+				month: '%Y年%m月',
+				year: '%Y年'
+			},
+		},
+		plotOptions: {
+			spline: {
+				lineWidth: 1,
+				states: {
+					hover: {
+						lineWidth: 2
+					}
+				},
+				marker: {
+					enabled: false
+				},
+				pointInterval: unit * 1000,
+				//pointInterval: 3600 * 1000, // one hour
+				//pointInterval: 24 * 3600 * 1000, // one day
+				//pointStart: Date.UTC(2013, 9, 6, 0, 0, 0)
+			},
+
+            series: {  
+                cursor: 'pointer',  
+                events: {  
+                    click: function(event) {  
+                        var arr={'访问量':'','参与量':'input','广告点击量':'ad'};
+                        getFilter();
+                        getData(filter, 'getNumDistrict', arr[this.name]);
+                    }  
+                }  
+            } ,
+
+
+
+		},
+        credits: {  
+            enabled: false  
+        }, 
+		series: [
+			{
+				name: '访问量',
+         //       type: 'area',
+				data: datas[0],
+
+			}, 
+			{
+				name: '参与量',
+          //      type: 'area',
+				data: datas[1]
+			}, 
+			{
+				name: '广告点击量',
+          //      type: 'area',
+				data: datas[2],
+				//lineWidth: 3
+			}, 
+		]
+		,
+		navigation: {
+			menuItemStyle: {
+				fontSize: '10px'
+			}
+		},
+	});
+}
+function getData(filter, type, extra) {
+    getFilter();
+    $.ajax({
+        type     : "POST",
+	    url      :  _c.baseUrl + 'getdata/e_h5page-wxh5.json?method=getAnalysis',
+        datatype : 'json',
+        data     : {'filter' : filter ,  'id' : $('#h5manage').attr('idx') , 'type' : type , 'extra' : extra},
+        //timeout  : 2000,
+        success  : function(data) {
+            if (data == 'nodata'){
+                ZENG.msgbox.show('目前没有数据',3);
+            }
+			var datas = JSON.parse(data);
+            //var datas = eval(data);
+            //$('#container').empty();
+			var unit = 3600;
+            //getNumAccess(datas,unit);
+            eval(type + '(datas,unit)');
+        },
+    });
+};
+//getAd();
+//eval('getNumSex()');
+getFilter();
+getData(filter, 'getNumAccess', '');
+getData(filter, 'getNumDistrict', '');
+</script>
+
+
+
+
+<script type="text/javascript" charset="utf-8">
+ZENG.msgbox.hide();
+$('.loadpage').click(function(){
+    ZENG.msgbox.show('载入中...',6);
+    $('.container-fluid').load($(this).attr('linkhref'));
+})
+</script>

@@ -1,0 +1,90 @@
+﻿<div class="page-header" ng-controller="StatsController">
+    <h1>
+        统计分析
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            <span ng-if="dataSource== 'wb'">私信规则分析</span>
+            <span ng-if="dataSource== 'wx'">自行回复分析</span>
+        </small>
+    </h1>
+</div>
+<div class="row" ng-controller="StatsController" ng-init="getRuleStats()">
+    <div class="col-xs-12">
+        <div class="well well-sm form-inline clearfix">
+            <div class="pull-left col-xs-4 col-sm-3">
+                <select ng-show="dataSource=='wb'" ng-options="i.id as i.screen_name for i in accounts" ng-model="selectedAccount" ng-change="getRuleStats()">
+                    <option value="">--切换账号--</option>
+                </select>
+                <select ng-show="dataSource=='wx'" ng-options="i.id as i.nickname for i in accounts" ng-model="selectedAccount" ng-change="getRuleStats()">
+                    <option value="">--切换账号--</option>
+                </select>
+            </div>
+            <div class="pull-right" style="margin-left:20px">
+                <button class="btn btn-primary btn-sm" ng-click="getRuleStats()">确定</button>
+            </div>
+            <div class="pull-right input-daterange input-group col-xs-6 col-sm-4">
+                <span>
+                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="startDt" is-open="startOpened" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="关闭" clear-text="清除" current-text="今天" ng-click="open($event, 'startOpened', 'endOpened')" placeholder="选择开始日期"/>
+                </span>
+                <span class="input-group-addon">
+                    <i class="fa fa-exchange"></i>
+                </span>
+                <span>
+                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="endDt" is-open="endOpened" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="关闭" clear-text="清除" current-text="今天" ng-click="open($event, 'endOpened', 'startOpened')" placeholder="选择结束日期"/>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 widget-container-col">
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h5 class="widget-title" ng-if="dataSource== 'wb'">私信规则触发</h5>
+                        <h5 class="widget-title" ng-if="dataSource== 'wx'">微信规则触发</h5>
+                    </div>
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div id="rule_stats" ng-if="dataSource == 'wb">
+                            {{statsEmpty}}</div>
+                            <div ng-if="dataSource == 'wx'">
+                                <div ng-if="wx_rule == ''">{{statsEmpty}}</div>
+                                <table class="table table-bordered" ng-if="wx_rule != ''">
+                                    <thead>
+                                    <tr>
+                                    <th>序号</th><th>规则</th><th>触发量</th><th>序号</th><th>规则</th><th>触发量</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="val in wx_rule">
+                                    <td>{{val[0].index}}</td>
+                                    <td>{{val[0].rule_name}}</td>
+                                    <td>{{val[0].rule_number}}</td>
+                                    <td ng-if="val[1].rule_name != null">{{val[1].index}}</td>
+
+                                    <td>{{val[1].rule_name}}</td>
+                                    <td>{{val[1].rule_number}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-init="showMsgKeywordColumn()">
+            <div class="col-xs-12 widget-container-col">
+                <div class="widget-box">
+                    <div class="widget-header">
+                        <h5 class="widget-title" ng-if="dataSource== 'wb'">私信规则关键词触发</h5>
+                        <h5 class="widget-title" ng-if="dataSource== 'wx'">微信规则关键词触发</h5>
+                    </div>
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <div id="keyword_stats">{{statsEmpty}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

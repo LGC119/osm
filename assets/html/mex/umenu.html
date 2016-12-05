@@ -1,0 +1,557 @@
+<div class="page-header">
+    <h1>
+        微信自动回复规则
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            自定义菜单
+        </small>
+    </h1>
+</div>
+<style>
+    .m_t_10 {
+        margin-top: 10px;
+    }
+
+    .input {
+        width: 100px;
+    }
+
+    .w_200 {
+        width: 200px;
+    }
+
+    .m_w_250 {
+        min-width: 250px;
+        overflow: hidden;
+    }
+
+    .con {
+        width: 100%;
+        margin-top: 10px;
+        border: 1px solid #C0C0C0;
+    }
+
+    .con_title {
+        color: #333333;
+        background: #CDCDCD;
+        font-weight: bold;
+        padding: 5px;
+    }
+
+    .f_l {
+        float: left;
+    }
+
+    .f_r {
+        float: right;
+    }
+
+    table input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
+        cursor: not-allowed;
+        background-color: #eee;
+    }
+</style>
+<div data-ng-controller="UmenuController">
+<h2>菜单结构</h2>
+<table class="table umenu-list">
+<tr>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单1</span>
+            <input type="text" ng-disabled="isDisabled" class="input" data-ng-model="menu.button[0].name"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[0].type,menu.button[0],'menu1')" data-ng-model="menu.button[0].type">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[0].url}}" target="_blank" data-ng-model="menu.button[0].url">
+                    {{menu.button[0].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单2</span>
+            <input ng-disabled="isDisabled" type="text" class="input" data-ng-model="menu.button[1].name"/>
+            <select ng-disabled="isDisabled" ng-change="change(menu.button[1].type,menu.button[1],'menu2')"
+                    name="buttonType" data-ng-model="menu.button[1].type">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[1].url}}" target="_blank" data-ng-model="menu.button[1].url">
+                    {{menu.button[1].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单3</span>
+            <input ng-disabled="isDisabled" type="text" class="input" data-ng-model="menu.button[2].name"/>
+            <select ng-disabled="isDisabled" ng-change="change(menu.button[2].type,menu.button[2],'menu3')"
+                    name="buttonType" data-ng-model="menu.button[2].type">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[2].url}}" target="_blank" data-ng-model="menu.button[2].url">
+                    {{menu.button[2].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单1_1</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[0]['sub_button'][0]['name']"/>
+            <select ng-disabled="isDisabled"
+                    ng-change="change(menu.button[0]['sub_button'][0].type,menu.button[0]['sub_button'][0],'menu1_1')"
+                    name="buttonType" data-ng-model="menu.button[0]['sub_button'][0]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[0]['sub_button'][0]['url']}}" target="_blank"
+                   data-ng-model="menu.button[0]['sub_button'][0]['url']">
+                    {{menu.button[0]['sub_button'][0]['url']}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单2_1</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[1]['sub_button'][0]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[1]['sub_button'][0].type,menu.button[1]['sub_button'][0],'menu2_1')"
+                    data-ng-model="menu.button[1]['sub_button'][0]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[1]['sub_button'][0].url}}" target="_blank"
+                   data-ng-model="menu.button[1]['sub_button'][0].url">
+                    {{menu.button[1]['sub_button'][0].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单3_1</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[2]['sub_button'][0]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[2]['sub_button'][0].type,menu.button[2]['sub_button'][0],'menu3_1')"
+                    data-ng-model="menu.button[2]['sub_button'][0]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[2]['sub_button'][0].url}}" target="_blank"
+                   data-ng-model="menu.button[2]['sub_button'][0].url">
+                    {{menu.button[2]['sub_button'][0].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单1_2</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[0]['sub_button'][1]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[0]['sub_button'][1].type,menu.button[0]['sub_button'][1],'menu1_2')"
+                    data-ng-model="menu.button[0]['sub_button'][1]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[0]['sub_button'][1].url}}" target="_blank"
+                   data-ng-model="menu.button[0]['sub_button'][1].url">
+                    {{menu.button[0]['sub_button'][1].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单2_2</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[1]['sub_button'][1]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[1]['sub_button'][1].type,menu.button[1]['sub_button'][1],'menu2_2')"
+                    data-ng-model="menu.button[1]['sub_button'][1]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[1]['sub_button'][1].url}}" target="_blank"
+                   data-ng-model="menu.button[1]['sub_button'][1].url">
+                    {{menu.button[1]['sub_button'][1].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单3_2</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[2]['sub_button'][1]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[2]['sub_button'][1].type,menu.button[2]['sub_button'][1],'menu3_2')"
+                    data-ng-model="menu.button[2]['sub_button'][1]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[2]['sub_button'][1].url}}" target="_blank"
+                   data-ng-model="menu.button[2]['sub_button'][1].url">
+                    {{menu.button[2]['sub_button'][1].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单1_3</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[0]['sub_button'][2]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[0]['sub_button'][2].type,menu.button[0]['sub_button'][2],'menu1_3')"
+                    data-ng-model="menu.button[0]['sub_button'][2]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[0]['sub_button'][2].url}}" target="_blank"
+                   data-ng-model="menu.button[0]['sub_button'][2].url">
+                    {{menu.button[0]['sub_button'][2].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单2_3</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[1]['sub_button'][2]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[1]['sub_button'][2].type,menu.button[1]['sub_button'][2],'menu2_3')"
+                    data-ng-model="menu.button[1]['sub_button'][2]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[1]['sub_button'][2].url}}" target="_blank"
+                   data-ng-model="menu.button[1]['sub_button'][2].url">
+                    {{menu.button[1]['sub_button'][2].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单3_3</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[2]['sub_button'][2]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[2]['sub_button'][2].type,menu.button[2]['sub_button'][2],'menu3_3')"
+                    data-ng-model="menu.button[2]['sub_button'][2]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[2]['sub_button'][2].url}}" target="_blank"
+                   data-ng-model="menu.button[2]['sub_button'][2].url">
+                    {{menu.button[2]['sub_button'][2].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单1_4</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[0]['sub_button'][3]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[0]['sub_button'][3].type,menu.button[0]['sub_button'][3],'menu1_4')"
+                    data-ng-model="menu.button[0]['sub_button'][3]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[0]['sub_button'][3].url}}" target="_blank"
+                   data-ng-model="menu.button[0]['sub_button'][3].url">
+                    {{menu.button[0]['sub_button'][3].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单2_4</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[1]['sub_button'][3]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[1]['sub_button'][3].type,menu.button[1]['sub_button'][3],'menu2_4')"
+                    data-ng-model="menu.button[1]['sub_button'][3]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[1]['sub_button'][3].url}}" target="_blank"
+                   data-ng-model="menu.button[1]['sub_button'][3].url">
+                    {{menu.button[1]['sub_button'][3].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单3_4</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[2]['sub_button'][3]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[2]['sub_button'][3].type,menu.button[2]['sub_button'][3],'menu3_4')"
+                    data-ng-model="menu.button[2]['sub_button'][3]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[2]['sub_button'][3].url}}" target="_blank"
+                   data-ng-model="menu.button[2]['sub_button'][3].url">
+                    {{menu.button[2]['sub_button'][3].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单1_5</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[0]['sub_button'][4]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[0]['sub_button'][4].type,menu.button[0]['sub_button'][4],'menu1_5')"
+                    data-ng-model="menu.button[0]['sub_button'][4]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[0]['sub_button'][4].url}}" target="_blank"
+                   data-ng-model="menu.button[0]['sub_button'][4].url">
+                    {{menu.button[0]['sub_button'][4].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单2_5</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[1]['sub_button'][4]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[1]['sub_button'][4].type,menu.button[1]['sub_button'][4],'menu2_5')"
+                    data-ng-model="menu.button[1]['sub_button'][4]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[1]['sub_button'][4].url}}" target="_blank"
+                   data-ng-model="menu.button[1]['sub_button'][4].url">
+                    {{menu.button[1]['sub_button'][4].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+    <td width="33%">
+        <div class="m_w_250">
+            <span>菜单3_5</span>
+            <input ng-disabled="isDisabled" type="text" class="input"
+                   data-ng-model="menu.button[2]['sub_button'][4]['name']"/>
+            <select ng-disabled="isDisabled" name="buttonType"
+                    ng-change="change(menu.button[2]['sub_button'][4].type,menu.button[2]['sub_button'][4],'menu3_5')"
+                    data-ng-model="menu.button[2]['sub_button'][4]['type']">
+                <option value="click">点击</option>
+                <option value="view">跳转</option>
+            </select>
+
+            <div class="m_t_10 w_200">
+                <a href="{{menu.button[2]['sub_button'][4].url}}" target="_blank"
+                   data-ng-model="menu.button[2]['sub_button'][4].url">
+                    {{menu.button[2]['sub_button'][4].url}}
+                </a>
+            </div>
+        </div>
+    </td>
+</tr>
+</table>
+<span class="btn btn-lg btn-primary pull-right" data-ng-click="save()">保存</span>
+<span class="btn btn-lg btn-danger pull-right" data-ng-click="edit()">{{editText}}</span>
+
+<hr style="margin-top: 90px;"/>
+
+<h2 style="margin-top: 30px;">菜单内容</h2>
+
+<div id="accordion" class="accordion-style1 panel-group">
+    <div class="panel panel-default" data-ng-repeat="menuV in menuKey">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion"
+                   href="#collapse{{menuV.key}}">
+                    <i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down"
+                       data-icon-show="ace-icon fa fa-angle-right"></i>
+                    {{menuV.pro_name}}
+                </a>
+            </h4>
+        </div>
+
+        <div class="panel-collapse collapse" id="collapse{{menuV.key}}" style="height: 0px;">
+            <div class="panel-body">
+                <div style="width: 100%;">
+                    <span class="btn btn-sm" data-ng-click="showMediaModal('text',menuV.key)">文本</span>
+                    <span class="btn btn-sm" data-ng-click="showMediaModal('image',menuV.key)">图片</span>
+                    <span class="btn btn-sm" data-ng-click="showMediaModal('news',menuV.key)">单图文</span>
+                    <span class="btn btn-sm" data-ng-click="showMediaModal('articles',menuV.key)">多图文</span>
+                    <span class="btn btn-sm" data-ng-click="showMediaModal('voice',menuV.key)">语音</span>
+                    <span class="btn btn-md btn-danger" style="float: right"
+                          data-ng-click="delete_rule(menuV.key)">删除</span>
+                    <span class="btn btn-md btn-primary" style="float: right;"
+                          data-ng-click="send_save(menuV.key)">保存</span>
+                </div>
+                <div class="f_l con con_title">文本</div>
+                <div class="f_l con" style="margin-top: 0;border-top: 0">
+                    <div class="f_l" style="width: 100%;" data-ng-repeat="text in menuData[menuV.key]['text']">
+                        <div class="f_l" style="width: 250px;height: 50px;margin: 6px;margin-top: 0;padding: 5px;">
+                            文本内容：{{text.content}} <br/>
+                            创建时间：{{text.created_at | date: 'yyyy-MM-dd HH:mm:ss'}}
+                        </div>
+                        <span class="btn f_r" style="margin-right: 20px;margin-top: 10px;"
+                              data-ng-click="delete('text',text.mediaid,menuV.key)">删除</span>
+                    </div>
+                </div>
+                <div class="f_l con con_title">图片</div>
+                <div class="f_l con" style="margin-top: 0;border-top: 0">
+                    <div class="f_l" style="width: 100%;" data-ng-repeat="image in menuData[menuV.key]['image']">
+                        <div class="f_l" style="width: 250px;height: 160px;margin: 6px;margin-top: 0;padding: 5px;">
+                            <img width="200" height="120" ng-src="{{image.filepath}}" alt=""/> <br/>
+
+                            <p></p>
+                            创建时间：{{image.created_at}}
+                        </div>
+                        <span class="btn f_r" style="margin-right: 20px;margin-top: 55px;"
+                              data-ng-click="delete('image',image.mediaid,menuV.key)">删除</span>
+                    </div>
+                </div>
+                <div class="f_l con con_title">单图文</div>
+                <div class="f_l con" style="margin-top: 0;border-top: 0">
+                    <div class="f_l" style="width: 100%;" data-ng-repeat="news in menuData[menuV.key]['news']">
+                        <div class="f_l" style="width: 250px;height: 220px;margin: 6px;margin-top: 0;padding: 5px;">
+                            <img width="200" height="120" ng-src="{{news.filepath}}" alt=""/> <br/>
+
+                            <p></p>
+                            标题： {{news.title}} <br/>
+
+                            <p></p>
+                            上传时间： {{news.created_at}} <br/>
+
+                            <p></p>
+                            过期时间： {{news.updated_at}}
+                        </div>
+                        <span class="btn f_r" style="margin-right: 20px;margin-top: 85px;"
+                              data-ng-click="delete('news',news.mediaid,menuV.key)">删除</span>
+                    </div>
+                </div>
+                <div class="f_l con con_title">多图文</div>
+
+                <div class="f_l con" style="margin-top: 0;border-top: 0">
+                    <div class="f_l" style="width: 100%;" data-ng-repeat="articles in menuData[menuV.key]['articles']">
+                        <div class="widget-box widget-box-me">
+                            <div class="widget-body">
+                                <div class="widget-main"
+                                     style="overflow: hidden;border-bottom: 1px solid #cccccc;"
+                                     data-ng-repeat="item1 in articles.data">
+                                    <span style="float:left;width: 40%;height:60px;white-space:normal;word-break:break-all;">
+                                        {{item1.title}}
+                                    </span>
+                                    <span style="overflow:hidden;">
+                                        <img style="width: 20%;height:60px;" ng-src="uploads/images/{{item1.filename}}"
+                                             alt=""/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="opt-btn" style="text-align: center">
+                                <a href="javascript:;" data-ng-click="delete('articles',articles.mediaid,menuV.key)">
+                                    <i title="删除" class="ace-icon fa bigger-140">删除</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="f_l con con_title">语音</div>
+                <div class="f_l con" style="margin-top: 0;border-top: 0">
+                    <div class="f_l" style="width: 100%;" data-ng-repeat="voice in menuData[menuV.key]['voice']">
+                        <div class="f_l" style="width: 250px;height: 90px;margin: 6px;margin-top: 0;padding: 5px;">
+                            <button class="btn btn-sm">
+                                <a href="{{voice.filepath}}">播放语音</a> >>
+                            </button>
+                            <br/>
+
+                            <p></p>
+                            上传时间： {{voice.created_at}}
+                        </div>
+                        <span class="btn f_r" style="margin-right: 20px;margin-top: 20px;"
+                              data-ng-click="delete('voice',voice.mediaid,menuV.key)">删除</span>
+                    </div>
+                </div>
+                <!--{{menuV.name}} {{menuV.key}}-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="editModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">填写链接URL</h3>
+    </div>
+    <div class="modal-body">
+        <input type="text" data-ng-model="boxValue.editValue" class="form-control"/>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">确定</button>
+        <button class="btn btn-warning" ng-click="cancel()">取消</button>
+    </div>
+</script>
+</div>

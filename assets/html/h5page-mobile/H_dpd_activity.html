@@ -1,0 +1,519 @@
+
+    <div class="content" style="margin-top:30px;">
+    	<div class="row-fluid" style="display:none">
+    		<div class="span12">
+                <div id="name" style="float:right;display:none;">
+                    <button class="btn btn-success changeTemplateClass" tpl="normal" >
+                    普通模板</button>
+                    <button class="btn btn-success changeTemplateClass" tpl="application" >
+                    应用场景</button>
+                    <select id="changeTemplateClass" style="margin:0;">
+                        <option value="NULL" disabled selected >请选择行业模板</option>
+                        <option value="car" > &nbsp; |--汽车</option >
+                        <option value="hotel"     > &nbsp; |--酒店</option >
+                        <option value="zhoudafu"     > &nbsp; |--周大福</option >
+                        <option value="4"     > &nbsp; |--行业类型4</option >
+                    </select>
+                </div>
+    		</div>
+    	</div>
+    	<div class="row-fluid">
+            <div class="span8"><!-- Span8 Start -->
+		
+                <link rel="stylesheet" href="../css/h5page/h5_app.css" media="screen">
+                <div id="phone-c" style="width: 320px; height: 568px;">
+                    <div id="phone-skin" style="margin-left: 20%;">
+                        <div id="phone" style="width: 320px; height: 568px;">
+                            <div id="phone-drop" class="sized droptarget ui-droppable" style="width: 320px; height: 568px; display: none;"> </div>
+                            <div class="content sized" style="width: 320px; height: 568px;">
+                                <div class="relative">
+                                    <iframe id="mobile-frame" srcT="../../php/index.php/h5page/wxh5_ext/mobile?tpl=101draw"  >
+                                    </iframe>
+                                </div>
+                                <div id="test-frame-wrapper" class="relative-test" style="display: none">
+                                    <iframe id="test-frame" src="about:blank">
+                                        <html>
+                                        <head></head>
+                                        <body></body>
+                                        </html>
+                                    </iframe>
+                                </div>
+                                <div id="iframe-cover" class=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    		</div><!-- Span8 End -->
+            <div class="span4">
+                <!-- <a class="btn btn-success btn-large" style="displayT:none;" id="publish" template="" href="#">发布页面</a> -->
+                <a id="modal-adtag" href="#modal-container-adtag" role="button" class="btn btn-success btn-large" data-toggle="modal">发布页面</a>
+				<div id="tplclass">
+					<!-- ===========A Template Start ====================================  -->
+					<h2>信息模板&nbsp;<a class="btn btn-success changeTemplate" tpl="104info" href="#">使用</a></h2>
+					<p class="">最简单的图文形式快速发布相关信息，在底部配有广告链接编辑。</p><hr/>
+				<!-- ===========A Template   End ====================================  -->
+				<!-- ===========A Template Start ====================================  -->
+					<h2>抽奖模板&nbsp;<a class="btn btn-success changeTemplate" tpl="101draw" href="#">使用</a></h2>
+					<p>最有吸引力的活动形式之一，微信用户只需最简单的操作就可以参与，后台可以对参与者进行分析统计与管理。</p><hr/>
+				<!-- ===========A Template   End ====================================  -->
+				<!-- ===========A Template Start ====================================  -->
+					<h2>试用模板&nbsp;<a class="btn btn-success changeTemplate" tpl="102try" href="#">使用</a></h2>
+					<p>有效的客户体验产品的方式，适合快速消费类、化妆品、电商、零售或服务类等轻量化产品行业使用。</p><hr/>
+				<!-- ===========A Template   End ====================================  -->
+				<!-- ===========A Template Start ====================================  -->
+					<h2>调研模板&nbsp;<a class="btn btn-success changeTemplate" tpl="103survey" href="#">使用</a></h2>
+					<p>了解用户想法最直接有效的方法，几个选择就可以轻松的实现与客户的沟通，当然最好能留些小奖励。</p><hr/>
+				<!-- ===========A Template   End ====================================  -->
+
+
+
+				</div>
+<!-- ===============================================  -->
+    		 </div>
+    	</div>
+ <!-- ===========遮罩弹框 Start========================== -->            
+    			<a style="display:none" id="modal-window" href="#modal-container-window" role="button" class="btn" data-toggle="modal">触发窗体</a>
+    			<div id="modal-container-window" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    			    <div class="modal-header">
+    					 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    					    <h3 id="myModalLabel">标题栏</h3>
+    				</div>
+    				<div id="window" class="modal-body">
+    					<p id="window-content" ></p>
+                        <center><button id="choosepic" class="btn" style="display:none;">选择图片</button> 
+                        &nbsp; 
+                        &nbsp; 
+                        <button id="picupload" class="btn" style="display:none;">上传</button></center>
+                        <center>
+                            <div id="addselect" class="form-horizental" style="display:none;">
+                                <div class="control-group">
+                                    <label class="control-label" for="title">修改选项：</label>
+                                    <div class="controls" id="optionlist">
+                                        <span class="oneselection"><input class='optiontxt' value="选择项" type="text" /> &nbsp; <span class="label label-important removeme">&nbsp;-&nbsp;</span><br/></span>
+                                    </div>
+                                        <span id="addoption" class="btn btn-success">+</span><br/>
+                                </div>
+                            </div>
+                        </center>
+                        <div id="showedit" style="display:none">
+                            <textarea id="mykeditor" style="height:150px;" id="content" style=""  ></textarea>
+                        </div>
+    				</div>
+    				<div class="modal-footer">
+    					 <button class="btn closethis" data-dismiss="modal" aria-hidden="true">取消</button> <button id="ok"  class="btn btn-success"  data-dismiss="modal" aria-hidden="true" >OK</button>
+    				</div>
+    			</div>
+ <!-- ===========遮罩弹框 End ========================== -->   
+<!-- ===========遮罩弹框 广告选择 ========================== -->   
+            <a id="modal-selectads" href="#modal-container-selectads" role="button" class="btn" data-toggle="modal" style="display:none;">AdsSelect</a>
+            <div id="modal-container-selectads" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">选择广告</h3>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <table id="adlist" class="table  table-hover table-condensed" >
+                            <tr>
+                                <th>名称</th><th>点击数</th><th>描述</th><th>图</th>
+                            </tr>
+                            <tr>
+                                
+                            </tr>
+                        </table>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                     <button id="insertAds" class="btn btn-primary" data-dismiss="modal" aria-hidden="true" >插入广告</button>
+                </div>
+            </div>
+ <!-- ===========遮罩弹框 广告选择 End ========================== -->   
+ <!-- ===========遮罩弹框 标签设定  ========================== -->   
+            <div id="modal-container-adtag" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">
+                        标签选择
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <form id="tagbox" class="form-inline">
+                        <div class="tabbable tabs-left"  id="adtagbox">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                     <!-- <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>  -->
+                     <!-- <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">保存设置</button> -->
+                     <a class="btn btn-primary" data-dismiss="modal" aria-hidden="true" id="publish" template="" href="#">发布页面</a>
+                </div>
+            </div>
+ <!-- ===========遮罩弹框 标签设定 End ========================== -->   
+    </div>   <!-- End of div class="content" -->
+<script type ="text/javascript" charset="utf-8">
+ZENG.msgbox.hide();
+    $(function() {
+        $('#publish').on('click', function(){
+            var htmlss = new Array();
+            $('#mobile-frame').contents().find('.changex').each(function(k,v){
+                 var idx = $(this).attr('idx');
+                 var typex = $(this).attr('typex');
+                 if (typeof(typex) == 'string'){
+                    switch(typex){
+                        case "text":
+                            htmlss[idx] = $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').text();
+                            break;
+                        case "img":
+                            htmlss[idx] = $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').attr('src');
+                            break;
+                        case "rich":
+                            htmlss[idx] =  $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').html();
+                            if (htmlss[idx] == '<b style="color:red;">广告位:如不需要，请清空内容,<br/>可追踪广告点击</b>'){
+                                htmlss[idx] = '';
+                            }
+                            break;
+                        case "value":
+                            htmlss[idx] = $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').val();
+                            break;
+                        case "tip":
+                            htmlss[idx] = $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').attr('placeholder');
+                            break;
+                        case "radio":
+                            break;
+                        case "select":
+                           var tmp = new Array();
+                            $('#mobile-frame').contents().find('.changex[idx="'+idx+'"] .optionx').each(function(k,v){
+                               tmp[k] = $(this).val();
+                            });
+                            htmlss[idx] = tmp;
+                            break;
+                        case "option":
+                            htmlss[idx] = 'option:none';
+                            break;
+                        case "check":
+                           var tmp = new Array();
+                            $('#mobile-frame').contents().find('.changex[idx="'+idx+'"] input').each(function(k,v){
+                               tmp[k] = $(this).attr('checkname');
+                            });
+                            htmlss[idx] = tmp;
+                            break;
+                        case "ads":
+                            htmlss[idx] =  $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').html();
+                            if (htmlss[idx] == '<center><b style="color:red;">点击以添加广告位</b></center>'){
+                                htmlss[idx] = '';
+                            }
+                            break;
+                    };  //End Switch
+                 };
+            });
+            var titlename = $('#mobile-frame').contents().find('#htmltitle').text();
+            var template = $('#publish').attr('template');
+            $.ajax({
+            	type     : "POST",
+	            url      :  _c.baseUrl + 'getdata/e_h5page-wxh5.json?method=publish',
+            	datatype : 'json',
+            	data     : {'html' : htmlss, 'name' : titlename, 'template' : template, 'tag' : $('#tagbox').serialize()},
+            	//timeout  : 2000,
+            	success  : function(rval) {
+                    //alert('生成地址：' + getpath() + '/index.php/wxh5_ext/go/' + rval);
+                    eval('var info=' + rval);
+                    if (info == 'ok') {
+                        ZENG.msgbox.show('发布成功',4,2000);
+                    };
+            	},
+            });
+        });
+
+        $('.content').on('click', '.modal-backdrop', function(){
+            $('#showedit').css('display','none');
+            $('#picupload').css('display','none');
+            $('#choosepic').css('display','none');
+            $('#addselect').css('display','none');
+        });
+
+        $('.content').on('click', '.changeTemplate', function(){
+             var tpl = $(this).attr('tpl');
+             //$('.span8').html('');
+             $('#publish').attr('template', tpl);
+             //$('.span8').load( 'h5page/template/tpl_' + tpl + '_pre.html');
+             $('#mobile-frame').attr('src', '../../php/index.php/h5page/wxh5_ext/mobile?tpl=' + tpl);
+             $('.changeTemplate').removeClass('btn-success');
+             $(this).addClass('btn-success');
+             //$('#publish').show()
+			
+         });
+
+        $('.content').on('click','.changeTemplateClass', function() {
+		
+            var tpl = $(this).attr('tpl');
+            $('#tplclass').html('');
+            $('#tplclass').load( '../h5page/tpls_' + tpl + '_TemplateClass.html');
+        });
+        $('#changeTemplateClass').on('change', function() {
+            var tpl = $(this).select().val();
+            $('#tplclass').html('');
+            $('#tplclass').load( '../h5page/tpls_' + tpl + '_TemplateClass.html');
+        });
+
+        $('.content').on('click', '.chooseTplClass', function(){
+            $('.chooseTplClass').removeClass('btn-primary');
+            $(this).addClass('btn-primary');
+        });
+
+        $('.content').on('click', '#addoption', function(){
+            $('#optionlist').append('<span class="oneselection"><input class="optiontxt" value="选择项" type="text" /> &nbsp; <span class="label label-important removeme">&nbsp;-&nbsp;</span><br/></span>');
+        });
+
+        $('#modal-container-window').on('click', '.removeme', function() {
+            $(this).parent('.oneselection').remove();
+        });
+
+        $('.content').on('click', '#ok', function(){
+            //var idx = $('#txtform').attr('idx');
+            //var typex = $('#txtform').attr('typex');
+            var idx = $('#txtform2').attr('idx');
+            var typex = $('#txtform2').attr('typex');
+            switch(typex){
+                case "text":
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').text($('#title').val());
+                    break;
+                case "img":
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').attr('src', $('#newimg').attr('src'));
+                    $('#picupload').css('display','block');
+                    break;
+                case "rich":
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').html(editor.html());
+                    break;
+                case "value":
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').val($('#title').val());
+                    break;
+                case "tip":
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').attr('placeholder', $('#title').val());
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').attr('name', $('#title').val());
+                    break;
+                case "radio":
+                    var html = '';
+                        for (i = $('#title').val(); i > 0; i--) {
+                            html += '<input id="radio'+i+'" name="radio'+i+'"  data-theme="c" type="radio" ><label for="radio'+i+'" ><span class="changex" typex="text">试用'+i+'</span></label>'
+                        }
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').contents().find('input,label').remove();
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').append(html);
+                    document.getElementById('#mobile-frame').contentWindow.refreshthis('.changex[idx="'+idx+'"]');
+                    break;
+                case "select":
+                    var i;
+                    var html = '';
+                    $('.optiontxt').each(function(k,v) {
+                        i = $(this).val();
+                        html += '<option value="'+i+'"  class="optionx" >'+i+'</option>'
+                    });
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').empty();
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').append(html);
+                    break;
+                case "option":
+                        var html = '';
+                    $('#options > input').each(function(k,v){
+                        html += '<option value="'+$(this).val()+'" class="optionx"  >'+$(this).val()+'</option>'
+                    });
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').empty();
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').append(html);
+                    break;
+                case "check":
+                    var i;
+                    var html = '';
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').empty();
+                    $('.optiontxt').each(function(k,v) {
+                        i = $(this).val();
+                        html += '<input data-role="none"  name="checkbox' + k + '" checkname="' + i + '" type="checkbox">' + i + ' <br/>';
+                    });
+                    $('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').append(html);
+                    //$('#mobile-frame').contents().find('.changex[idx="'+idx+'"]').trigger('create')
+                    //$('#mobile-frame').contents().find('#multiselect').trigger('create');
+                    break;
+            };  //End Switch
+            $('#showedit').css('display','none');
+            $('#picupload').css('display','none');
+            $('#choosepic').css('display','none');
+            $('#addselect').css('display','none');
+        });
+
+        $('#tester').click(function(){
+            alert($('#fileupload').val());
+        });
+
+        $('.content').on('click', '#choosepic', function(){
+            $('#fileupload').trigger('click');
+            $('#picupload').show();
+        });
+
+        //发布之前加标签
+        $('.content').on('click', '#pre-publish', function(){
+            $('#publish').trigger('click');
+        });
+
+        $('.content').on('click', '#picupload', function(){
+            //$(this).text('上传中，请稍后...')
+            $('#picupload').text('上传中，请稍后...');
+            $('#picform').submit();
+            $('#picupload').hide();
+            $('#picupload').text('上传');
+        });
+
+        //$('.content').on('chagne', '#fileupload', function(){
+        $('#fileupload').change( function(){
+            $('#picpath').html( '<center>图片路径： ' + $('#fileupload').val() + '</center>');
+
+            //====================================
+           // $('#picupload').text('上传中，请稍后...');
+           // $('#picform').submit();
+           // $('#picupload').text('上传');
+           // $('#picupload').css('display','none');
+           // $('#picupload').hide();
+            //====================================
+            return false;
+        });
+
+        //读取广告列表
+        var adList = {};
+        function getAdList(filter) {
+            $.ajax({
+                type     : "POST",
+                url      :  _c.baseUrl + 'getdata/e_h5page-h5ads.json?method=getAdList',
+                datatype : 'json',
+                data     : {'filter' : filter},
+                //timeout  : 2000,
+                async : false,  //同步请求
+                success  : function(data) {
+                    datas = JSON.parse(data);
+                    adList = datas;
+                    var tmpList = '';
+                    $.each(adList,function(k,v){
+                        var imgss = '';
+                        if (v.img != ''){
+                            imgss = '<span class="label label-warning">图</span>';
+                        } 
+                        tmpList += '<tr class="selectAds" adsid="' + v.id + '""  k="' + k + '"" style="text-align:center" ><td>' + v.name + '</td><td>' + v.count + '</td><td>' + v.desc + '</td><td>' + imgss + '</td></tr>';
+                    });
+                    $('#adlist').append(tmpList);
+                },
+            });
+        };
+        getAdList();
+        $('.content').on('click', '.selectAds', function(){
+            $('.selectAds').removeClass('success');
+            $(this).toggleClass('success');
+        });
+        $('.content').on('click', '#insertAds', function(){
+            var id = $('tr.success').attr('k');
+            ad = adList[id];
+            if (ad.img == '') {
+                html = '<center><a href="' + ad.url + '" type="adv"  adid="' + ad.id + '"  target="_blank">' + ad.desc + '</a></center>';
+            } else {
+                 html = '<a href="' + ad.url + '" type="adv" adid="' + ad.id + '"  target="_blank"><img src="' + ad.img + '"  title="' + ad.desc + '" style="width:100%;"  /></a>';
+            }
+            $('#mobile-frame').contents().find('.changex[typex="ads"]').empty();
+            $('#mobile-frame').contents().find('.changex[typex="ads"]').append(html);
+            $('#mobile-frame').contents().find('.changex[typex="ads"]').css('background-color','');
+        });
+
+        var templateTags={}; //MEX的特征标签存储
+        //读取标签列表
+        $('.content').on('click', '#modal-adtag', function(){
+            $.ajax({
+                type     : "POST",
+                url      :  _c.baseUrl + 'getdata/e_h5page-h5tag.json?method=getTagList',
+                datatype : 'json',
+                data     : {'filter' : '0'},
+                //timeout  : 2000,
+                async : false,  //同步请求
+                success  : function(data) {
+                    datas = JSON.parse(data);
+                    templateTags = datas;
+                    var tmpList = '';
+                    var tagsList ='';
+                    $.each(templateTags[0],function(k,v){
+                        tagsList += '<div class="tab-pane" id="tab'+v.id+'"   >';
+                        if ( $.isArray(templateTags[v.id]) ) {
+                            $.each(templateTags[v.id], function(x,y){
+                                tagsList += '<label class="checkbox" ><input type="checkbox" name="'+y.id+'"  />'+y.name+'</label> &nbsp;  &nbsp;';
+                                '<div class="tab-pane" id="tab2"></div>'
+                            });
+                        }
+                        tagsList += '</div>';
+                        tmpList += '<li  ><a href="#tab'+v.id+'"  data-toggle="tab">'+v.name+'</a></li>';
+                        active = '';
+                    });
+                    //$('#adtagbox');
+                    $('#adtagbox').empty().append('<div class="tabbable"><ul id="myTab" class="nav nav-tabs">' + tmpList + '</ul><div class="tab-content">' + tagsList + '</div></div>' );
+                    $('#myTab a:first').tab('show')
+                    //$('#active_me').toggle('click');
+                },
+            });
+        });
+    });
+$('.changeTemplate').first().trigger('click');
+</script>
+<!-- 文件上传 Start -->
+<form action="../../php/index.php/h5page/wxh5_ext/uploadfiles" method="post"  id="picform" style="display:none;" enctype="multipart/form-data" target="ifrcc">
+    <input id="fileupload" type="file" name="uppic" >
+</form>
+<iframe name="ifrcc" style="display:none;" ></iframe>
+<!-- 文件上传  End -->
+<!-- ===============================================  -->
+<style>
+	form { margin: 0; }
+	textarea { display: block; }
+</style>
+<link rel="stylesheet" href="../plugin/kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="../plugin/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="../plugin/kindeditor/plugins/code/prettify.js"></script>
+<script charset="utf-8" src="../plugin/kindeditor/lang/zh_CN.js"></script>
+<script>
+    function editVal(vals){
+        editor.html(vals);
+    };  
+
+    var editor;
+    $.getScript('../plugin/kindeditor/kindeditor-min.js', function() {
+	    KindEditor.basePath = '../plugin/kindeditor/';
+		editor = KindEditor.create('#mykeditor', {
+            resizeType : 1,
+            themeType : 'simple',
+			allowPreviewEmoticons : false,
+			allowImageUpload : true,
+            width : '500px',
+            height : '300px',
+            formatUploadUrl : false,
+            minWidth : 400,
+            uploadJson : '../../php/index.php/h5page/wxh5_ext/editorUpload/',
+			items : [
+                'fontsize',
+                'forecolor', 'hilitecolor', 
+                '|', 
+                'bold', 'italic', 'underline',
+                'removeformat', '|', 
+                'justifyleft', 'justifycenter', 
+                'justifyright', 'insertorderedlist',
+                'insertunorderedlist',
+                '|', 'image', 'link', 'unlink', 
+                 'source',
+                ],
+        });
+	});
+    ZENG.msgbox.hide();
+    close_shade();
+</script>
+<input id="contenttext" type="hidden" name="textarea" value=""/>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

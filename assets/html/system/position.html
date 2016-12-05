@@ -1,0 +1,133 @@
+<div class="page-header">
+	<h1>
+		系统账号
+		<small>
+			<i class="ace-icon fa fa-angle-double-right"></i>职位管理
+		</small>
+	</h1>
+</div>
+
+<div ng-controller="PositionController" class="row" ng-init="getPositionList()">
+	<div class="col-xs-12">
+		<p><button class="btn btn-sm btn-primary" ng-click="initModal()">添加职位</button></p>
+
+		<!-- 添加和编辑员工的Dialog -->
+		<div class="modal fade" id="createPositionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">{{dTitle}}</h4>
+					</div>
+					<form method="POST" class="form-horizontal" role="form" ng-submit="submitPosition()">
+					<div class="modal-body">
+						<div class="form-group">
+							<label class="col-sm-4 control-label no-padding-right" for="name"> 职位名称 </label>
+							<div class="col-sm-8"><input type="text" ng-model="position.name" ng-disabled="{{isDis}}" name="name" class="col-xs-10 col-sm-4"></div>
+						</div>
+						<div class="clearfix">
+							<h4>菜单权限列表</h4>
+							<!-- 树形菜单 -->
+							<div class="tree tree-selectable col-sm-4">
+								<div ng-if="!menu.list" class="loading">{{menuEmpty}}</div>
+								<!-- 一级菜单 -->
+								<div ng-class="{'tree-item':!menu.tree[sid], 'tree-folder':menu.tree[sid]}" ng-repeat="sid in menu.tree.0">
+									<div class="tree-item-name" ng-if="!menu.tree[sid]" ng-click="getMenuAuth(sid)">{{menu.list[sid].name}}</div>
+									<div class="tree-folder-header" ng-if="menu.tree[sid]" ng-click="showSubMenu(sid)" ng-init="fold[sid]=true">
+										<i ng-class="{'ace-icon':true,'tree-plus':fold[sid],'tree-minus':!fold[sid]}"></i>
+										<div class="tree-folder-name">{{menu.list[sid].name}}</div>
+									</div>
+									<div class="tree-folder-content" ng-if="menu.tree[sid]" ng-show="!fold[sid]">
+										<!-- 二级菜单 -->
+										<div ng-class="{'tree-item':!menu.tree[sid], 'tree-folder':menu.tree[sid]}" ng-repeat="sid in menu.tree[sid]">
+											<div class="tree-item-name" ng-if="!menu.tree[sid]" ng-click="getMenuAuth(sid)">{{menu.list[sid].name}}</div>
+											<div class="tree-folder-header" ng-if="menu.tree[sid]" ng-click="showSubMenu(sid)" ng-init="fold[sid]=true">
+												<i ng-class="{'ace-icon':true,'tree-plus':fold[sid],'tree-minus':!fold[sid]}"></i>
+												<div class="tree-folder-name">{{menu.list[sid].name}}</div>
+											</div>
+											<div class="tree-folder-content" ng-if="menu.tree[sid]" ng-show="!fold[sid]">
+												<!-- 三级菜单 -->
+												<div ng-class="{'tree-item':!menu.tree[sid], 'tree-folder':menu.tree[sid]}" ng-repeat="sid in menu.tree[sid]">
+													<div class="tree-item-name" ng-click="getMenuAuth(sid)">{{menu.list[sid].name}}</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 权限项选择框 -->
+							<div class="col-sm-8">
+								<span ng-if="!menuid">请点击左侧菜单查看权限项</span>
+								<div class="authList" ng-show="menuid>0">
+									<div class="page-header" style="padding:0 0 3px;">
+										<label>
+											<input type="checkbox" class="ace" ng-model="position.menuids[menuid]">
+											<span class="lbl text-primary"> 『 {{menu.list[menuid].name}} 』</span>
+										</label>
+									</div>
+									<p ng-show="!menuAuths||menuAuths.length==0">{{authEmpty}}</p>
+									<ul class="list-unstyled spaced">
+										<li ng-repeat="act in  menuAuths" style="float:left;margin-right:12px;">
+											<label>
+												<input type="checkbox" class="ace" ng-model="position.authids[act.id]">
+												<span class="lbl"> {{act.title}}</span>
+											</label>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="submit" class="btn btn-primary" ng-disabled="editPending">确定</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- 添加和编辑员工的Dialog END -->
+
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>名称</th>
+					<th>添加时间</th>
+					<!-- <th>员工人数</th> -->
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show={{'positions==undefined'}}>
+					<td colspan="10" align="center">{{empty}}</td>
+				</tr>
+				<tr ng-repeat="position in positions">
+					<td>{{position.id}}</td>
+					<td>{{position.name}}</td>
+					<td>{{position.created_at}}</td>
+					<td>
+						<a href="javascript:;" staff-id="{{position.id}}" ng-click="initModal(position)" >编辑</a> |
+						<a href="javascript:;" staff-id="{{position.id}}" ng-click="delete(position.id)" >删除</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<!-- 删除弹窗 -->
+	<div class="bootbox modal fade bootbox-confirm in" tabindex="-1" role="dialog" id="deletecodeBox">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true" style="margin-top: -10px;">×</button>
+					<div class="bootbox-body"><h4>确定删除该职位吗?</h4></div>
+				</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary" ng-disabled="deletePending" ng-click="deleteCfm()">确定</button>
+					</div>
+			</div>
+		</div>
+	</div>
+</div>

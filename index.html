@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html ng-app> 
+<head>
+	<title>ME3.0 - 云点矩阵</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<link rel="stylesheet" href="assets/lib/bootstrap/bootstrap.min.css" />
+	<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="assets/lib/ace/ace.min.css" />
+	<link rel="stylesheet" href="assets/lib/ace/ace-rtl.min.css" />
+	<link rel="stylesheet" href="assets/lib/ace/ace.onpage-help.css" />
+
+	<style type="text/css">
+	body, h1, h2, h3, h4, h5{font-family: "Microsoft YaHei", "Tahoma", "Arial", 'Times New Roman', Times, serif}
+	</style>
+	<!--[if lte IE 9]>
+		<link rel="stylesheet" href="assets/css/ace-part2.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body class="login-layout light-login" ng-controller="login">
+	<div class="main-container">
+		<div class="main-content">
+			<div class="row">
+				<div class="col-sm-10 col-sm-offset-1">
+					<div class="login-container">
+						<div class="center">
+							<h1>
+								<img src="assets/img/logo.png" style="width:100%">
+							</h1>
+							<!-- <h4 class="blue" id="id-company-text">&copy; MasEngine</h4> -->
+						</div>
+
+						<div class="space-6"></div>
+
+						<div class="position-relative">
+							<div id="login-box" class="login-box visible widget-box no-border">
+								<div class="widget-body">
+									<div class="widget-main">
+										<h4 class="header blue lighter bigger" ng-show="!loggedIn">
+											<i class="ace-icon fa fa-coffee"></i>
+											请输入登录信息
+										</h4>
+
+										<div class="space-6"></div>
+										<form name="loginForm" id="loginForm" ng-submit="dologin()" method="POST" ng-show="!loggedIn">
+											<fieldset>
+												<label class="block clearfix">
+													<span class="block input-icon input-icon-right">
+														<input type="text" class="form-control" placeholder="用户名" id="uname" ng-model="pd.uname"  />
+														<i class="ace-icon fa fa-user"></i>
+													</span>
+												</label>
+
+												<label class="block clearfix">
+													<span class="block input-icon input-icon-right">
+														<input type="password" class="form-control" placeholder="密码" id="upass" ng-model="pd.upass"/>
+														<i class="ace-icon fa fa-lock"></i>
+													</span>
+												</label>
+
+												<div class="space"></div>
+
+												<div class="clearfix">
+													<button id="login_btn" type="submit" class="btn btn-primary btn-block">
+														<i class="ace-icon fa fa-key"></i>
+														<span class="bigger-110">登 录</span>
+													</button>
+												</div>
+
+												<div class="space-4"></div>
+											</fieldset>
+										</form>
+										<p ng-show="loggedIn">{{loggedIn}}</p>
+									</div><!-- /.widget-main -->
+								</div><!-- /.widget-body -->
+							</div><!-- /.login-box -->
+						</div><!-- /.position-relative -->
+					</div>
+				</div><!-- /.col -->
+			</div><!-- /.row -->
+		</div><!-- /.main-content -->
+	</div><!-- /.main-container -->	
+	<script type="text/javascript" src="assets/lib/angular/angular.min.js"></script>
+	<script type="text/javascript" src="assets/lib/jquery/jquery.min.js"></script>
+	<script type="text/javascript">
+	function login ($scope, $http)
+	{
+		/* 表单数据初始化 */
+		$scope.pd = {uname:'',upass:''};
+		$scope.showLoginForm = false;
+		/* 登陆检验 */
+		$http({
+			method : 'GET',
+			url : 'app/index.php/gate/has_login'
+		}).success(function(res){
+			if (res != 0) {
+				$scope.loggedIn = '您已经登录，正在为您跳转...';
+				window.location.href='main.html';
+			} else {
+				$scope.showLoginForm = true;
+			}
+		});
+
+		/* 登陆表单提交验证 */
+		$scope.dologin = function () {
+
+			if ( ! $scope.pd.uname.trim()) {
+				alert('请输入用户名！');
+				return false;
+			}
+			if ($scope.pd.upass == undefined || $scope.pd.upass.trim() == '') {
+				alert('请输入密码！');
+				return false;
+			}
+
+			$('#login_btn').val('登录中...').attr('disabled', 'true');
+			$http.post( 
+				'app/index.php/gate/login', 
+				$scope.pd, 
+				{
+					headers : { 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'}, 
+					transformRequest : function (data) {return $.param(data);}
+				}
+			).success(function(data){
+				if (data.error != 0)
+					alert(data.error);
+				else 
+					window.location.href='main.html';
+				$('#login_btn').val('登 录').removeAttr('disabled');
+				return ;
+			}).error(function(){
+				alert('登陆失败，请稍后尝试！');
+				$('#login_btn').val('登 录').removeAttr('disabled');
+				return false;
+			});
+		}
+	}
+	</script>
+</body>
+</html>

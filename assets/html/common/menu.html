@@ -1,0 +1,74 @@
+<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+	<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+		<a href="#/h5page-create/0" class="btn btn-success" title="创建H5活动页面">
+			<i class="ace-icon fa fa-file-o"></i>
+		</a>
+
+		<a href="#/tag" class="btn btn-info" title="标签管理">
+			<i class="ace-icon fa fa-tags"></i>
+		</a>
+		<!-- #section:basics/sidebar.layout.shortcuts -->
+		<a href="#/media/news/" class="btn btn-warning" title="素材管理">
+			<i class="ace-icon fa fa-cube"></i>
+		</a>
+
+		<a class="btn btn-danger">
+			<i class="ace-icon fa fa-cogs"></i>
+		</a>
+		<!-- /section:basics/sidebar.layout.shortcuts -->
+	</div>
+	
+</div>
+<ul class="nav nav-list">
+	<!-- 一级菜单 -->
+	<li ng-repeat="menu in menus">
+		<!-- 无二级菜单链接 -->
+		<a href="#/{{menu.url}}" ng-show="menu.url" ng-click="showCurrentMenu(menu.url)">
+			<i class="menu-icon fa {{menu.icon}}"></i>
+			<span class="menu-text">
+				{{menu.name}}
+			</span>
+		</a>
+		<!-- 有二级菜单 -->
+		<a href="javascript:;" ng-show="!menu.url" class="dropdown-toggle">
+			<i class="menu-icon fa {{menu.icon}}"></i>
+			<span class="menu-text">
+				{{menu.name}}
+			</span>
+			<b class="arrow fa fa-angle-down" ng-show="menu.cmenu"></b>
+		</a>
+		<!-- 二级菜单 -->
+		<b class="arrow"></b>
+		<ul class="submenu">
+			<li ng-repeat="cm in menu.cmenu">
+				<!-- 无三级菜单链接 -->
+				<a href="#/{{cm.url}}" ng-show="cm.url" ng-click="showCurrentMenu(cm.url)">
+					<i class="menu-icon"></i>
+					<span class="menu-text">
+						{{cm.name}}
+					</span>
+				</a>
+				<!-- 有三级菜单 -->
+				<a href="javascript:;" class="dropdown-toggle" ng-show="!cm.url">
+					<i class="menu-icon fa fa-caret-right"></i>
+					<span class="menu-text">
+						{{cm.name}}
+					</span>
+					<b class="arrow fa fa-angle-down" ng-show="cm.cmenu"></b>
+				</a>
+				<!-- 三级菜单 -->
+				<b class="arrow"></b>
+				<ul class="submenu">
+					<li ng-repeat="ccm in cm.cmenu">
+						<a href="#/{{ccm.url}}" ng-click="showCurrentMenu(ccm.url)">
+							<i class="menu-icon fa fa-caret-right"></i>
+							{{ccm.name}}
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+
+</ul>
+	

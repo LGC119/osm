@@ -1,0 +1,80 @@
+<div class="page-header">
+	<h1>
+		微博沟通管理 
+		<small><i class="ace-icon fa fa-angle-double-right"></i>已处理</small>
+	</h1>
+</div>
+<style type="text/css">
+.form-actions{padding: 6px 24px 8px;margin: 8px 0;background-color: #fafafa;border-top: 1px solid #eee;}
+</style>
+<div class="row" ng-controller="WeiboOperationController" ng-init="get_timeline(3)">
+	<div class="col-xs-12">
+		<ul class="nav nav-tabs padding-18">
+			<li ng-class="{true:'active'}[type=='mentions']">
+				<a href="#/replied/mentions">
+					@我的 <span class="badge badge-danger">{{count.mentions}}</span>
+				</a>
+			</li>
+			<li ng-class="{true:'active'}[type=='comments']">
+				<a href="#/replied/comments">
+					评论我的 <span class="badge badge-danger">{{count.comments}}</span>
+				</a>
+			</li>
+			<li ng-class="{true:'active'}[type=='keywords']">
+				<a href="#/replied/keywords">
+					关键词 <span class="badge badge-danger">{{count.keywords}}</span>
+				</a>
+			</li>
+			<li ng-class="{true:'active'}[type=='messages']">
+				<a href="#/replied/messages">
+					私信 <span class="badge badge-danger">{{count.messages}}</span>
+				</a>
+			</li>
+		</ul>
+
+		<div id="feed" class="tab-content no-border padding-12">
+			<div class="profile-feed row-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="filter pull-left">
+							<span class="input-group col-sm-3" style="width:160px;display:inline-table;">
+								<span class="input-group-addon"><i class="fa fa-calendar bigger-110"></i></span>
+								<input type="text" datepicker-popup="{{format}}" ng-model="start_date" is-open="opened1" max-date="end_date" datepicker-options="dateOptions" placeholder="开始时间" date-disabled="disabled(date, mode)" style="width:120px;" ng-click="openDatepicker($event, 'opened1')" clear-text="清除" current-text="今天" close-text="关闭" />
+							</span>
+							<span class="input-group col-sm-3" style="width:160px;display:inline-table;">
+								<span class="input-group-addon"><i class="fa fa-calendar bigger-110"></i></span>
+								<input type="text" datepicker-popup="{{format}}" ng-model="end_date" is-open="opened2" max-date="{{today}}" min-date="start_date" datepicker-options="dateOptions" placeholder="结束时间" date-disabled="disabled(date, mode)" style="width:120px;" ng-click="openDatepicker($event, 'opened2')" clear-text="清除" current-text="今天" close-text="关闭" />
+							</span>
+							<input type="text" placeholder="关键词" ng-model="keyword">
+							<input type="text" placeholder="排除关键词" ng-model="fkeyword">
+							<button class="btn btn-sm btn-info" ng-click="get_timeline()" ng-disabled="searchPending" style="margin-top:-3px;">筛选</button>
+						</div>
+						<pagination ng-show="timeline.length>0" total-items="pages.total_number" ng-model="pages.current_page" ng-click="get_timeline(0)" items-per-page="pages.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+					</div>
+				</div>
+				<div id="loading" ng-show="!timeline.length||searchPending">
+					<img src="assets/img/loading.gif" ng-show="searchPending" style="vertical-align:text-bottom;"> 
+					{{empty}}
+				</div>
+				<div class="span6 timeline-item">
+					<div class="profile-activity clearfix" ng-repeat="item in timeline" collapse="$parent[item.id].isCollapsed">
+						<div>分配给：{{item.name}}</div>
+						<div ng-include src="'assets/html/meo/wb_communication.html'"></div>
+						<div class="clearfix form-actions">
+							<div style="position:relative">
+								<span class="badge badge-info badge-left" style="position:relative;top:-1px" ng-init="RTS=['转发','评论','回复','转&评','私信']">{{RTS[item.reply_type]}}</span>
+								<b>{{item.staff_name}} 回复</b>
+								<span class="text-muted">[{{item.reply_time}}]</span>：{{item.reply}}
+							</div>
+						</div>
+					</div><!-- ng-repeat untouched -->
+				</div><!-- /span -->
+				<div class="row" ng-show="timeline.length>0">
+					<div class="col-xs-12">
+						<pagination total-items="pages.total_number" ng-model="pages.current_page" ng-click="get_timeline(3)" items-per-page="pages.items_per_page" max-size="5" class="pagination-sm pull-right" boundary-links="true" previous-text="<" next-text=">" first-text="首页" last-text="末页"></pagination>
+					</div>
+				</div>
+			</div><!-- /row -->
+		</div>
+	</div>
+</div>

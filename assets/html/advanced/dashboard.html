@@ -1,0 +1,131 @@
+<div class="page-header">
+    <h1>
+        高级功能
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            控制面板
+        </small>
+    </h1>
+</div>
+<div ng-controller="AdvDashboardController">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row infobox-container info-switchers" style="text-align:left">
+                <div class="col-sm-8 col-xs-12">
+                    <div class="infobox infobox-green infobox-me" ng-click="switchChart('mex/stats_user/top_interact_users', 'getColumnChart')">
+                        <div class="infobox-icon">
+                            <i class="ace-icon fa fa-wechat"></i>
+                        </div>
+
+                        <div class="infobox-data">
+                            <span class="infobox-data-number">2213</span>
+                            <div class="infobox-content">微信用户量</div>
+                        </div>
+                    </div>
+
+                    <div class="infobox infobox-red infobox-me" ng-click="switchChart('meo/stats_user/top_interact_users', 'getColumnChart')">
+                        <div class="infobox-icon">
+                            <i class="ace-icon fa fa-weibo"></i>
+                        </div>
+
+                        <div class="infobox-data">
+                            <span class="infobox-data-number">655123123</span>
+                            <div class="infobox-content">微博用户量</div>
+                        </div>
+                    </div>
+
+                    <div class="infobox infobox-pink infobox-me" ng-click="switchChart('meo/event/get_list', 'getEvents')">
+                        <div class="infobox-icon">
+                            <i class="ace-icon fa fa-flag"></i>
+                        </div>
+
+                        <div class="infobox-data">
+                            <span class="infobox-data-number">675</span>
+                            <div class="infobox-content">双微关联用户量</div>
+                        </div>
+                    </div>
+
+                    <div class="infobox infobox-blue infobox-me" ng-click="switchChart('common/stats_tag/top_tags', 'getHotTags')">
+                        <div class="infobox-icon">
+                            <i class="ace-icon fa fa-circle-o"></i>
+                        </div>
+
+                        <div class="infobox-data">
+                            <span class="infobox-data-number">896</span>
+                            <div class="infobox-content">O2O用户量</div>
+                        </div>
+                    </div>
+
+                    <div class="infobox infobox-orange2 infobox-me" ng-click="switchChart('common/stats_rule/top_keywords', 'getColumnChart')">
+                        <div class="infobox-icon">
+                            <i class="ace-icon fa fa-users"></i>
+                        </div>
+
+                        <div class="infobox-data">
+                            <span class="infobox-data-number">675</span>
+                            <div class="infobox-content">CRM关联用户量</div>
+                        </div>
+                    </div>
+
+                    <div class="infobox infobox-blue2 infobox-me" ng-click="switchChart('common/stats_h5page/top_views', 'getColumnChart')">
+                        <div class="infobox-icon">
+                            <i class="ace-icon fa fa-file-o"></i>
+                        </div>
+
+                        <div class="infobox-data">
+                            <span class="infobox-data-number">591</span>
+                            <div class="infobox-content">APP关联用户量</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xs-12 form-horizontal widget-container-col">
+                    <div class="widget-box">
+                        <div class="widget-header" style="min-height:33px">
+                            <h5 class="widget-title" style="line-height:33px">高级功能开关</h5>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <div class="row form-group" style="margin-bottom:0">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 双微关联 </label>
+                                    <div class="col-xs-6">
+                                        <label>
+                                            <input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox">
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row form-group" style="margin-bottom:0">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> O2O关联 </label>
+                                    <div class="col-xs-6">
+                                        <label>
+                                            <input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox">
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="space"></div>
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="gender-pie pie-chart"></div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="id-pie pie-chart"></div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="location-column column-chart"></div>
+                </div>
+            </div>
+            <div class="space"></div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="interact-line line-chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

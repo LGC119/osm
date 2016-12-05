@@ -1,0 +1,121 @@
+<div class="page-header">
+    <h1>
+        系统账号
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            员工管理
+        </small>
+    </h1>
+</div>
+<div ng-controller="StaffController" class="row" ng-init="getStaffList()">
+	<div class="col-xs-12">
+		<p><button class="btn btn-sm btn-primary" ng-click="initModal()">添加员工</button></p>
+
+		<!-- 添加和编辑员工的Dialog -->
+		<div class="modal fade" id="add_new" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">{{dTitle}}</h4>
+					</div>
+					<form method="POST" class="form-horizontal" role="form" ng-submit="submit()">
+					<div class="modal-body">
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right" for="name"> 姓名 </label>
+							<div class="col-sm-9"><input type="text" ng-model="staff.name" ng-disabled="{{isDis}}" name="name" class="col-xs-10 col-sm-4"></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right" for="login_name"> 登录名 </label>
+							<div class="col-sm-9"><input type="text" ng-model="staff.login_name" ng-disabled="{{isDis}}" name="login_name" class="col-xs-10 col-sm-4"></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right" for="password"> 密码 </label>
+							<div class="col-sm-9"><input type="password" ng-model="staff.password" name="password" class="col-xs-10 col-sm-5"> {{tip}}</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right" for="tel"> 职位 </label>
+							<div class="col-sm-9">
+								<select ng-model="staff.position_id" ng-options="p.id as p.name for p in positions">
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right" for="tel"> 联系电话 </label>
+							<div class="col-sm-9"><input type="text" ng-model="staff.tel" name="tel" class="col-xs-10 col-sm-5"></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right" for="email"> 电子邮箱 </label>
+							<div class="col-sm-9"><input type="text" ng-model="staff.email" name="email" class="col-xs-10 col-sm-6"></div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="submit" class="btn btn-primary">确定</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- 添加和编辑员工的Dialog END -->
+
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>分配</th>
+					<th>ID</th>
+					<th>姓名</th>
+					<th>登录名</th>
+					<th>职位</th>
+					<th>上次登录时间</th>
+					<th>上次登录IP</th>
+					<th>添加时间</th>
+					<th>电话</th>
+					<th>E-mail</th>
+					<th>登录次数</th>
+					<th>是否可分配</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show={{'staffs==undefined'}}>
+					<td colspan="11" align="center">{{empty}}</td>
+				</tr>
+				<tr ng-repeat="val in staffs">
+					<td><input type="checkbox" class="do_message" ng-checked="val.do_message == 1" value="{{val.do_message}}"></td>
+					<td>{{val.id}}</td>
+					<td>{{val.name}}</td>
+					<td>{{val.login_name}}</td>
+					<td>{{val.position_name}}</td>
+					<td>{{val.last_login_time}}</td>
+					<td>{{val.last_login_ip}}</td>
+					<td>{{val.created_at}}</td>
+					<td>{{val.tel}}</td>
+					<td>{{val.email}}</td>
+					<td>{{val.login_count}}</td>
+					<td><button class="btn btn-sm btn-primary" ng-click="do_message(val.id,val.do_message)">确定</button></td>
+					<td>
+						<a href="javascript:;" staff-id="{{val.id}}" ng-click="initModal(val)" >编辑</a> |
+						<a href="javascript:;" staff-id="{{val.id}}" ng-click="delete(val.id)" >删除</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+    <!-- 删除弹窗 -->
+    <div class="bootbox modal fade bootbox-confirm in" tabindex="-1" role="dialog" id="deletecodeBox">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true" style="margin-top: -10px;">×</button>
+                    <div class="bootbox-body"><h4>确定删除该账户吗?</h4></div>
+                </div>
+                    <div class="modal-footer">
+                        <button data-bb-handler="cancel" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button data-bb-handler="confirm" type="button" class="btn btn-primary" ng-click="deleteCfm()">确定</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
